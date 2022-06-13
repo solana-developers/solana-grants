@@ -13,12 +13,6 @@ const Home: NextPage = (props) => {
           content="Solana Scaffold"
         />
       </Head>
-      <div className="columns-sm gap-8">
-      <ExplorerCard />
-      <ExplorerCard />
-      <ExplorerCard />
-      <ExplorerCard />
-      </div>
       <HomeView />
     </div>
   );
