@@ -1,21 +1,20 @@
 import type { NextPage } from "next";
 import Head from "next/head";
-import { ExplorerCard } from "../components/ExplorerCard";
-import { HomeView } from "../views";
+import { LandingPageView } from "../views";
 
-const Home: NextPage = (props) => {
+const LandingPage: NextPage = (props) => {
   return (
     <div>
       <Head>
-        <title>Solana Scaffold</title>
+        <title>Solana Grants</title>
         <meta
           name="description"
-          content="Solana Scaffold"
+          content="Solana Grants"
         />
       </Head>
-      <HomeView />
+      <LandingPageView />
     </div>
   );
 };
 
-export default Home;
+export default LandingPage;
