@@ -84,7 +84,7 @@ export const AppBar: FC = props => {
               <li><a>Menu 4</a></li>
               <li><a>Menu 5</a></li>
             </ul>
-            <div className='flex items-center content-center'>
+            <div className='flex justify-center'>
               <div className="btn btn-ghost mr-4 rounded-md">LOGIN</div>
               <div className="btn btn-ghost bg-yellow-500 hover:bg-yellow-600 px-7 rounded-md">REGISTER</div>
             </div>
