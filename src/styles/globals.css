@@ -1,3 +1,9 @@
+/* Grants Logo */
+@import url('https://fonts.googleapis.com/css2?family=Quantico&display=swap');
+
+/* norma text */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;

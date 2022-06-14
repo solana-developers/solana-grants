@@ -3,7 +3,12 @@ module.exports = {
   content: ["./src/**/*.{js,jsx,ts,tsx}"],
   darkMode: "media",
   theme: {
-    extend: {},
+      extend: {
+          fontFamily: {
+              quantico: ['Quantico', 'sans-serif'],
+              montserrat: ['montserrat', 'Montserrat'],
+          }
+      },
   },
   plugins: [
     require('daisyui'),
