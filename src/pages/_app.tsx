@@ -2,7 +2,6 @@ import { AppProps } from 'next/app';
 import { FC } from 'react';
 import { ContextProvider } from '../contexts/ContextProvider';
 import { AppBar } from '../components/AppBar';
-import { ContentContainer } from '../components/ContentContainer';
 import { Footer } from '../components/Footer';
 import Notifications from '../components/Notification';
 
@@ -21,9 +20,7 @@ const App: FC<AppProps> = ({ Component, pageProps }) => {
                   <AppBar/>
                 </div>
               </div>
-              <ContentContainer>
-                <Component {...pageProps} />
-              </ContentContainer>
+              <Component {...pageProps} />
             </div>
           </ContextProvider>
         </>
