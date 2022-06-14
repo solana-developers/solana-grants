@@ -3,7 +3,12 @@ module.exports = {
   content: ["./src/**/*.{js,jsx,ts,tsx}"],
   darkMode: "media",
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        quantico: ['Quantico', 'sans-serif'],
+        montserrat: ['montserrat', 'Montserrat'],
+      },
+    },
   },
   plugins: [
     require('daisyui'),
@@ -35,7 +40,7 @@ module.exports = {
           'neutral-focus': '#2a2e37',     /* Neutral color - focused */
           'neutral-content': '#ffffff',   /* Foreground content color to use on neutral color */
 
-          'base-100': '#181818',          /* Base color of page, used for blank backgrounds */
+          'base-100': '#000000',          /* Base color of page, used for blank backgrounds */
           'base-200': '#35363a',          /* Base color, a little darker */
           'base-300': '#222222',          /* Base color, even more darker */
           'base-content': '#f9fafb',      /* Foreground content color to use on base color */
