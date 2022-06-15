@@ -1,4 +1,5 @@
 import { FC, useState } from 'react';
+import Link from "next/link";
 
 export const AppBar: FC = props => {
   const [isOpen, setIsOpen] = useState(false);
@@ -13,7 +14,7 @@ export const AppBar: FC = props => {
         
         <div className="navbar-center hidden lg:flex">
           <ul className="menu menu-horizontal p-0">
-            <li><a>Menu 1</a></li>
+            <li><Link href='/explorer'><a>Explore</a></Link></li>
             <li><a>Menu 2</a></li>
             <li><a>Menu 3</a></li>
             <li><a>Menu 4</a></li>
