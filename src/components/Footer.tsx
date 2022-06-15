@@ -13,8 +13,8 @@ export const Footer: FC = () => {
 
   return (
     <div className="">
-      <footer className="text-center h-96 py-20 relative lg:text-left">
-        <div className="overflow-hidden absolute right-0 bottom-0 flex items-stretch">
+      <footer className="text-center h-52 relative lg:text-left">
+        <div className="overflow-hidden h-60 absolute right-0 bottom-0">
           <svg
             width="1600"
             height="633"
