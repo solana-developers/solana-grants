@@ -75,7 +75,7 @@ export const AppBar: FC = props => {
       </div>
 
       {isOpen && (
-        <div className="md:hidden z-100 bg-black">
+        <div className="lg:hidden bg-black">
           <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
             <ul className="menu p-0 flex items-center">
               <li><a>Menu 1</a></li>
