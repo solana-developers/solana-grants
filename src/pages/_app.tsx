@@ -16,11 +16,13 @@ const App: FC<AppProps> = ({ Component, pageProps }) => {
               <Notifications />
               <div className="relative mb-20">
                 <div className='absolute left-0 top-0 background-graphic-upper'></div>
-                <div className='absolute left-0 right-0'>
+                <div className='absolute left-0 right-0 z-20'>
                   <AppBar/>
                 </div>
               </div>
-              <Component {...pageProps} />
+              <div className="z-10">
+                <Component {...pageProps} />
+              </div>
             </div>
           </ContextProvider>
         </>
