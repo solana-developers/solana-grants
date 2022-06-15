@@ -1,6 +1,8 @@
 import { FC } from "react";
 
 interface Props {
+  image: string;
+  bgColor: string;
   title: string;
   author: string;
   authorLink: string;
@@ -11,6 +13,8 @@ interface Props {
 }
 
 export const ExplorerCard: FC<Props> = ({
+  image,
+  bgColor,
   title,
   author,
   authorLink,
@@ -28,14 +32,15 @@ export const ExplorerCard: FC<Props> = ({
             <div className='w-full h-full bg-slate-200 absolute transition-opacity opacity-0 hover:opacity-80 flex'>
               <button className='btn btn-primary m-auto'>Donate</button>
             </div>
-            <img
-              className='w-full'
-              src='https://api.lorem.space/image/shoes?w=400&h=225'
-              alt='Shoes'
-            />
+            <img className='w-full' src={image} alt='Project image' />
           </figure>
         </a>
-        <div className='card-body'>
+        <div
+          className='card-body'
+          style={{
+            background: bgColor,
+          }}
+        >
           <a href={projectLink}>
             <h2 id='title' className='card-title mb-1 font-mono'>
               {title}
@@ -52,10 +57,9 @@ export const ExplorerCard: FC<Props> = ({
           </p>
           <div className='card-actions'>
             <p className='font-mono mx-auto text-sm text-center'>
-              <p className='text-xl text-center'>
-                ${roundedAmtRaised}
-              </p>
-              Raised from {numContributors} supporters</p>
+              <p className='text-xl text-center'>${roundedAmtRaised}</p>
+              Raised from {numContributors} supporters
+            </p>
           </div>
         </div>
       </div>
@@ -65,6 +69,8 @@ export const ExplorerCard: FC<Props> = ({
 
 export const _exampleCard = (
   <ExplorerCard
+    image='https://api.lorem.space/image/shoes?w=400&h=225'
+    bgColor='#001020'
     title='Minter Project'
     author='minter.sol'
     authorLink='https://minter.sol'
