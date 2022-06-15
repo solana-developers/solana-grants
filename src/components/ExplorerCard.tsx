@@ -29,8 +29,8 @@ export const ExplorerCard: FC<Props> = ({
       <div className='card w-96 bg-base-100 shadow-xl'>
         <a href={projectLink}>
           <figure className='relative'>
-            <div className='w-full h-full bg-slate-200 absolute transition-opacity opacity-0 hover:opacity-80 flex'>
-              <button className='btn btn-primary m-auto'>Donate</button>
+            <div className='w-full h-full bg-slate-700 absolute transition-opacity opacity-0 hover:opacity-90 flex'>
+              <button className='btn btn-secondary m-auto'>Learn More</button>
             </div>
             <img className='w-full' src={image} alt='Project image' />
           </figure>
@@ -56,10 +56,11 @@ export const ExplorerCard: FC<Props> = ({
             {summary}
           </p>
           <div className='card-actions'>
-            <p className='font-mono mx-auto text-sm text-center'>
-              <p className='text-xl text-center'>${roundedAmtRaised}</p>
+            <p className='font-mono mx-auto text-sm text-right'>
+              <p className='text-xl text-left color-green'>${roundedAmtRaised}</p>
               Raised from {numContributors} supporters
             </p>
+            <button className='btn btn-primary m-auto'>Donate</button>            
           </div>
         </div>
       </div>
