@@ -2,7 +2,7 @@ import { FC } from 'react';
 
 export const LandingPageView: FC = ({ }) => {
   const slide = ({ forward }) => {
-    const scroller = document.querySelector('.rounded-box');
+    const scroller = document.querySelector('.carousel-container');
     const itemWidth = document.querySelector('.slide-content').clientWidth;
     if (forward) {
       scroller.scrollBy({left: itemWidth, top: 0, behavior:'smooth'});  
@@ -46,9 +46,9 @@ export const LandingPageView: FC = ({ }) => {
         <div className='my-2'>
           <p className="normal-case text-md text-center md:mx-0 mx-5">Cras convallis lacus orci, tristique tincidunt magna consequat in. In vel  est, at euismod libero.</p>
         </div>
-        <div className='items-center w-[70%] sm:flex hidden'>
+        <div className='flex items-center sm:w-[70%] w-[95%]'>
           <button className="bg-purple-700 hover:bg-purple-900 pt-1 pb-2 px-3 rounded-md text-lg" onClick={() => slide({ forward: false })}>❮</button>
-          <div className="carousel rounded-box my-40 mx-5">
+          <div className="carousel carousel-container rounded-box my-40 mx-5">
             <div className="carousel-item">
               <div className='slide-content w-64 h-56 m-4'>
                 <img src="/images/man-climbs-blockchain-tree.png" className='h-full' />
