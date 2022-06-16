@@ -1,17 +1,24 @@
 import { FC, useEffect, useState } from "react";
 import personImage from "../../../public/images/person-opens-the-safe-with-the-money.png";
+import { ExplorerCard, ExplorerCardProps } from '../../components/ExplorerCard';
 
 export const ExplorerView: FC = ({}) => {
-  const [projects, setProjects] = useState([]);
+  const [projects, setProjects] = useState<ExplorerCardProps[]>([]);
   useEffect(() => {
-    // TODO: fetch projects for the explorer cards
-    setProjects([
-      {},
-      {},
-      {},
-      {},
-      {},
-    ]);
+    // TODO: fetch projects from the API
+    let exampleProject = {
+      image: 'https://api.lorem.space/image/shoes?w=400&h=225',
+      bgColor: 'yellow',
+      title: 'Minter Project',
+      author: 'minter.sol',
+      authorLink: 'https://minter.sol',
+      summary: 'Make minting process easier with this framework and then do a lot of subsequent lines until we reach more than 3 lines to test for line clamping',
+      projectLink: 'https://solanagrants.com/minter-project',
+      amtRaised: 3012.892,
+      numContributors: 76,
+    };
+    setProjects([exampleProject, exampleProject, exampleProject,
+      exampleProject, exampleProject, exampleProject, exampleProject,]);
   }, []);
 
   return (
@@ -40,33 +47,10 @@ export const ExplorerView: FC = ({}) => {
         </div>
       </div>
       <div className='mx-auto px-2 lg:container'>
-        <div className='flex flex-wrap justify-center gap-4'>
-          {projects.map((project, index) => <Card />)}
+        <div className='flex flex-wrap justify-center gap-8'>
+          {projects.map((props) => <ExplorerCard {...props}/>)}
         </div>
       </div>
     </>
-  );
-};
-
-/** 
- * TODO: This is just while we merge the explorer card into main
- */ 
-const Card: FC = () => {
-  return (
-    <div className='card w-96 bg-base-100 shadow-xl'>
-      <figure>
-        <img
-          src='https://api.lorem.space/image/shoes?w=400&h=225'
-          alt='Shoes'
-        />
-      </figure>
-      <div className='card-body'>
-        <h2 className='card-title'>Shoes!</h2>
-        <p>If a dog chews shoes whose shoes does he choose?</p>
-        <div className='card-actions justify-end'>
-          <button className='btn btn-primary'>Buy Now</button>
-        </div>
-      </div>
-    </div>
   );
 };

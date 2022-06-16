@@ -18,6 +18,7 @@
     "@solana/web3.js": "^1.31.0",
     "@tailwindcss/line-clamp": "^0.4.0",
     "@tailwindcss/typography": "^0.5.0",
+    "contrast-color": "^1.0.1",
     "daisyui": "^1.24.3",
     "immer": "^9.0.12",
     "next": "12.0.8",

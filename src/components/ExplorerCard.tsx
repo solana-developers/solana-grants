@@ -1,6 +1,7 @@
 import { FC } from "react";
+import { contrastColor } from 'contrast-color';
 
-interface Props {
+export interface ExplorerCardProps {
   image: string;
   bgColor: string;
   title: string;
@@ -12,7 +13,11 @@ interface Props {
   numContributors: number;
 }
 
-export const ExplorerCard: FC<Props> = ({
+/**
+ * A card to show a summary of a project in the explorer view.
+ * @param bgColor is expected to be taken from the image, ideally provided by the backend
+ */
+export const ExplorerCard: FC<ExplorerCardProps> = ({
   image,
   bgColor,
   title,
@@ -24,6 +29,7 @@ export const ExplorerCard: FC<Props> = ({
   numContributors,
 }) => {
   const roundedAmtRaised = Math.round(amtRaised);
+  const textColor = contrastColor({bgColor, fgLightColor: 'text-slate-200', fgDarkColor: 'text-slate-800'});
   return (
     <>
       <div className='card w-96 bg-base-100 shadow-xl'>
@@ -36,10 +42,8 @@ export const ExplorerCard: FC<Props> = ({
           </figure>
         </a>
         <div
-          className='card-body'
-          style={{
-            background: bgColor,
-          }}
+          className={'card-body ' + textColor}
+          style={{ background: bgColor, }}
         >
           <a href={projectLink}>
             <h2 id='title' className='card-title mb-1 font-mono'>
@@ -52,13 +56,13 @@ export const ExplorerCard: FC<Props> = ({
               {author}
             </a>
           </p>
-          <p id='description' className='line-clamp-3 text-slate-200'>
+          <p id='description' className={'line-clamp-3 text-opacity-90 ' + textColor}>
             {summary}
           </p>
           <div className='card-actions'>
-            <p className='font-mono mx-auto text-sm text-right'>
-              <p className='text-xl text-left color-green'>${roundedAmtRaised}</p>
-              Raised from {numContributors} supporters
+            <p className={'font-mono mx-auto text-sm text-right text-opacity-90 '+textColor}>
+              <p className={'text-xl text-left font-semibold color-green '+textColor}>${roundedAmtRaised}</p>
+              Raised from <strong>{numContributors}</strong> supporters
             </p>
             <button className='btn btn-primary m-auto'>Donate</button>            
           </div>

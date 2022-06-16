@@ -1231,6 +1231,11 @@ concat-map@0.0.1:
   resolved "https://registry.yarnpkg.com/concat-map/-/concat-map-0.0.1.tgz#d8a96bd77fd68df7793a73036a3ba0d5405d477b"
   integrity sha512-/Srv4dswyQNBfohGpz9o6Yb3Gz3SrUDqBH5rTuhGR7ahtlbYKnVxw2bCFMRljaA7EXHaXZ8wsHdodFvbkhKmqg==
 
+contrast-color@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/contrast-color/-/contrast-color-1.0.1.tgz#15fd7b444f43ccb7d6175d7e131d095623a9f146"
+  integrity sha512-XeTV/LiyWrf/OWnODTqve2YGBfg32N6zlLqQjJKmEY+ffDqIfecgdmluVz7tky1D4VEaweZgoeRJJT87gDSDCQ==
+
 convert-source-map@1.7.0:
   version "1.7.0"
   resolved "https://registry.yarnpkg.com/convert-source-map/-/convert-source-map-1.7.0.tgz#17a2cb882d7f77d3490585e2ce6c524424a3a442"
