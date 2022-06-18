@@ -12,8 +12,8 @@ export const LandingPageView: FC = ({ }) => {
   }
 
   return (
-    <>
-      <div className='flex justify-center my-20'>
+    <div>
+      <div className='flex justify-center my-24'>
         <div className='flex justify-center hidden md:block w-[400px] h-[350px]'>
           <img src='/images/bitcoin-man.png' />
         </div>
@@ -65,6 +65,6 @@ export const LandingPageView: FC = ({ }) => {
           <button className="bg-purple-700 hover:bg-purple-900 pt-1 pb-2 px-3 rounded-md text-lg" onClick={() => slide({ forward: true })}>❯</button>
         </div>
       </div>
-    </>
+    </div>
   );
 };
