@@ -44,8 +44,8 @@ export const Footer: FC = () => {
             </defs>
           </svg>
         </div> */}
-        <div className="mx-6 px-20 md:px-10 xl:px-15 -my-6 text-center absolute top-0 md:text-left">
-          <div className="grid lg:grid-cols-5 place-items-center md:grid-cols-2 gap-4">
+        <div className="mx-6 px-20 md:px-10 xl:px-15 text-center absolute top-0 md:text-left">
+          <div className="grid lg:grid-cols-5 mb-6 mt-6 place-items-center md:grid-cols-2 gap-4">
             <div className="">
               <h6 className="uppercase text-thistle font-montserrat font-bold mb-4 flex items-center justify-center md:justify-start">
                 <div className="mr-2">
