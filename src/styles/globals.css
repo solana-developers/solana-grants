@@ -46,6 +46,7 @@ a {
   height: 700px;
   background-size: cover;
   background-image: url(/images/bg-graphic-upper.svg);
+  box-shadow: 0px 11px 25px 10px #0b0f0f;
 }
 
 .grant-submain input {
