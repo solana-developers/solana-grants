@@ -24,13 +24,15 @@ export const ExplorerView: FC = ({}) => {
   return (
     <>
       <div className='md:hero mx-auto p-4'>
-        <div className='hero-content flex flex-col'>
-          <h1 className='text-center text-5xl mt-20 md:pl-12 font-bold text-white bg-clip-text'>
+        <div className='hero-content flex-col lg:flex-row gap-20 mb-40'>
+          <div className='flex flex-col lg:items-start'>
+
+          <h1 className='text-center lg:text-left text-5xl mt-20 font-bold text-white bg-clip-text'>
             Fund Public Goods
             <br />
             Help grow Solana!{" "}
           </h1>
-          <h4 className='md:w-full text-center text-xl text-white my-5'>
+          <h4 className='md:w-full text-center lg:text-left text-xl text-white my-5'>
             <p>
               Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
               <br /> eiusmod tempor incididunt ut labore et dolore magna aliqua.
@@ -40,6 +42,7 @@ export const ExplorerView: FC = ({}) => {
             <button className='bg-[#14F195] uppercase hover:bg-[#12d986] text-black font-bold py-2 px-12 rounded-full'>
               Create grant
             </button>
+          </div>
           </div>
           <div className='pt-10'>
             <img src={personImage.src} width='420px' />
