@@ -22,9 +22,9 @@ const App: FC<AppProps> = ({ Component, pageProps }) => {
               </div>
               <div className="z-10">
                 <Component {...pageProps} />
+                <Footer/>
               </div>
             </div>
-              <Footer/>
           </ContextProvider>
         </>
     );
