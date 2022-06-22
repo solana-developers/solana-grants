@@ -1,9 +1,22 @@
+const defaultTheme = require('tailwindcss/defaultTheme')
+
 module.exports = {
   mode: "jit",
   content: ["./src/**/*.{js,jsx,ts,tsx}"],
   darkMode: "media",
   theme: {
-    extend: {},
+      extend: {
+          fontFamily: {
+              quantico: ['Quantico', 'sans-serif'],
+              montserrat: ['montserrat', 'Montserrat'],
+          },
+      colors: {
+        'magenta': '#9c27b0',
+        'royal-purple': '#6A1B9A',
+        'safety-orange': '#FF6F00',
+        'thistle': '#E1BEE7',
+      },
+      },
   },
   plugins: [
     require("@tailwindcss/typography"),
