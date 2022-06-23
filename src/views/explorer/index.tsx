@@ -44,7 +44,7 @@ export const ExplorerView: FC = ({}) => {
             </button>
           </div>
           </div>
-          <div className='pt-10'>
+          <div className='pt-10 hidden lg:block'>
             <img src={personImage.src} width='420px' />
           </div>
         </div>
