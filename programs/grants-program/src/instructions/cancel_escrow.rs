@@ -39,7 +39,7 @@ pub fn cancel_escrow(ctx: Context<CancelEscrow>) -> Result<()> {
     );
 
     // update state
-    ctx.accounts.escrow.state = EscrowState::Released;
+    ctx.accounts.escrow.state = EscrowState::Cancelled;
 
     Ok(())
 }

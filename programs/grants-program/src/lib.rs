@@ -30,4 +30,8 @@ pub mod grants_program {
     pub fn release_escrow(ctx: Context<ReleaseEscrow>) -> Result<()> {
         instructions::release_escrow(ctx)
     }
+
+    pub fn cancel_escrow(ctx: Context<CancelEscrow>) -> Result<()> {
+        instructions::cancel_escrow(ctx)
+    }
 }
