@@ -14,7 +14,7 @@ import {
 import { expect } from "chai";
 import { GrantsProgram } from "../target/types/grants_program";
 
-describe("grants-program", async () => {
+describe("grants-program: Escrows", async () => {
   // Configure the client to use the local cluster.
   const provider = anchor.AnchorProvider.env();
   anchor.setProvider(provider);
@@ -22,31 +22,29 @@ describe("grants-program", async () => {
   const program = anchor.workspace.GrantsProgram as Program<GrantsProgram>;
   const programWallet = (program.provider as anchor.AnchorProvider).wallet;
   const grantKeypair = anchor.web3.Keypair.generate();
-  const [escrowPDA, _] = await anchor.web3.PublicKey.findProgramAddress(
-    [
-      anchor.utils.bytes.utf8.encode("escrow"),
-      grantKeypair.publicKey.toBuffer(),
-      (program.provider as anchor.AnchorProvider).wallet.publicKey.toBuffer(),
-    ],
-    program.programId
-  );
 
   async function generateFundedKeypair(): Promise<anchor.web3.Keypair> {
     const newKeypair = anchor.web3.Keypair.generate();
 
     const transaction = new Transaction().add(
-    SystemProgram.transfer({
-      fromPubkey: programWallet.publicKey,
-      toPubkey: newKeypair.publicKey,
-      lamports: 5 * LAMPORTS_PER_SOL,
-    }));
-    const _confirmation = await (program.provider as anchor.AnchorProvider).sendAndConfirm(transaction);
-    
+      SystemProgram.transfer({
+        fromPubkey: programWallet.publicKey,
+        toPubkey: newKeypair.publicKey,
+        lamports: 5 * LAMPORTS_PER_SOL,
+      })
+    );
+    const _confirmation = await (
+      program.provider as anchor.AnchorProvider
+    ).sendAndConfirm(transaction);
+
     return newKeypair;
   }
 
-  async function generateEscrow(grant: PublicKey, donor: Keypair, lamports: number): Promise<PublicKey> {
-
+  async function generateEscrow(
+    grant: PublicKey,
+    donor: Keypair,
+    lamports: number
+  ): Promise<PublicKey> {
     const [escrowPDA, _] = await anchor.web3.PublicKey.findProgramAddress(
       [
         anchor.utils.bytes.utf8.encode("escrow"),
@@ -56,22 +54,25 @@ describe("grants-program", async () => {
       program.programId
     );
 
-    const tx = await program.methods
+    const _tx = await program.methods
       .createEscrow(lamports)
       .accounts({
-        donor: donor.publicKey,
+        payer: donor.publicKey,
         escrow: escrowPDA,
-        grant,
+        receiver: grant,
       })
       .signers([donor])
       .rpc();
-    
+
     let escrow = await program.account.escrow.fetch(escrowPDA);
+    const escrowBalance = await provider.connection.getBalance(escrowPDA);
 
     expect(escrow.payer).to.eql(donor.publicKey);
     expect(escrow.receiver).to.eql(grant);
     expect(escrow.amount.toNumber()).to.eq(lamports);
     expect(escrow.state).to.eql({ funded: {} });
+
+    expect(escrowBalance).to.be.above(lamports);
 
     return escrowPDA;
   }
@@ -94,12 +95,10 @@ describe("grants-program", async () => {
       })
       .signers([grantKeypair])
       .rpc();
-    console.log("Your transaction signature", tx);
 
     let grant = await program.account.grant.fetch(grantKeypair.publicKey);
 
-    expect(grant.title).to.eql("first grant");
-    console.log(grant.description);
+    expect(grant.title).to.eql(grantInfo.title);
   });
 
   it("Creates an escrow account", async () => {
@@ -108,24 +107,42 @@ describe("grants-program", async () => {
   });
 
   it("Releases an escrow to the grant", async () => {
+    // Arrange
     const donor = await generateFundedKeypair();
-    const escrowPDA = await generateEscrow(grantKeypair.publicKey, donor, 0.7 * LAMPORTS_PER_SOL);
-    
-    const grant = (await program.account.escrow.fetch(escrowPDA)).receiver;
+    const lamports = 0.7 * LAMPORTS_PER_SOL;
+    const escrowPDA = await generateEscrow(
+      grantKeypair.publicKey,
+      donor,
+      lamports
+    );
+
+    const grant = grantKeypair.publicKey;
+    const initialEscrowBalance = await provider.connection.getBalance(
+      escrowPDA
+    );
+    const initialGrantBalance = await provider.connection.getBalance(grant);
+
+    // Act
     const tx = await program.methods
       .releaseEscrow()
       .accounts({
         escrow: escrowPDA,
-        grant,
+        receiver: grant,
       })
       .rpc();
 
+    // Assert
+    const escrowBalance = await provider.connection.getBalance(escrowPDA);
+    const grantBalance = await provider.connection.getBalance(grant);
     const escrow = await program.account.escrow.fetch(escrowPDA);
 
+    expect(escrowBalance).to.eql(initialEscrowBalance - lamports);
+    expect(grantBalance).to.eql(initialGrantBalance + lamports);
     expect(escrow.state).to.eql({ released: {} });
   });
 
   it("Fails when trying to release same escrow", async () => {
+    // Arrange
     const donor = await generateFundedKeypair();
     const escrowPDA = await generateEscrow(
       grantKeypair.publicKey,
@@ -138,7 +155,7 @@ describe("grants-program", async () => {
       .releaseEscrow()
       .accounts({
         escrow: escrowPDA,
-        grant,
+        receiver: grant,
       })
       .rpc();
 
@@ -146,15 +163,17 @@ describe("grants-program", async () => {
 
     expect(escrow.state).to.eql({ released: {} });
 
+    // Act
     try {
       const tx = await program.methods
         .releaseEscrow()
         .accounts({
           escrow: escrowPDA,
-          grant,
+          receiver: grant,
         })
         .rpc();
 
+      // Assert
       expect.fail("Should've failed but didn't");
     } catch (_err) {
       expect(_err).to.be.instanceOf(AnchorError);
@@ -166,55 +185,87 @@ describe("grants-program", async () => {
   });
 
   it("Same user and grant cannot create another escrow account", async () => {
-    const donor = (program.provider as anchor.AnchorProvider).wallet;
+    // Arrange
+    const donor = await generateFundedKeypair();
+    const escrowPDA = await generateEscrow(
+      grantKeypair.publicKey,
+      donor,
+      2.4 * LAMPORTS_PER_SOL
+    );
 
-    const lamports = 0.7 * LAMPORTS_PER_SOL;
     try {
+      // Act
       const tx = await program.methods
-        .createEscrow(lamports)
+        .createEscrow(0.7 * LAMPORTS_PER_SOL)
         .accounts({
-          donor: donor.publicKey,
+          payer: donor.publicKey,
           escrow: escrowPDA,
-          grant: grantKeypair.publicKey,
+          receiver: grantKeypair.publicKey,
         })
+        .signers([donor])
         .rpc();
+
+      // Assert
+      expect.fail("This should've failed but didn't");
     } catch (_err) {
       expect(_err).to.be.instanceOf(SendTransactionError);
     }
   });
 
   it("Creates another escrow with other user", async () => {
-
     const donor1 = await generateFundedKeypair();
-    const _escrow1 = await generateEscrow(grantKeypair.publicKey, donor1, 2.1 * LAMPORTS_PER_SOL);
+    const _escrow1 = await generateEscrow(
+      grantKeypair.publicKey,
+      donor1,
+      2.1 * LAMPORTS_PER_SOL
+    );
 
     const donor2 = await generateFundedKeypair();
-    const _escrow2 = await generateEscrow(grantKeypair.publicKey, donor2, 2.1 * LAMPORTS_PER_SOL);
+    const _escrow2 = await generateEscrow(
+      grantKeypair.publicKey,
+      donor2,
+      2.1 * LAMPORTS_PER_SOL
+    );
   });
 
   it("Cancels escrow", async () => {
+    // Arrange
     const donor = await generateFundedKeypair();
+    const lamports = 2.1 * LAMPORTS_PER_SOL;
     const escrowPDA = await generateEscrow(
       grantKeypair.publicKey,
       donor,
-      2.1 * LAMPORTS_PER_SOL
+      lamports
     );
 
-    const payer = (await program.account.escrow.fetch(escrowPDA)).payer;
+    const payer = donor.publicKey;
+
+    const initialEscrowBalance = await provider.connection.getBalance(
+      escrowPDA
+    );
+    const initialDonorBalance = await provider.connection.getBalance(payer);
+
+    // Act
     const tx = await program.methods
       .cancelEscrow()
       .accounts({
         escrow: escrowPDA,
-        donor: payer,
+        payer,
       })
       .rpc();
 
+    // Assert
     const escrow = await program.account.escrow.fetch(escrowPDA);
+    const escrowBalance = await provider.connection.getBalance(escrowPDA);
+    const donorBalance = await provider.connection.getBalance(payer);
 
+    expect(escrowBalance).to.be.eql(initialEscrowBalance - lamports);
+    expect(donorBalance).to.be.eql(initialDonorBalance + lamports);
     expect(escrow.state).to.eql({ cancelled: {} });
   });
 
-  it('Fails when trying to cancel an already cancelled escrow', async () => {
+  it("Fails when trying to cancel an already cancelled escrow", async () => {
+    // Arrange
     const donor = await generateFundedKeypair();
     const escrowPDA = await generateEscrow(
       grantKeypair.publicKey,
@@ -222,12 +273,13 @@ describe("grants-program", async () => {
       2.1 * LAMPORTS_PER_SOL
     );
 
-    const payer = (await program.account.escrow.fetch(escrowPDA)).payer;
+    const payer = donor.publicKey;
+
     const tx = await program.methods
       .cancelEscrow()
       .accounts({
         escrow: escrowPDA,
-        donor: payer,
+        payer,
       })
       .rpc();
 
@@ -236,13 +288,17 @@ describe("grants-program", async () => {
     expect(escrow.state).to.eql({ cancelled: {} });
 
     try {
+      // Act
       const tx = await program.methods
         .cancelEscrow()
         .accounts({
           escrow: escrowPDA,
-          donor: payer,
+          payer,
         })
         .rpc();
+      
+      // Assert
+      expect.fail("Should've failed but didn't");
     } catch (_err) {
       expect(_err).to.be.instanceOf(AnchorError);
       const err: AnchorError = _err;
@@ -250,5 +306,33 @@ describe("grants-program", async () => {
       expect(err.error.errorCode.number).to.equal(6000);
       expect(err.program.equals(program.programId)).is.true;
     }
+  });
+
+  it("Users can increment the escrow funds", async () => {
+    // Arrange
+    const donor = await generateFundedKeypair();
+
+    const escrowPDA = await generateEscrow(
+      grantKeypair.publicKey,
+      donor,
+      1 * LAMPORTS_PER_SOL
+    );
+
+    // Act
+    const tx = await program.methods
+      .incrementEscrow(1 * LAMPORTS_PER_SOL)
+      .accounts({
+        escrow: escrowPDA,
+        payer: donor.publicKey,
+      })
+      .signers([donor])
+      .rpc();
+
+    // Assert
+    const escrow = await program.account.escrow.fetch(escrowPDA);
+    const escrowBalance = await provider.connection.getBalance(escrowPDA);
+    
+    expect(escrow.state).to.eql({ funded: {} });
+    expect(escrowBalance).to.be.above(2 * LAMPORTS_PER_SOL);
   });
 });

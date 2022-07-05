@@ -27,6 +27,10 @@ pub mod grants_program {
         instructions::create_escrow(ctx, lamports as u64)
     }
 
+    pub fn increment_escrow(ctx: Context<IncrementEscrow>, lamports: u32) -> Result<()> {
+        instructions::increment_escrow(ctx, lamports as u64)
+    }
+
     pub fn release_escrow(ctx: Context<ReleaseEscrow>) -> Result<()> {
         instructions::release_escrow(ctx)
     }
