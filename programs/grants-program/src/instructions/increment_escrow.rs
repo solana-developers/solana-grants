@@ -21,7 +21,6 @@ pub struct IncrementEscrow<'info> {
 
 pub fn increment_escrow(ctx: Context<IncrementEscrow>, lamports: u64) -> Result<()> {
 
-    // require_keys_eq!(ctx.accounts.escrow.payer(), ctx.accounts.payer.key());
 
     // check that it is active
     match ctx.accounts.escrow.state {

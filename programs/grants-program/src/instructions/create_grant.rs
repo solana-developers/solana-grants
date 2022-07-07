@@ -3,7 +3,13 @@ use crate::state::{Grant, InitGrant};
 
 #[derive(Accounts)]
 pub struct CreateGrant<'info> {
-  #[account(init, payer = creator, space = 8 + Grant::MAXIMUM_SPACE)]
+  #[account(
+    init, 
+    payer = creator, 
+    space = 8 + Grant::MAXIMUM_SPACE,
+    seeds = [b"grant", creator.key().as_ref()],
+    bump
+  )]
   grant: Account<'info, Grant>,
 
   #[account(mut)]

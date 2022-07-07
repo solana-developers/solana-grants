@@ -21,14 +21,14 @@ pub enum EscrowState {
 impl Escrow {
     pub const MAXIMUM_SPACE: usize = 32 + 32 + 8 + 1 + 1;
 
-    pub fn init(&mut self, payer: Pubkey, receiver: Pubkey, amount: u64, bump: u8) {
-        *self = Escrow {
+    pub fn new(bump: u8, payer: Pubkey, receiver: Pubkey, amount: u64) -> Self {
+        Escrow {
             payer,
             receiver,
             amount,
             state: EscrowState::Funded,
             bump,
-        };
+        }
     }
 
     pub fn amount(&self) -> u64 {

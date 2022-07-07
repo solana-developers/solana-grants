@@ -12,7 +12,7 @@ pub struct CancelEscrow<'info> {
     )]
     escrow: Account<'info, Escrow>,
 
-    #[account(mut, constraint = payer.key() == escrow.payer())]
+    #[account(mut, address = escrow.payer())]
     /// CHECK: We check that the payer provided is the escrow's payer
     payer: AccountInfo<'info>,
 }

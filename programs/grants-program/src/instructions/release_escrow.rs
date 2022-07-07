@@ -1,7 +1,4 @@
-use anchor_lang::{
-    prelude::*,
-    solana_program::{program::invoke, system_instruction},
-};
+use anchor_lang::prelude::*;
 
 use crate::{state::{Escrow, EscrowState}, errors::GrantsProgramError};
 
@@ -14,7 +11,7 @@ pub struct ReleaseEscrow<'info> {
     )] 
     escrow: Account<'info, Escrow>,
 
-    #[account(mut, constraint = receiver.key() == escrow.receiver())]
+    #[account(mut, address = escrow.receiver())]
     /// CHECK: We check a custom constraint to make sure it is the escrow's receiver
     receiver: AccountInfo<'info>,
 }
@@ -28,8 +25,11 @@ pub fn release_escrow(ctx: Context<ReleaseEscrow>) -> Result<()> {
         EscrowState::Released => err!(GrantsProgramError::ReleasedEscrow),
     }?;
 
+    // TODO: check that it is releasable
+
     // transfer lamports
-    **ctx.accounts.escrow.to_account_info().try_borrow_mut_lamports()? -= ctx.accounts.escrow.amount();
+    **ctx.accounts.escrow
+        .to_account_info().try_borrow_mut_lamports()? -= ctx.accounts.escrow.amount();
     **ctx.accounts.receiver.try_borrow_mut_lamports()? += ctx.accounts.escrow.amount();
 
     // update state
