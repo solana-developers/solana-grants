@@ -1,6 +1,8 @@
-import { FC } from 'react';
+import { FC ,useState } from 'react';
+import Grant from "../../components/Grant";
 
 export const LandingPageView: FC = ({ }) => {
+  const [preview, setpreview] = useState(false);
   const slide = ({ forward }) => {
     const scroller = document.querySelector('.carousel-container');
     const itemWidth = document.querySelector('.slide-content').clientWidth;
@@ -29,9 +31,10 @@ export const LandingPageView: FC = ({ }) => {
               <button className="bg-green-400 hover:bg-emerald-500 py-2 px-9 text-black text-sm rounded-full mr-4">
                 EXPLORE
               </button>
-              <button className="bg-transparent hover:bg-slate-500 py-2 px-6 text-fuchsia-300 border border-fuchsia-300 text-sm rounded-full">
+              <button className="bg-transparent hover:bg-slate-500 py-2 px-6 text-fuchsia-300 border border-fuchsia-300 text-sm rounded-full"  onClick={()=>{ setpreview(true) }}>
                 CREATE A GRANT
-              </button>
+              </button> 
+              { preview && <Grant setpreview={setpreview} />}
             </div>
           </div> 
         </div>
