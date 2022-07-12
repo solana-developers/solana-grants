@@ -1,6 +1,6 @@
 use anchor_lang::prelude::*;
 
-use crate::{state::{ProgramInfo, Grant, GrantState}, errors::GrantsProgramError};
+use crate::state::{ProgramInfo, Grant, GrantState};
 
 #[derive(Accounts)]
 pub struct ReleaseGrant<'info> {

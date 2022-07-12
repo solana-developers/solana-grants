@@ -1,5 +1,7 @@
 use anchor_lang::prelude::*;
 
+/// This is just a linking account intended to be used as a PDA for 
+/// when a different seed is needed to reach another account.
 #[account]
 pub struct Link {
     pub bump: u8,       // 1
@@ -8,8 +10,6 @@ pub struct Link {
 
 impl Link {
     pub const MAXIMUM_SPACE: usize = 1 + 32;
-
-    pub const SEED_PREFIX: &'static str = "donation_link";
     
     pub fn new( bump: u8, address: Pubkey) -> Self {
         Link {
@@ -20,9 +20,5 @@ impl Link {
 
     pub fn bump(&self) -> u8 {
         self.bump
-    }
-
-    pub fn address(&self) -> Pubkey {
-        self.address
     }
 }

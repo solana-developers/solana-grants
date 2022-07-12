@@ -1,7 +1,7 @@
 use anchor_lang::prelude::*;
 
-/// This account will hold the money given to a grant, which can be
-/// either a donation or a match.
+/// This account will keep track of the money given to a grant, which can be
+/// either a user donation or a match. This will not hold the money.
 #[account]
 pub struct Donation {
     pub payer: Pubkey,          // 32
@@ -34,14 +34,6 @@ impl Donation {
 
     pub fn amount(&self) -> u64 {
         self.amount
-    }
-
-    pub fn receiver(&self) -> Pubkey {
-        self.grant
-    }
-
-    pub fn payer(&self) -> Pubkey {
-        self.payer
     }
 
     pub fn bump(&self) -> u8 {

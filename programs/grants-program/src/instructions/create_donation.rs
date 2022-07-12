@@ -32,13 +32,13 @@ pub struct CreateDonation<'info> {
         payer = payer,
         space = 8 + Link::MAXIMUM_SPACE,
         seeds = [
-            Link::SEED_PREFIX.as_bytes().as_ref(), 
+            b"donation_index", 
             grant.key().as_ref(), 
             grant.total_donors.to_be_bytes().as_ref()
         ],
         bump
     )]
-    donation_link: Account<'info, Link>,
+    donation_index: Account<'info, Link>,
 
     system_program: Program<'info, System>,
 }
@@ -72,10 +72,10 @@ pub fn create_donation(ctx: Context<CreateDonation>, lamports: u64) -> Result<()
 
     // initialize index account
     ctx.accounts
-        .donation_link
+        .donation_index
         .set_inner(
             Link::new(
-            *ctx.bumps.get(Link::SEED_PREFIX).expect("we should have gotten the link canonical bump"),
+            *ctx.bumps.get("donation_index").expect("we should have gotten the link canonical bump"),
             ctx.accounts.donation.key()
             )
         );

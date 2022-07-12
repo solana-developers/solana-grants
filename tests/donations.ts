@@ -63,9 +63,9 @@ describe("Donations", () => {
       );
 
     const totalDonors = (await program.account.grant.fetch(grant)).totalDonors;
-    const [donationLinkPDA, _bump1] =
+    const [donationIndexPDA, _bump1] =
       await anchor.web3.PublicKey.findProgramAddress(
-        [encode("donation_link"), grant.toBuffer(), toBytesInt32(totalDonors)],
+        [encode("donation_index"), grant.toBuffer(), toBytesInt32(totalDonors)],
         program.programId
       );
 
@@ -78,7 +78,7 @@ describe("Donations", () => {
           payer: donor.publicKey,
           grant,
           donation: donationPDA,
-          donationLink: donationLinkPDA,
+          donationIndex: donationIndexPDA,
         })
         .signers([donor])
         .rpc();
@@ -259,9 +259,9 @@ describe("Donations", () => {
       2.4 * LAMPORTS_PER_SOL
     );
 
-    const [donationLinkPDA, _bump] =
+    const [donationIndexPDA, _bump] =
       await anchor.web3.PublicKey.findProgramAddress(
-        [encode("link"), grantPDA.toBuffer(), Buffer.from([1])],
+        [encode("donation_index"), grantPDA.toBuffer(), Buffer.from([1])],
         program.programId
       );
 
@@ -272,7 +272,7 @@ describe("Donations", () => {
         .accounts({
           payer: donor.publicKey,
           donation: donationPDA,
-          donationLink: donationLinkPDA,
+          donationIndex: donationIndexPDA,
           grant: grantPDA,
         })
         .signers([donor])
@@ -422,17 +422,17 @@ describe("Donations", () => {
       1 * LAMPORTS_PER_SOL
     );
 
-    const [donationLinkPDA, _] = await anchor.web3.PublicKey.findProgramAddress(
-      [encode("donation_link"), grantPDA.toBuffer(), toBytesInt32(totalDonors)],
+    const [donationIndexPDA, _] = await anchor.web3.PublicKey.findProgramAddress(
+      [encode("donation_index"), grantPDA.toBuffer(), toBytesInt32(totalDonors)],
       program.programId
     );
 
     // Act
-    const donationLink = await program.account.link.fetch(donationLinkPDA);
+    const donationIndex = await program.account.link.fetch(donationIndexPDA);
     
     // Assert
-    expect(donationLink.address).to.eql(donationPDA);
-    const donation = await program.account.donation.fetch(donationLink.address);
+    expect(donationIndex.address).to.eql(donationPDA);
+    const donation = await program.account.donation.fetch(donationIndex.address);
     expect(donation.payer).to.eql(donor.publicKey);
   });
 });

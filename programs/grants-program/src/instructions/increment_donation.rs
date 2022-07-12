@@ -11,8 +11,8 @@ pub struct IncrementDonation<'info> {
         has_one = grant,
         seeds = [
             Donation::SEED_PREFIX.as_ref(), 
-            donation.receiver().as_ref(), 
-            donation.payer().key().as_ref()
+            donation.grant.as_ref(), 
+            donation.payer.as_ref()
         ],
         bump = donation.bump()
     )]

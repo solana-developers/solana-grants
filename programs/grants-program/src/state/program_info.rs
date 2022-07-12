@@ -1,7 +1,6 @@
 use anchor_lang::prelude::*;
 
 /// This account holds the information of number of grants and admin
-
 #[account]
 #[derive(Default)]
 pub struct ProgramInfo {
@@ -19,7 +18,7 @@ impl ProgramInfo {
         ProgramInfo {
             bump,
             grants_count,
-            authority: authority,
+            authority,
         }
     }
 
