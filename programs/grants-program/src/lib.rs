@@ -6,12 +6,11 @@ use anchor_lang::prelude::*;
 use instructions::*;
 use state::InitGrant;
 
-pub mod state;
-mod instructions;
 mod errors;
+mod instructions;
+pub mod state;
 
 declare_id!("Fg6PaFpoGXkYsidMpWTK6W2BeZ7FEfcYkg476zPFsLnS");
-
 
 /// This is the main account
 #[program]
@@ -19,23 +18,27 @@ pub mod grants_program {
 
     use super::*;
 
-    pub fn create_grant(ctx: Context<CreateGrant>, grant_info: InitGrant ) -> Result<()> {
+    pub fn create_grant(ctx: Context<CreateGrant>, grant_info: InitGrant) -> Result<()> {
         instructions::create_grant(ctx, grant_info)
     }
 
-    pub fn create_escrow(ctx: Context<CreateEscrow>, lamports: u32) -> Result<()> {
-        instructions::create_escrow(ctx, lamports as u64)
+    pub fn create_donation(ctx: Context<CreateDonation>, lamports: u32) -> Result<()> {
+        instructions::create_donation(ctx, lamports as u64)
     }
 
-    pub fn increment_escrow(ctx: Context<IncrementEscrow>, lamports: u32) -> Result<()> {
-        instructions::increment_escrow(ctx, lamports as u64)
+    pub fn increment_donation(ctx: Context<IncrementDonation>, lamports: u32) -> Result<()> {
+        instructions::increment_donation(ctx, lamports as u64)
     }
 
-    pub fn release_escrow(ctx: Context<ReleaseEscrow>) -> Result<()> {
-        instructions::release_escrow(ctx)
+    pub fn release_grant(ctx: Context<ReleaseGrant>) -> Result<()> {
+        instructions::release_grant(ctx)
     }
 
-    pub fn cancel_escrow(ctx: Context<CancelEscrow>) -> Result<()> {
-        instructions::cancel_escrow(ctx)
+    pub fn cancel_donation(ctx: Context<CancelDonation>) -> Result<()> {
+        instructions::cancel_donation(ctx)
+    }
+
+    pub fn initialize_program_info(ctx: Context<Initialize>) -> Result<()> {
+        instructions::initialize(ctx)
     }
 }

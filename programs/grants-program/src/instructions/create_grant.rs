@@ -20,5 +20,6 @@ pub struct CreateGrant<'info> {
 
 pub fn create_grant(ctx: Context<CreateGrant>, grant_info: InitGrant ) -> Result<()>{
   ctx.accounts.grant.init(grant_info);
+  ctx.accounts.grant.bump = *ctx.bumps.get("grant").unwrap();
   Ok(())
 }
