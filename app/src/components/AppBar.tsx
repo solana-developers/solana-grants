@@ -70,8 +70,6 @@ export const AppBar: FC = props => {
         <div className="navbar-end hidden lg:flex">
           <div className='mr-4'>
             <WalletMultiButton />
-            {/* <div className="btn btn-ghost mr-4 rounded-md">LOGIN</div> */}
-            {/* <div className="btn btn-ghost bg-yellow-500 hover:bg-yellow-600 px-7 rounded-md">REGISTER</div> */}
           </div>
         </div>
       </div>
@@ -88,8 +86,6 @@ export const AppBar: FC = props => {
             </ul>
             <div className='flex justify-center'>
               <WalletMultiButton />
-              {/* <div className="btn btn-ghost mr-4 rounded-md">LOGIN</div>
-              <div className="btn btn-ghost bg-yellow-500 hover:bg-yellow-600 px-7 rounded-md">REGISTER</div> */}
             </div>
           </div>
         </div>
