@@ -1,5 +1,6 @@
 import { AppProps } from "next/app";
 import { FC } from "react";
+import { SessionProvider } from "next-auth/react"
 import { ContextProvider } from "../contexts/ContextProvider";
 import { AppBar } from "../components/AppBar";
 import { Footer } from "../components/Footer";
@@ -11,7 +12,7 @@ require("../styles/globals.css");
 const App: FC<AppProps> = ({ Component, pageProps }) => {
   return (
     <>
-      <ContextProvider>
+      <SessionProvider session={pageProps.session}>
         <div className='flex flex-col h-screen'>
           <Notifications />
           <div className='relative mb-20'>
@@ -23,8 +24,8 @@ const App: FC<AppProps> = ({ Component, pageProps }) => {
           <div className='z-10'>
             <Component {...pageProps} />
           </div>
-        </div>
-      </ContextProvider>
+        </div>  
+      </SessionProvider>
     </>
   );
 };
