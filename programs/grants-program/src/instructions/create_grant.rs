@@ -6,6 +6,9 @@ pub struct CreateGrant<'info> {
     #[account(mut)]
     author: Signer<'info>,
 
+    #[account(mut)]
+    admin: Signer<'info>,
+
     #[account(
     init,
     payer = author,
@@ -21,15 +24,13 @@ pub struct CreateGrant<'info> {
     system_program: Program<'info, System>,
 }
 
-pub fn create_grant(ctx: Context<CreateGrant>, target_lamports: u32, due_date: u32) -> Result<()> {
+pub fn create_grant(ctx: Context<CreateGrant>, info: String, target_lamports: u32, due_date: u32) -> Result<()> {
     ctx.accounts.grant.set_inner(Grant::new (
         ctx.accounts.author.key(),
-        Default::default(),
-        Default::default(),
-        Default::default(),
-        Default::default(), // initialize the rest of the fields to their default values
+        info,
         target_lamports as u64,
         due_date as u32,
+        ctx.accounts.program_info.grants_count() as u32,
     ));
 
     // Increment the number of grants by one

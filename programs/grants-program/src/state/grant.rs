@@ -5,47 +5,40 @@ use anchor_lang::prelude::*;
 #[account]
 #[derive(Default)]
 pub struct Grant {
-    author: Pubkey,        // 32
+    pub author: Pubkey,        // 32
     escrow_count: u32,     // 8
     info: String,          // 4 + 200
     lamports_raised: u64,  // 16
     total_donors: u32,     // 8
     target_lamports: u64,  // 16
-    due_date: u32,       // 16 im not sure about this type
+    due_date: u32,       // 8 im not sure about this type
+    is_active: bool,       // 1
+    pub grant_num: u32,        // 8
 }
 
 impl Grant {
-    pub const MAXIMUM_SPACE: usize = 32 + 8 + (4 + 200) + 16 + 8 + 16 + 16;
+    pub const MAXIMUM_SPACE: usize = 32 + 8 + (4 + 200) + 16 + 8 + 16 + 8 + 1 + 8;
 
-    pub fn new(author: Pubkey, escrow_count: u32, info: String, lamports_raised: u64, total_donors: u32, target_lamports: u64, due_date: u32) -> Self {
+    pub fn new(author: Pubkey, info: String, target_lamports: u64, due_date: u32, grant_num: u32) -> Self {
         Grant {
             author,
-            escrow_count,
             info,
-            lamports_raised,
-            total_donors,
             target_lamports,
             due_date,
+            grant_num,
+            ..Default::default() // rest of the fields are initialized to default values
         }
     }
 
-    pub fn author(&self) -> Pubkey {
-        self.author
-    }
-
-    pub fn target_lamports(&self) -> u64 {
-        self.target_lamports
-    }
-
-    pub fn due_date(&self) -> u32 {
-        self.due_date
-    }
-
     /// Updates the grant's total `amount_raised`, increments the `total_donors`
-    // by one, and adds the payment to the `payments` structure.
+    /// by one, and adds the payment to the `payments` structure.
     pub fn update_with_payment(&mut self) {
-        // self.amount_raised += payment.amount();
+
         self.total_donors += 1;
         self.escrow_count += 1;
+    }
+
+    pub fn cancel_grant(&mut self) {
+        self.is_active = false;
     }
 }

@@ -7,7 +7,7 @@ use anchor_lang::prelude::*;
 pub struct GrantsProgramInfo {
     pub bump: u8,           // 1
     pub grants_count: u32,  // 8
-    admin: Pubkey,      // 32
+    pub admin: Pubkey,      // 32
 }
 
 impl GrantsProgramInfo {
