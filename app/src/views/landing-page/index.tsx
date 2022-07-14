@@ -31,9 +31,9 @@ export const LandingPageView: FC = ({ }) => {
               <button className="bg-green-400 hover:bg-emerald-500 py-2 px-9 text-black text-sm rounded-full mr-4">
                 EXPLORE
               </button>
-              <button className="bg-transparent hover:bg-slate-500 py-2 px-6 text-fuchsia-300 border border-fuchsia-300 text-sm rounded-full"  onClick={()=>{ setpreview(true) }}>
+              <a href="#my-modal-2" className="bg-transparent hover:bg-slate-500 py-2 px-6 text-fuchsia-300 border border-fuchsia-300 text-sm rounded-full btn"  onClick={()=>{ setpreview(true) }}>
                 CREATE A GRANT
-              </button> 
+              </a> 
               { preview && <Grant setpreview={setpreview} />}
             </div>
           </div> 
