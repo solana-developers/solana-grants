@@ -11,6 +11,7 @@ import {
 } from "@solana/web3.js";
 import { expect } from "chai";
 import { GrantsProgram } from "../target/types/grants_program";
+import { makeDonation } from "../app/src/transactions";
 
 const toBytesInt32 = (num: number): Buffer => {
   const arr = new ArrayBuffer(4);
@@ -422,17 +423,73 @@ describe("Donations", () => {
       1 * LAMPORTS_PER_SOL
     );
 
-    const [donationIndexPDA, _] = await anchor.web3.PublicKey.findProgramAddress(
-      [encode("donation_index"), grantPDA.toBuffer(), toBytesInt32(totalDonors)],
-      program.programId
-    );
+    const [donationIndexPDA, _] =
+      await anchor.web3.PublicKey.findProgramAddress(
+        [
+          encode("donation_index"),
+          grantPDA.toBuffer(),
+          toBytesInt32(totalDonors),
+        ],
+        program.programId
+      );
 
     // Act
     const donationIndex = await program.account.link.fetch(donationIndexPDA);
-    
+
     // Assert
     expect(donationIndex.address).to.eql(donationPDA);
-    const donation = await program.account.donation.fetch(donationIndex.address);
+    const donation = await program.account.donation.fetch(
+      donationIndex.address
+    );
     expect(donation.payer).to.eql(donor.publicKey);
+  });
+
+  describe("makeDonation helper", () => {
+    it("creates a new donation", async () => {
+      // Arrange
+      const donor = await generateFundedKeypair();
+      const lamports = 2.1 * LAMPORTS_PER_SOL;
+
+      // Act
+      let transaction = await makeDonation(donor.publicKey, grantPDA, lamports);
+      const _txSignature = await provider.sendAndConfirm(transaction, [donor]);
+
+      // Assert
+      const [donationPDA, _] = await anchor.web3.PublicKey.findProgramAddress(
+        [encode("donation"), grantPDA.toBuffer(), donor.publicKey.toBuffer()],
+        program.programId
+      );
+      const donation = await program.account.donation.fetch(donationPDA);
+
+      expect(donation.state).to.eql({ funded: {} });
+      expect(donation.amount.toNumber()).to.eql(lamports);
+    });
+
+    it("increments an existing donation", async () => {
+      // Arrange
+      // make first donation
+      const donor = await generateFundedKeypair();
+      const lamports = 2.1 * LAMPORTS_PER_SOL;
+
+      let transaction = await makeDonation(donor.publicKey, grantPDA, lamports);
+      let _txSignature = await provider.sendAndConfirm(transaction, [donor]);
+
+      // Act
+      // make second donation
+      transaction = await makeDonation(donor.publicKey, grantPDA, lamports);
+      _txSignature = await provider.sendAndConfirm(transaction, [donor]);
+
+      // Assert
+      // fetch the donation
+      const [donationPDA, _bump0] =
+        await anchor.web3.PublicKey.findProgramAddress(
+          [encode("donation"), grantPDA.toBuffer(), donor.publicKey.toBuffer()],
+          program.programId
+        );
+      const donation = await program.account.donation.fetch(donationPDA);
+
+      expect(donation.state).to.eql({ funded: {} });
+      expect(donation.amount.toNumber()).to.eql(2 * lamports);
+    });
   });
 });
