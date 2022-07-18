@@ -1,32 +1,38 @@
 import { WebBundlr } from "@bundlr-network/client";
-import { PhantomWalletAdapter } from "@solana/wallet-adapter-wallets";
+import { WalletContextState } from "@solana/wallet-adapter-react";
 import { DEVNET_API, BUNDLR_DEVNET } from "../constants";
 
-export default async function uploadToWeb3DB(data: Object) {
-  const walletAdapter = new PhantomWalletAdapter();
-  await walletAdapter.connect();
+export default async function uploadToWeb3DB(wallet: WalletContextState, data: Object) {
+  try {
+    if (!wallet || !wallet.connected) {
+      alert("Wallet not connected");
+      return { err: true };
+    }
 
-  const bundlr = new WebBundlr(BUNDLR_DEVNET, "solana", walletAdapter, { providerUrl: DEVNET_API });
+    await wallet.connect();
+    const provider = wallet.wallet.adapter;
+    await provider.connect();
   
-  const dataToBeUploaded = JSON.stringify(data);
-
-  const price = await bundlr.getPrice(dataToBeUploaded.length);
-
-  const balance = await bundlr.getLoadedBalance();
+    const bundlr = new WebBundlr(BUNDLR_DEVNET, "solana", provider, { providerUrl: DEVNET_API });
+    
+    const dataToBeUploaded = JSON.stringify(data);
   
-  // If you don't have enough balance for the upload
-  if (price.isGreaterThan(balance)) {
-    // Fund your account with the difference
-    // We multiply by 1.1 to make sure we don't run out of funds
-    await bundlr.fund(price.minus(balance).multipliedBy(1.1).c[0]);
+    const price = await bundlr.getPrice(dataToBeUploaded.length);
+    const balance = await bundlr.getLoadedBalance();
+    
+    // If you don't have enough balance for the upload
+    if (price.isGreaterThan(balance)) {
+      // Fund your account with the difference
+      // We multiply by 1.1 to make sure we don't run out of funds
+      await bundlr.fund(price.minus(balance).multipliedBy(1.1).c[0]);
+    }
+    
+    const tags = [{ name: "Content-Type", value: "text/plain" }];
+    const response = await bundlr.uploader.upload(Buffer.from(dataToBeUploaded), tags);
+  
+    return { err: false, id: response.data.id };  
+  } catch (error) {
+    return { err: true }
   }
   
-  const tags = [{ name: "Content-Type", value: "text/plain" }];
-  // const transaction = bundlr.createTransaction(dataToBeUploaded, { tags: tags });
-  // await transaction.sign();
-  // const id = (await transaction.upload()).data.id;
-
-  const response = await bundlr.uploader.upload(Buffer.from(dataToBeUploaded), tags);
-
-  return response.data.id;
 }
