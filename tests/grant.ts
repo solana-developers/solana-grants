@@ -135,10 +135,9 @@ describe("grant", () => {
     it("Is updating the number of grants", async () => {
 
         await createGrant(author);
-        await createGrant(author);
 
         const grantsCount = (await program.account.grantsProgramInfo.fetch(programInfoPDA)).grantsCount;
-        expect(grantsCount).to.eql(3)
+        expect(grantsCount).to.eql(2)
 
     })
 
@@ -174,7 +173,6 @@ describe("grant", () => {
             })
             .signers([author])
             .rpc();
-
 
         const grant = await program.account.grant.fetch(grantPDA)
 

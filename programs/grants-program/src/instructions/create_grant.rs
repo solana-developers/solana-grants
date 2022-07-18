@@ -1,5 +1,5 @@
 use anchor_lang::prelude::*;
-use crate::state::{Grant, GrantsProgramInfo};
+use crate::{state::{Grant, GrantsProgramInfo}, errors::GrantErrors};
 
 #[derive(Accounts)]
 pub struct CreateGrant<'info> {
@@ -25,7 +25,12 @@ pub struct CreateGrant<'info> {
 }
 
 pub fn create_grant(ctx: Context<CreateGrant>, info: String, target_lamports: u32, due_date: u32) -> Result<()> {
-    ctx.accounts.grant.set_inner(Grant::new (
+    // checking if info is longer than 200 characters
+    if info.chars().count() > 200 {
+        return Err(GrantErrors::InfoTooLong.into());
+    }
+
+    ctx.accounts.grant.set_inner(Grant::new(
         ctx.accounts.author.key(),
         info,
         target_lamports as u64,
@@ -34,7 +39,7 @@ pub fn create_grant(ctx: Context<CreateGrant>, info: String, target_lamports: u3
     ));
 
     // Increment the number of grants by one
-    &ctx.accounts.program_info.increment_grants_count();
+    ctx.accounts.program_info.increment_grants_count();
 
     Ok(())
 }
