@@ -12,12 +12,13 @@ pub struct Grant {
     total_donors: u32,     // 8
     target_lamports: u64,  // 16
     due_date: u32,       // 8 im not sure about this type
-    is_active: bool,       // 1
+    pub is_active: bool,       // 1
+    matching_eligible: bool,       // 1
     pub grant_num: u32,        // 8
 }
 
 impl Grant {
-    pub const MAXIMUM_SPACE: usize = 32 + 8 + (4 + 200) + 16 + 8 + 16 + 8 + 1 + 8;
+    pub const MAXIMUM_SPACE: usize = 32 + 8 + (4 + 200) + 16 + 8 + 16 + 8 + 1 + 1 + 8;
 
     pub fn new(author: Pubkey, info: String, target_lamports: u64, due_date: u32, grant_num: u32) -> Self {
         Grant {
@@ -26,6 +27,7 @@ impl Grant {
             target_lamports,
             due_date,
             grant_num,
+            is_active: true,
             ..Default::default() // rest of the fields are initialized to default values
         }
     }
@@ -40,5 +42,9 @@ impl Grant {
 
     pub fn cancel_grant(&mut self) {
         self.is_active = false;
+    }
+
+    pub fn eligible_grant(&mut self) {
+        self.matching_eligible = true;
     }
 }

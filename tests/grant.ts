@@ -23,6 +23,7 @@ describe("grant", () => {
 
     let programInfoPDA: PublicKey;
     let grantPDA: PublicKey;
+    let author: Keypair;
 
     before(async () => {
         const [newProgramInfoPDA, program_info_bump] = await anchor.web3.PublicKey.findProgramAddress(
@@ -33,25 +34,30 @@ describe("grant", () => {
         );
 
         programInfoPDA = newProgramInfoPDA;
+
+        // initializes the program info
+        await initProgramInfo()
+
     })
 
-    async function generateGrantPDA(grantsCount: number) {
+    beforeEach(async () => {
+        // runs before each test, updates the grant PDA and author keypair
+        const programInfo = await program.account.grantsProgramInfo.fetch(programInfoPDA)
+
         const [newGrantPDA, grant_bump] = await anchor.web3.PublicKey.findProgramAddress(
             [
                 encode("grant"),
-                toBytesInt32(grantsCount),
+                toBytesInt32(programInfo.grantsCount),
             ],
             program.programId
         );
 
         grantPDA = newGrantPDA;
-    }
+
+        author = await generateFundedKeypair();
+    });
 
     async function createGrant(author: Keypair) {
-
-        const grantsCount = (await program.account.grantsProgramInfo.fetch(programInfoPDA)).grantsCount;
-
-        await generateGrantPDA(grantsCount);
 
         const targetLamports = LAMPORTS_PER_SOL;
         const dueDate = 123124;
@@ -68,6 +74,18 @@ describe("grant", () => {
             .rpc();
 
         return program.account.grant.fetch(grantPDA);
+    }
+
+
+    async function initProgramInfo() {
+        await program.methods
+            .initializeProgramInfo()
+            .accounts({
+                admin: programWallet.publicKey,
+                programInfo: programInfoPDA,
+            }).rpc();
+
+        return await program.account.grantsProgramInfo.fetch(programInfoPDA);
     }
 
     async function generateFundedKeypair(): Promise<anchor.web3.Keypair> {
@@ -90,14 +108,7 @@ describe("grant", () => {
 
     it("Initializes Grant Program Info!", async () => {
 
-        await program.methods
-            .initializeProgramInfo()
-            .accounts({
-                admin: programWallet.publicKey,
-                programInfo: programInfoPDA,
-            }).rpc();
-
-        const programInfo = await program.account.grantsProgramInfo.fetch(programInfoPDA)
+        const programInfo = await program.account.grantsProgramInfo.fetch(programInfoPDA);
 
         expect(programInfo.admin).to.eql(programWallet.publicKey);
         expect(programInfo.grantsCount).to.eql(0);
@@ -105,8 +116,6 @@ describe("grant", () => {
     });
 
     it("Creates a grant", async () => {
-
-        const author = await generateFundedKeypair();
 
         const targetLamports = LAMPORTS_PER_SOL;
         const dueDate = 123124;
@@ -119,25 +128,25 @@ describe("grant", () => {
         expect(grant.totalDonors).to.eql(0);
         expect(grant.targetLamports.toNumber()).to.eql(targetLamports);
         expect(grant.escrowCount).to.eql(0);
+        expect(grant.isActive).to.eql(true);
         expect(grant.info).to.eql("")
     })
 
     it("Is updating the number of grants", async () => {
-        const author1 = await generateFundedKeypair();
-        const author2 = await generateFundedKeypair();
 
-        await createGrant(author1)
-        await createGrant(author2)
+        await createGrant(author);
+        await createGrant(author);
 
         const grantsCount = (await program.account.grantsProgramInfo.fetch(programInfoPDA)).grantsCount;
         expect(grantsCount).to.eql(3)
 
     })
 
-    it("can admin cancel the grant", async () => {
+    it("admin can cancel the grant", async () => {
 
-        const grant = await program.account.grant.fetch(grantPDA);
         const programInfo = await program.account.grantsProgramInfo.fetch(programInfoPDA)
+
+        await createGrant(author);
 
         await program.methods
             .cancelGrantAdmin()
@@ -148,14 +157,13 @@ describe("grant", () => {
             })
             .rpc();
 
-        expect(grant.isActive).to.eql(false)
+        const grant = await program.account.grant.fetch(grantPDA)
 
+        expect(grant.isActive).to.eql(false)
     })
 
-    it("can author cancel the grant", async () => {
-
-        const author = await generateFundedKeypair();
-        const grant = await createGrant(author);
+    it("author can cancel the grant", async () => {
+        await createGrant(author);
 
         await program.methods
             .cancelGrantAuthor()
@@ -167,8 +175,10 @@ describe("grant", () => {
             .signers([author])
             .rpc();
 
-        expect(grant.isActive).to.eql(false)
 
+        const grant = await program.account.grant.fetch(grantPDA)
+
+        expect(grant.isActive).to.eql(false)
     })
 
 });
