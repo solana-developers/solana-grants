@@ -1,5 +1,6 @@
 import { FC, useState } from 'react';
 import Link from "next/link";
+import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
 
 export const AppBar: FC = props => {
   const [isOpen, setIsOpen] = useState(false);
@@ -71,8 +72,7 @@ export const AppBar: FC = props => {
 
         <div className="navbar-end hidden lg:flex">
           <div className='mr-4'>
-            <div className="btn btn-ghost mr-4 rounded-md">LOGIN</div>
-            <div className="btn btn-ghost bg-yellow-500 hover:bg-yellow-600 px-7 rounded-md">REGISTER</div>
+            <WalletMultiButton />
           </div>
         </div>
       </div>
@@ -88,8 +88,7 @@ export const AppBar: FC = props => {
               <li><a>Menu 5</a></li>
             </ul>
             <div className='flex justify-center'>
-              <div className="btn btn-ghost mr-4 rounded-md">LOGIN</div>
-              <div className="btn btn-ghost bg-yellow-500 hover:bg-yellow-600 px-7 rounded-md">REGISTER</div>
+              <WalletMultiButton />
             </div>
           </div>
         </div>
