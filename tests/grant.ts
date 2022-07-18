@@ -179,4 +179,51 @@ describe("grant", () => {
         expect(grant.isActive).to.eql(false)
     })
 
+    it("admin can make grant eligible matching", async () => {
+
+        const programInfo = await program.account.grantsProgramInfo.fetch(programInfoPDA)
+
+        await createGrant(author);
+
+        await program.methods
+            .eligibleMatching()
+            .accounts({
+                grant: grantPDA,
+                admin: programInfo.admin,
+                programInfo: programInfoPDA,
+            })
+            .rpc();
+
+        const grant = await program.account.grant.fetch(grantPDA)
+
+        expect(grant.matchingEligible).to.eql(true)
+    })
+
+    it("author cannot make grant eligible matching", async () => {
+
+        const programInfo = await program.account.grantsProgramInfo.fetch(programInfoPDA)
+
+        await createGrant(author);
+
+        try {
+            await program.methods
+                .eligibleMatching()
+                .accounts({
+                    grant: grantPDA,
+                    admin: author.publicKey,
+                    programInfo: programInfoPDA,
+                })
+                .signers([author])
+                .rpc();
+            const grant = await program.account.grant.fetch(grantPDA)
+
+            expect(grant.matchingEligible).to.eql(true)
+
+            console.log("Author can make grant eligible matching ==> ERROR")
+        } catch (e) {
+            console.log("Only admin can make grant eligible matching")
+        }
+    })
+
+
 });
