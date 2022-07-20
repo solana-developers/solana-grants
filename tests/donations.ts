@@ -12,13 +12,7 @@ import {
 import { expect } from "chai";
 import { GrantsProgram } from "../target/types/grants_program";
 import { makeDonation } from "../app/src/transactions";
-
-const toBytesInt32 = (num: number): Buffer => {
-  const arr = new ArrayBuffer(4);
-  const view = new DataView(arr);
-  view.setUint32(0, num);
-  return Buffer.from(arr);
-};
+import { toBytesInt32 } from "../app/src/utils/conversion";
 
 describe("Donations", () => {
   // Configure the client to use the local cluster.
@@ -57,12 +51,14 @@ describe("Donations", () => {
     donor: Keypair,
     lamports: number
   ): Promise<PublicKey> {
+    // donationPDA with grant key + donor key
     const [donationPDA, _bump0] =
       await anchor.web3.PublicKey.findProgramAddress(
         [encode("donation"), grant.toBuffer(), donor.publicKey.toBuffer()],
         program.programId
       );
 
+    // donationIndexPDA with grant key + latest donor count
     const totalDonors = (await program.account.grant.fetch(grant)).totalDonors;
     const [donationIndexPDA, _bump1] =
       await anchor.web3.PublicKey.findProgramAddress(
@@ -288,14 +284,14 @@ describe("Donations", () => {
 
   it("Creates another donation with other user", async () => {
     const donor1 = await generateFundedKeypair();
-    const _escrow1 = await generateDonation(
+    await generateDonation(
       grantPDA,
       donor1,
       2.1 * LAMPORTS_PER_SOL
     );
 
     const donor2 = await generateFundedKeypair();
-    const _escrow2 = await generateDonation(
+    await generateDonation(
       grantPDA,
       donor2,
       2.1 * LAMPORTS_PER_SOL
