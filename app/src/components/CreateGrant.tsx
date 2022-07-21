@@ -15,7 +15,7 @@ export default function CreateGrant({ setpreview }) {
         console.log(grant);
     }
 
-    const handleSubmit = (event) => {
+    const handleSubmit = (event: React.FormEvent<HTMLDivElement>) => {
         event.preventDefault();
         console.log(grant);
     }
@@ -68,12 +68,6 @@ export default function CreateGrant({ setpreview }) {
                         </div>
                     </div>
             </Modal>
-            {/* <div className="modal" id="my-modal-2">
-                <div className="modal-box maingrantbox">
-                    <a href="#my-modal-2" className="btn btn-sm btn-circle absolute right-2 top-2" onClick={() => setpreview(false)}>✕</a>
-                    
-                </div>
-            </div> */}
         </>
 
     );
