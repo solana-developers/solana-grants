@@ -22,7 +22,7 @@ export default function CreateGrant({ setpreview }) {
 
     return (
         <>
-            <Modal setpreview={setpreview} classNameForModalBoxStyling={"maingrantbox"}>
+            <Modal setpreview={setpreview} showCloseButton={true} classNameForModalBoxStyling={"maingrantbox"}>
                 <h1 className='text-[3rem] text-center	font-extrabold	mb-[3rem]'>Lets Get Funding!</h1>
                     <div className='grant-main'>
                         <div className='grant-submain' onSubmit={handleSubmit}>
