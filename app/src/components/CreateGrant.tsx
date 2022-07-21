@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
+import Modal from "./Modal";
 
-export default function Grant({ setpreview }) {
+export default function CreateGrant({ setpreview }) {
     const [grant, setGrant] = useState({
         title: '',
         image: '',
@@ -8,7 +9,7 @@ export default function Grant({ setpreview }) {
         link: '',
     });
 
-    const handleChange = (event) => {
+    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = event.target;
         setGrant({ ...grant, [name]: value });
         console.log(grant);
@@ -21,10 +22,8 @@ export default function Grant({ setpreview }) {
 
     return (
         <>
-            <div className="modal" id="my-modal-2">
-                <div className="modal-box maingrantbox">
-                    <a href="#my-modal-2" className="btn btn-sm btn-circle absolute right-2 top-2" onClick={() => setpreview(false)}>✕</a>
-                    <h1 className='text-[3rem] text-center	font-extrabold	mb-[3rem]'>Lets Get Funding!</h1>
+            <Modal setpreview={setpreview} classNameForModalBoxStyling={"maingrantbox"}>
+                <h1 className='text-[3rem] text-center	font-extrabold	mb-[3rem]'>Lets Get Funding!</h1>
                     <div className='grant-main'>
                         <div className='grant-submain' onSubmit={handleSubmit}>
                             <div>
@@ -68,8 +67,13 @@ export default function Grant({ setpreview }) {
                             </div>
                         </div>
                     </div>
+            </Modal>
+            {/* <div className="modal" id="my-modal-2">
+                <div className="modal-box maingrantbox">
+                    <a href="#my-modal-2" className="btn btn-sm btn-circle absolute right-2 top-2" onClick={() => setpreview(false)}>✕</a>
+                    
                 </div>
-            </div>
+            </div> */}
         </>
 
     );
