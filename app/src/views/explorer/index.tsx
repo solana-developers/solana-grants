@@ -14,7 +14,7 @@ export const ExplorerView: FC = ({}) => {
       authorLink: "https://minter.sol",
       summary:
         "Make minting process easier with this framework and then do a lot of subsequent lines until we reach more than 3 lines to test for line clamping",
-      projectLink: "https://solanagrants.com/minter-project",
+      projectLink: "/grants/1",
       amtRaised: 3012.892,
       numContributors: 76,
     };
@@ -59,8 +59,8 @@ export const ExplorerView: FC = ({}) => {
       </div>
       <div className='mx-auto px-2 lg:container'>
         <div className='flex flex-wrap justify-center gap-8'>
-          {projects.map((props) => (
-            <ExplorerCard {...props} />
+          {projects.map((props, idx) => (
+            <ExplorerCard key={idx} {...props} />
           ))}
         </div>
       </div>

@@ -1,5 +1,6 @@
 import { FC } from "react";
 import { contrastColor } from "contrast-color";
+import Image from "next/image";
 
 export interface ExplorerCardProps {
   image: string;
@@ -29,7 +30,11 @@ export const ExplorerCard: FC<ExplorerCardProps> = ({
   numContributors,
 }) => {
   const roundedAmtRaised = Math.round(amtRaised);
-  const textColor = contrastColor({ bgColor, fgLightColor: "text-slate-200", fgDarkColor: "text-slate-800", });
+  const textColor = contrastColor({
+    bgColor,
+    fgLightColor: "text-slate-200",
+    fgDarkColor: "text-slate-800",
+  });
   return (
     <>
       <div className='card w-96 bg-base-100 shadow-xl'>
@@ -56,12 +61,26 @@ export const ExplorerCard: FC<ExplorerCardProps> = ({
               {author}
             </a>
           </p>
-          <p id='description' className={'line-clamp-3 text-opacity-90 ' + textColor}>
+          <p
+            id='summary'
+            className={"line-clamp-3 text-opacity-90 " + textColor}
+          >
             {summary}
           </p>
           <div className='card-actions'>
-            <p className={'font-mono mx-auto text-sm text-right text-opacity-90 '+textColor}>
-              <p className={'text-xl text-left font-semibold color-green '+textColor}>${roundedAmtRaised}</p>
+            <p
+              className={
+                "font-mono mx-auto text-sm text-right text-opacity-90 " +
+                textColor
+              }
+            >
+              <p
+                className={
+                  "text-xl text-left font-semibold color-green " + textColor
+                }
+              >
+                ${roundedAmtRaised}
+              </p>
               Raised from <strong>{numContributors}</strong> supporters
             </p>
             <button className='btn btn-primary m-auto'>Donate</button>
