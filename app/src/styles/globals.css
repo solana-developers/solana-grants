@@ -83,7 +83,7 @@ a {
   border-radius: 2px soild grey;
   border-radius: 1rem;
   background: #000000;
-  height: 39.438rem;
+  /* height: 39.438rem; */
 }
 
 .maingrantbox .cross {
@@ -142,10 +142,23 @@ a {
   max-width: 37rem !important;
 }
 
+.loading-spinner-gradients {
+  --mask: radial-gradient(
+    farthest-side, 
+    transparent calc(100% - 2px - 0.5px), 
+    #000 calc(100% - 2px + 0.5px)
+  );
+  
+  -webkit-mask: var(--mask);
+  mask: var(--mask);
+
+  background: linear-gradient(to top, rgba(0,255,226, 1), transparent 95%) 100% 0/100% 100% no-repeat;
+}
+
 @media screen and (max-width: 768px) {
   .modal-box {
     width: 20rem;
-    height: 525px;
+    /* height: 525px; */
   }
   .modal h1 {
     font-size: 10px;
