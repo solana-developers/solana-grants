@@ -1,12 +1,12 @@
 use anchor_lang::prelude::*;
 
-use crate::{state::{Donation, ProgramInfo, DonationState}, errors::GrantsProgramError};
+use crate::{state::{Donation, ProgramInfo, DonationState}, errors::DonationError};
 
 #[derive(Accounts)]
 pub struct CancelDonation<'info> {
-    authority: Signer<'info>,
+    admin: Signer<'info>,
 
-    #[account(has_one = authority, seeds = [b"program_info"], bump = program_info.bump)]
+    #[account(has_one = admin, seeds = [b"program_info"], bump = program_info.bump)]
     program_info: Account<'info, ProgramInfo>,
 
     #[account(
@@ -37,7 +37,7 @@ pub fn cancel_donation(ctx: Context<CancelDonation>) -> Result<()> {
     // check if it is cancellable
     match ctx.accounts.donation.state {
         DonationState::Funded => Ok(()),
-        DonationState::Cancelled => err!(GrantsProgramError::CancelledDonation),
+        DonationState::Cancelled => err!(DonationError::CancelledDonation),
     }?;
 
     // transfer lamports from the grant to the payer

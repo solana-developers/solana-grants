@@ -10,43 +10,39 @@ import {
   Transaction,
 } from "@solana/web3.js";
 import { expect } from "chai";
-import { GrantsProgram } from "../target/types/grants_program";
-import { makeDonation } from "../app/src/transactions";
-import { toBytesInt32 } from "../app/src/utils/conversion";
+import { GrantsProgram } from "../../target/types/grants_program";
+import { makeDonation } from "../../app/src/transactions";
+import { toBytesInt32 } from "../../app/src/utils/conversion";
 
-describe("Donations", () => {
+export default function donations() {
   // Configure the client to use the local cluster.
   const provider = anchor.AnchorProvider.env();
   anchor.setProvider(provider);
-
-  const program = anchor.workspace.GrantsProgram as Program<GrantsProgram>;
-  const programWallet = (program.provider as anchor.AnchorProvider).wallet;
-
-  // to be initialized in the `before` method
+  
+  
+  // to be initialized in the `before` method from the context
+  let program: Program<GrantsProgram>;
   let programInfoPDA: PublicKey;
+  let admin: Keypair;
+  let generateFundedKeypair: () => Promise<Keypair>;
 
   // to be initialized in the `beforeEach` method
-  let creator: Keypair;
+  let author: Keypair;
   let grantPDA: PublicKey;
 
-  async function generateFundedKeypair(): Promise<anchor.web3.Keypair> {
-    const newKeypair = anchor.web3.Keypair.generate();
+  before(async function() {
+    program = this.test.ctx.program;
+    programInfoPDA = this.test.ctx.programInfoPDA;
+    admin = this.test.ctx.admin;
+    generateFundedKeypair = this.test.ctx.generateFundedKeypair;
+  });
 
-    const transaction = new Transaction().add(
-      SystemProgram.transfer({
-        fromPubkey: programWallet.publicKey,
-        toPubkey: newKeypair.publicKey,
-        lamports: 5 * LAMPORTS_PER_SOL,
-      })
-    );
-    const _confirmation = await (
-      program.provider as anchor.AnchorProvider
-    ).sendAndConfirm(transaction);
+  beforeEach(async () => {
+    author = await generateFundedKeypair();
+    grantPDA = await createGrant(author);
+  });
 
-    return newKeypair;
-  }
-
-  async function generateDonation(
+  async function createDonation(
     grant: PublicKey,
     donor: Keypair,
     lamports: number
@@ -66,8 +62,6 @@ describe("Donations", () => {
         program.programId
       );
 
-    const initialGrantBalance = await provider.connection.getBalance(grantPDA);
-
     try {
       const _tx = await program.methods
         .createDonation(lamports)
@@ -84,141 +78,115 @@ describe("Donations", () => {
       expect.fail();
     }
 
-    let donation = await program.account.donation.fetch(donationPDA);
-
-    const grantBalance = await provider.connection.getBalance(grantPDA);
-
-    expect(donation.payer).to.eql(donor.publicKey);
-    expect(donation.grant).to.eql(grant);
-    expect(donation.amount.toNumber()).to.eq(lamports);
-    expect(donation.state).to.eql({ funded: {} });
-
-    expect(grantBalance).to.eql(initialGrantBalance + lamports);
-
     return donationPDA;
   }
 
-  async function generateGrant(
-    creator: Keypair
-  ): Promise<anchor.web3.PublicKey> {
-    const [newGrantPDA, _grantBump] =
-      await anchor.web3.PublicKey.findProgramAddress(
-        [encode("grant"), creator.publicKey.toBuffer()],
-        program.programId
-      );
-
-    const grantInfo = {
-      title: "first grant",
-      description:
-        "skadkfjaskdjfhaklsjdhfjklashdfkljhaskldjfhklajshdfkljahsdkljfh",
-      image: "http://mycdn.com/image1",
-      repo: "http://github.com/myuser/myrepo/",
-      creator: creator.publicKey,
-    };
-    const _tx = await program.methods
-      .createGrant(grantInfo)
-      .accounts({
-        grant: newGrantPDA,
-        creator: creator.publicKey,
-      })
-      .signers([creator])
-      .rpc();
-
-    let grant = await program.account.grant.fetch(newGrantPDA);
-
-    expect(grant.title).to.eql(grantInfo.title);
-    return newGrantPDA;
-  }
-  before(async () => {
-    const [newProgramInfoPDA, _bump] =
-      await anchor.web3.PublicKey.findProgramAddress(
-        [encode("program_info")],
-        program.programId
-      );
-    programInfoPDA = newProgramInfoPDA;
-  });
-
-  beforeEach(async () => {
-    creator = await generateFundedKeypair();
-
-    grantPDA = await generateGrant(creator);
-  });
-
-  it("Initializes Grant Program Info!", async () => {
-    // Add your test here.
-    const _tx = await program.methods
-      .initializeProgramInfo()
-      .accounts({
-        authority: programWallet.publicKey,
-        programInfo: programInfoPDA,
-      })
-      .rpc();
+  async function createGrant(author: Keypair) {
+    const targetLamports = LAMPORTS_PER_SOL;
+    const dueDate = 123124;
+    const info = "";
 
     const programInfo = await program.account.programInfo.fetch(programInfoPDA);
+    const [newGrantPDA, _grantBump] =
+      await anchor.web3.PublicKey.findProgramAddress(
+        [encode("grant"), toBytesInt32(programInfo.grantsCount)],
+        program.programId
+      );
 
-    expect(programInfo.authority).to.eql(programWallet.publicKey);
-    expect(programInfo.grantsCount).to.eql(0);
-  });
+    try {
+      await program.methods
+        .createGrant(info, targetLamports, dueDate)
+        .accounts({
+          grant: newGrantPDA,
+          programInfo: programInfoPDA,
+          author: author.publicKey,
+        })
+        .signers([author])
+        .rpc();
+    } catch (err) {
+      console.log(err);
+      expect.fail();
+    }
+
+    return newGrantPDA;
+  }
 
   it("Creates a grant!", async () => {
-    creator = await generateFundedKeypair();
-    await generateGrant(creator);
+    author = await generateFundedKeypair();
+    await createGrant(author);
   });
 
   it("Creates a donation", async () => {
-    const donor = await generateFundedKeypair();
-    await generateDonation(grantPDA, donor, 0.7 * LAMPORTS_PER_SOL);
-  });
-
-  it("Releases the grant funds to the creator", async () => {
     // Arrange
     const donor = await generateFundedKeypair();
     const lamports = 0.7 * LAMPORTS_PER_SOL;
-    const _donationPDA = await generateDonation(grantPDA, donor, lamports);
+    const initialGrantBalance = await provider.connection.getBalance(grantPDA);
+
+    // Act
+    const donationPDA = await createDonation(grantPDA, donor, lamports);
+
+    // Assert
+    let donation = await program.account.donation.fetch(donationPDA);
+    const grantBalance = await provider.connection.getBalance(grantPDA);
+
+    expect(donation.payer).to.eql(donor.publicKey);
+    expect(donation.grant).to.eql(grantPDA);
+    expect(donation.amount.toNumber()).to.eq(lamports);
+    expect(donation.state).to.eql({ funded: {} });
+    expect(grantBalance).to.eql(initialGrantBalance + lamports);
+  });
+
+  it("Releases the grant funds to the author", async () => {
+    // Arrange
+    const donor = await generateFundedKeypair();
+    const lamports = 0.7 * LAMPORTS_PER_SOL;
+    const _donationPDA = await createDonation(grantPDA, donor, lamports);
 
     const initialGrantBalance = await provider.connection.getBalance(grantPDA);
-    const initialCreatorBalance = await provider.connection.getBalance(
-      creator.publicKey
+    const initialAuthorBalance = await provider.connection.getBalance(
+      author.publicKey
     );
 
     // Act
     const _tx = await program.methods
       .releaseGrant()
       .accounts({
-        authority: programWallet.publicKey,
-        creator: creator.publicKey,
+        admin: admin.publicKey,
+        author: author.publicKey,
         grant: grantPDA,
         programInfo: programInfoPDA,
       })
+      .signers([admin])
       .rpc();
 
     // Assert
     const grantBalance = await provider.connection.getBalance(grantPDA);
-    const creatorBalance = await provider.connection.getBalance(
-      creator.publicKey
+    const authorBalance = await provider.connection.getBalance(
+      author.publicKey
     );
     const grant = await program.account.grant.fetch(grantPDA);
 
-    expect(grant.amountRaised.toNumber()).to.eql(lamports);
+    expect(grant.lamportsRaised.toNumber()).to.eql(lamports);
     expect(grant.state).to.eql({ released: {} });
     expect(grantBalance).to.eql(initialGrantBalance - lamports);
-    expect(creatorBalance).to.eql(initialCreatorBalance + lamports);
+    expect(authorBalance).to.eql(initialAuthorBalance + lamports);
   });
 
   it("Fails when trying to release same grant", async () => {
     // Arrange
     const donor = await generateFundedKeypair();
     const lamports = 0.7 * LAMPORTS_PER_SOL;
-    const _donationPDA = await generateDonation(grantPDA, donor, lamports);
+    const _donationPDA = await createDonation(grantPDA, donor, lamports);
 
     const _tx = await program.methods
       .releaseGrant()
       .accounts({
-        authority: programWallet.publicKey,
-        creator: creator.publicKey,
+        admin: admin.publicKey,
+        author: author.publicKey,
         grant: grantPDA,
         programInfo: programInfoPDA,
       })
+      .signers([admin])
       .rpc();
 
     const grant = await program.account.grant.fetch(grantPDA);
@@ -229,11 +197,12 @@ describe("Donations", () => {
       const _tx = await program.methods
         .releaseGrant()
         .accounts({
-          authority: programWallet.publicKey,
-          creator: creator.publicKey,
+          admin: admin.publicKey,
+          author: author.publicKey,
           grant: grantPDA,
           programInfo: programInfoPDA,
         })
+        .signers([admin])
         .rpc();
 
       // Assert
@@ -242,7 +211,7 @@ describe("Donations", () => {
       expect(_err).to.be.instanceOf(AnchorError);
       const err: AnchorError = _err;
       expect(err.error.errorCode.code).to.equal("ReleasedGrant");
-      expect(err.error.errorCode.number).to.equal(6001);
+      expect(err.error.errorCode.number).to.equal(6002);
       expect(err.program.equals(program.programId)).is.true;
     }
   });
@@ -250,7 +219,7 @@ describe("Donations", () => {
   it("Cannot create another donation account with same user and grant", async () => {
     // Arrange
     const donor = await generateFundedKeypair();
-    const donationPDA = await generateDonation(
+    const donationPDA = await createDonation(
       grantPDA,
       donor,
       2.4 * LAMPORTS_PER_SOL
@@ -284,25 +253,17 @@ describe("Donations", () => {
 
   it("Creates another donation with other user", async () => {
     const donor1 = await generateFundedKeypair();
-    await generateDonation(
-      grantPDA,
-      donor1,
-      2.1 * LAMPORTS_PER_SOL
-    );
+    await createDonation(grantPDA, donor1, 2.1 * LAMPORTS_PER_SOL);
 
     const donor2 = await generateFundedKeypair();
-    await generateDonation(
-      grantPDA,
-      donor2,
-      2.1 * LAMPORTS_PER_SOL
-    );
+    await createDonation(grantPDA, donor2, 2.1 * LAMPORTS_PER_SOL);
   });
 
   it("Cancels a donation", async () => {
     // Arrange
     const donor = await generateFundedKeypair();
     const lamports = 2.1 * LAMPORTS_PER_SOL;
-    const donationPDA = await generateDonation(grantPDA, donor, lamports);
+    const donationPDA = await createDonation(grantPDA, donor, lamports);
 
     const payer = donor.publicKey;
 
@@ -313,12 +274,13 @@ describe("Donations", () => {
     const _tx = await program.methods
       .cancelDonation()
       .accounts({
-        authority: programWallet.publicKey,
+        admin: admin.publicKey,
         programInfo: programInfoPDA,
         donation: donationPDA,
         payer,
         grant: grantPDA,
       })
+      .signers([admin])
       .rpc();
 
     // Assert
@@ -335,19 +297,20 @@ describe("Donations", () => {
     // Arrange
     const donor = await generateFundedKeypair();
     const lamports = 2.1 * LAMPORTS_PER_SOL;
-    const donationPDA = await generateDonation(grantPDA, donor, lamports);
+    const donationPDA = await createDonation(grantPDA, donor, lamports);
 
     const payer = donor.publicKey;
 
     const _tx = await program.methods
       .cancelDonation()
       .accounts({
-        authority: programWallet.publicKey,
+        admin: admin.publicKey,
         programInfo: programInfoPDA,
         donation: donationPDA,
         payer,
         grant: grantPDA,
       })
+      .signers([admin])
       .rpc();
 
     const donation = await program.account.donation.fetch(donationPDA);
@@ -358,12 +321,13 @@ describe("Donations", () => {
       const _tx = await program.methods
         .cancelDonation()
         .accounts({
-          authority: programWallet.publicKey,
+          admin: admin.publicKey,
           programInfo: programInfoPDA,
           donation: donationPDA,
           payer,
           grant: grantPDA,
         })
+        .signers([admin])
         .rpc();
 
       // Assert
@@ -381,7 +345,7 @@ describe("Donations", () => {
     // Arrange
     const donor = await generateFundedKeypair();
 
-    const donationPDA = await generateDonation(
+    const donationPDA = await createDonation(
       grantPDA,
       donor,
       1 * LAMPORTS_PER_SOL
@@ -413,7 +377,7 @@ describe("Donations", () => {
     const totalDonors = (await program.account.grant.fetch(grantPDA))
       .totalDonors;
 
-    const donationPDA = await generateDonation(
+    const donationPDA = await createDonation(
       grantPDA,
       donor,
       1 * LAMPORTS_PER_SOL
@@ -488,4 +452,4 @@ describe("Donations", () => {
       expect(donation.amount.toNumber()).to.eql(2 * lamports);
     });
   });
-});
+}

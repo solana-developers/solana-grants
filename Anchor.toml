@@ -1,7 +1,7 @@
 [features]
 seeds = false
 [programs.localnet]
-grants_program = "Fg6PaFpoGXkYsidMpWTK6W2BeZ7FEfcYkg476zPFsLnS"
+grants_program = "4rYKkNGRQSe2hJEQGgmiEAcg4KQzP8h8QfwTmmgChAmZ"
 
 [registry]
 url = "https://anchor.projectserum.com"

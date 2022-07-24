@@ -1,0 +1,34 @@
+use crate::state::{Grant, ProgramInfo};
+use anchor_lang::prelude::*;
+
+/// This instruction lets an admin make a grant eligible for matching.
+#[derive(Accounts)]
+pub struct EligibleMatching<'info> {
+    #[account(mut)]
+    admin: Signer<'info>,
+
+    #[account(
+        mut,
+        seeds = [b"grant", grant.grant_num.to_be_bytes().as_ref()],
+        bump = grant.bump,
+    )]
+    grant: Account<'info, Grant>,
+
+    #[account(
+        seeds = [ProgramInfo::SEED.as_bytes().as_ref()], 
+        bump = program_info.bump, 
+        has_one = admin
+    )]
+    program_info: Account<'info, ProgramInfo>,
+
+    system_program: Program<'info, System>,
+}
+
+pub fn eligible_matching(ctx: Context<EligibleMatching>) -> Result<()> {
+    ctx.accounts.grant.is_active()?;
+
+    // making grant matching eligible
+    ctx.accounts.grant.is_matching_eligible = true;
+
+    Ok(())
+}

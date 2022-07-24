@@ -3,13 +3,12 @@
 
 use anchor_lang::prelude::*;
 use instructions::*;
-use state::InitGrant;
 
-mod errors;
+pub mod state;
 mod instructions;
-mod state;
+mod errors;
 
-declare_id!("Fg6PaFpoGXkYsidMpWTK6W2BeZ7FEfcYkg476zPFsLnS");
+declare_id!("4rYKkNGRQSe2hJEQGgmiEAcg4KQzP8h8QfwTmmgChAmZ");
 
 /// Main program entrypoint
 #[program]
@@ -18,9 +17,9 @@ pub mod grants_program {
 
     use super::*;
 
-    /// TODO: to be replaced with Dhiraj's implementation
-    pub fn create_grant(ctx: Context<CreateGrant>, grant_info: InitGrant) -> Result<()> {
-        instructions::create_grant(ctx, grant_info)
+    /// Initializes a grant and updates the program info's grant count
+    pub fn create_grant(ctx: Context<CreateGrant>, info: String, target_lamports: u32, due_date: u32) -> Result<()> {
+        instructions::create_grant(ctx, info, target_lamports, due_date)
     }
 
     /// Creates a donation which transfers money from the payer to the grant
@@ -44,8 +43,24 @@ pub mod grants_program {
         instructions::cancel_donation(ctx)
     }
 
-    /// TODO: to be replaced with Dhiraj's implementation
+    /// Initializes the program info data, which determines the admin.
     pub fn initialize_program_info(ctx: Context<Initialize>) -> Result<()> {
         instructions::initialize(ctx)
     }
+
+    /// Lets an admin cancel a grant
+    pub fn cancel_grant_admin(ctx: Context<CancelGrantAdmin>) -> Result<()> {
+        instructions::cancel_grant_admin(ctx)
+    }
+
+    /// Lets an author cancel a grant
+    pub fn cancel_grant_author(ctx: Context<CancelGrantAuthor>) -> Result<()> {
+        instructions::cancel_grant_author(ctx)
+    }
+
+    /// Sets the matching eligibility to true
+    pub fn eligible_matching(ctx: Context<EligibleMatching>) -> Result<()> {
+        instructions::eligible_matching(ctx)
+    }
+
 }

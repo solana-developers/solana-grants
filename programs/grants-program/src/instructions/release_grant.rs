@@ -4,26 +4,26 @@ use crate::state::{ProgramInfo, Grant, GrantState};
 
 #[derive(Accounts)]
 pub struct ReleaseGrant<'info> {
-    authority: Signer<'info>,
+    admin: Signer<'info>,
 
     #[account(
-        has_one = authority, 
-        seeds = [ProgramInfo::SEED_PREFIX.as_bytes().as_ref()],
+        has_one = admin, 
+        seeds = [ProgramInfo::SEED.as_bytes().as_ref()],
         bump = program_info.bump,
     )]
     program_info: Account<'info, ProgramInfo>,
 
     #[account(
         mut,
-        has_one = creator,
-        seeds = [b"grant", creator.key().as_ref()],
+        has_one = author,
+        seeds = [b"grant", grant.grant_num.to_be_bytes().as_ref()],
         bump = grant.bump,
     )]
     grant: Account<'info, Grant>,
 
     #[account(mut)]
     /// CHECK: We check that the grant has this creator
-    creator: AccountInfo<'info>,
+    author: AccountInfo<'info>,
 }
 
 pub fn release_grant(ctx: Context<ReleaseGrant>) -> Result<()> {
@@ -32,9 +32,9 @@ pub fn release_grant(ctx: Context<ReleaseGrant>) -> Result<()> {
 
     // transfer lamports from grant to creator
     **ctx.accounts.grant
-        .to_account_info().try_borrow_mut_lamports()? -= ctx.accounts.grant.amount_raised;
+        .to_account_info().try_borrow_mut_lamports()? -= ctx.accounts.grant.lamports_raised;
 
-    **ctx.accounts.creator.try_borrow_mut_lamports()? += ctx.accounts.grant.amount_raised;
+    **ctx.accounts.author.try_borrow_mut_lamports()? += ctx.accounts.grant.lamports_raised;
 
     // update grant state
     ctx.accounts.grant.state = GrantState::Released;
