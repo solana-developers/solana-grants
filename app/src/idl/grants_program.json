@@ -1,0 +1,239 @@
+{
+  "version": "0.1.0",
+  "name": "grants_program",
+  "instructions": [
+    {
+      "name": "createGrant",
+      "accounts": [
+        {
+          "name": "author",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "admin",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "grant",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "programInfo",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "info",
+          "type": "string"
+        },
+        {
+          "name": "targetLamports",
+          "type": "u32"
+        },
+        {
+          "name": "dueDate",
+          "type": "u32"
+        }
+      ]
+    },
+    {
+      "name": "initializeProgramInfo",
+      "accounts": [
+        {
+          "name": "admin",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "programInfo",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "cancelGrantAdmin",
+      "accounts": [
+        {
+          "name": "admin",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "grant",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "programInfo",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "cancelGrantAuthor",
+      "accounts": [
+        {
+          "name": "author",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "grant",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "programInfo",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "eligibleMatching",
+      "accounts": [
+        {
+          "name": "admin",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "grant",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "programInfo",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": []
+    }
+  ],
+  "accounts": [
+    {
+      "name": "GrantsProgramInfo",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "bump",
+            "type": "u8"
+          },
+          {
+            "name": "grantsCount",
+            "type": "u32"
+          },
+          {
+            "name": "admin",
+            "type": "publicKey"
+          }
+        ]
+      }
+    },
+    {
+      "name": "Grant",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "author",
+            "type": "publicKey"
+          },
+          {
+            "name": "escrowCount",
+            "type": "u32"
+          },
+          {
+            "name": "info",
+            "type": "string"
+          },
+          {
+            "name": "lamportsRaised",
+            "type": "u64"
+          },
+          {
+            "name": "totalDonors",
+            "type": "u32"
+          },
+          {
+            "name": "targetLamports",
+            "type": "u64"
+          },
+          {
+            "name": "dueDate",
+            "type": "u32"
+          },
+          {
+            "name": "isActive",
+            "type": "bool"
+          },
+          {
+            "name": "matchingEligible",
+            "type": "bool"
+          },
+          {
+            "name": "grantNum",
+            "type": "u32"
+          }
+        ]
+      }
+    }
+  ],
+  "errors": [
+    {
+      "code": 6000,
+      "name": "InfoTooLong",
+      "msg": "The provided info string should be 200 characters long maximum."
+    },
+    {
+      "code": 6001,
+      "name": "InvalidDateFormat",
+      "msg": "The provided date is not in the correct format."
+    },
+    {
+      "code": 6002,
+      "name": "AlreadyInActive",
+      "msg": "The provided grant is already inactive."
+    }
+  ],
+  "metadata": {
+    "address": "2BAJJedFtdAEv8BdDcQwnQEYuBieqkz3Yzdg8feBiCXc"
+  }
+}

@@ -1,70 +1,81 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
+import {useAnchorWallet} from "@solana/wallet-adapter-react";
+import getProvider from "../instructions/api/getProvider";
+import createGrant from "../instructions/createGrant";
 
-export default function Grant({ setpreview }) {
-    const [grant, setGrant] = useState({
-        title: '',
-        image: '',
-        description: '',
-        link: '',
-    });
+export default function Grant({setpreview}) {
+    const [grant, setGrant] = useState({});
 
     const handleChange = (event) => {
-        const { name, value } = event.target;
-        setGrant({ ...grant, [name]: value });
-        console.log(grant);
+        const {name, value} = event.target;
+        setGrant({...grant, [name]: value});
     }
 
-    const handleSubmit = (event) => {
+    const wallet = useAnchorWallet()
+    const provider = getProvider(wallet)
+
+    const handleSubmit = async (event) => {
         event.preventDefault();
-        console.log(grant);
+        const tsx = await createGrant(provider, grant)
+        console.log(tsx)
+        setpreview(false);
     }
 
     return (
         <>
             <div className="modal" id="my-modal-2">
                 <div className="modal-box maingrantbox">
-                    <a href="#my-modal-2" className="btn btn-sm btn-circle absolute right-2 top-2" onClick={() => setpreview(false)}>✕</a>
+                    <a href="#my-modal-2" className="btn btn-sm btn-circle absolute right-2 top-2"
+                       onClick={() => setpreview(false)}>✕</a>
                     <h1 className='text-[3rem] text-center	font-extrabold	mb-[3rem]'>Lets Get Funding!</h1>
+
                     <div className='grant-main'>
-                        <div className='grant-submain' onSubmit={handleSubmit}>
+                        <div className='grant-submain'>
                             <div>
                                 <label>
                                     <div className='grantsub'>
                                         <h1 className='grantname'>Grant Title:</h1>
-                                        <input className='grantinput' placeholder='Grant Title Field' type="text" name="title" onChange={handleChange} />
+                                        <input className='grantinput' placeholder='Grant Title Field' type="text"
+                                               onChange={handleChange} name="info"/>
                                     </div>
                                 </label>
                             </div>
-                            <br />
+                            <br/>
                             <div>
                                 <label>
                                     <div className='grantsub'>
                                         <h1 className='grantname'>Grant Description:</h1>
-                                        <input className='grantinput' type="text" name="description" placeholder='Grant Image Field' onChange={handleChange} />
+                                        <input className='grantinput' type="text" name="description"
+                                               onChange={handleChange} placeholder='Grant Image Field'/>
                                     </div>
                                 </label>
                             </div>
-                            <br />
+                            <br/>
                             <div>
                                 <label>
                                     <div className='grantsub'>
                                         <h1 className='grantname'>Grant Image:</h1>
-                                        <input className='grantinput' type="text" name="image" placeholder='Grant Description' onChange={handleChange} />
+                                        <input className='grantinput' type="text" name="image"
+                                               onChange={handleChange} placeholder='Grant Description'/>
                                     </div>
                                 </label>
                             </div>
-                            <br />
+                            <br/>
                             <div>
                                 <label>
                                     <div className='grantsub'>
                                         <h1 className='grantname'> Grant Link:</h1>
-                                        <input className='grantinput' type="text" placeholder='GitHub Link Field' name="link" onChange={handleChange} />
+                                        <input className='grantinput' type="text" placeholder='GitHub Link Field'
+                                               onChange={handleChange} name="link"/>
                                     </div>
                                 </label>
                             </div>
-                            <br />
+                            <br/>
                             <div className="modal-action flex justify-center">
-                                <a href="#" type="submit" className="btn bg-[#14F195] decoration-[#000] rounded-[20px] w-[210px] h-[38px]"><h1 className='grantbuttonname'>Create Grant</h1></a>
+                                <button type="button"
+                                        className="btn bg-[#14F195] decoration-[#000] rounded-[20px] w-[210px] h-[38px]"
+                                        onClick={handleSubmit}><h1 className='grantbuttonname'>Create Grant</h1>
+                                </button>
                             </div>
                         </div>
                     </div>
