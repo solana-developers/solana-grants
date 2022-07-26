@@ -1,22 +1,27 @@
-import {Provider} from "@project-serum/anchor";
+import { Provider, BN } from "@project-serum/anchor";
 import getProgram from "./api/getProgram";
-import {getProgramInfoPDA} from "./pda/getProgramInfoPDA";
+import { getProgramInfoPDA } from "./pda/getProgramInfoPDA";
 import getGrantPDA from "./pda/getGrantPDA";
-import {GrantModel} from "../models/grant";
-import {notify} from "../utils/notifications";
+import { GrantModel } from "../models/grant";
+import { notify } from "../utils/notifications";
 
 export default async function createGrant(provider: Provider, grant: GrantModel): Promise<any> {
-    const program = getProgram(provider)
+    try {
+        if (!provider) {
+            notify({ type: "error", message: "error", description: "Wallet not connected!" });
+            return { err: true };
+        }
 
-    const programInfoPDA = await getProgramInfoPDA(program)
+        const program = getProgram(provider)
 
-    const programInfo = await program.account.grantsProgramInfo.fetch(programInfoPDA)
+        const programInfoPDA = await getProgramInfoPDA(program)
 
-    const grantPDA = await getGrantPDA(program, programInfo)
+        const programInfo = await program.account.grantsProgramInfo.fetch(programInfoPDA)
 
-    if (provider) {
+        const grantPDA = await getGrantPDA(program, programInfo)
+
         await program.methods
-            .createGrant(grant.info, 2, 22)
+            .createGrant(grant.info, new BN(grant.targetLamports), new BN(grant.dueDate))
             .accounts({
                 grant: grantPDA,
                 programInfo: programInfoPDA,
@@ -24,10 +29,12 @@ export default async function createGrant(provider: Provider, grant: GrantModel)
             })
             .rpc();
 
-        return program.account.grant.fetch(grantPDA);
-    } else {
-        console.log('error', 'Wallet not connected!');
-        notify({ type: 'error', message: 'error', description: 'Wallet not connected!' });
-        return;
+        console.log(await program.account.grant.fetch(grantPDA));
+
+        return { err: false }
+    } catch (error) {
+        console.log(error);
+        return { err: true }
     }
+    
 }
