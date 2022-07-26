@@ -24,7 +24,7 @@ pub struct CreateGrant<'info> {
     system_program: Program<'info, System>,
 }
 
-pub fn create_grant(ctx: Context<CreateGrant>, info: String, target_lamports: u32, due_date: u32) -> Result<()> {
+pub fn create_grant(ctx: Context<CreateGrant>, info: String, target_lamports: u32, due_date: u64) -> Result<()> {
     // checking if info is longer than 200 characters
     if info.chars().count() > 200 {
         return Err(GrantErrors::InfoTooLong.into());
@@ -34,7 +34,7 @@ pub fn create_grant(ctx: Context<CreateGrant>, info: String, target_lamports: u3
         ctx.accounts.author.key(),
         info,
         target_lamports as u64,
-        due_date as u32,
+        due_date as u64,
         ctx.accounts.program_info.grants_count() as u32,
     ));
 
