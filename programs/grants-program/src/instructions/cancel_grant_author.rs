@@ -1,10 +1,9 @@
 use crate::state::Grant;
 use anchor_lang::prelude::*;
 
-/// This instruction lets an author cancel a grant.
+/// Lets an author cancel a grant.
 #[derive(Accounts)]
 pub struct CancelGrantAuthor<'info> {
-    #[account(mut)]
     author: Signer<'info>,
 
     #[account(
@@ -14,8 +13,6 @@ pub struct CancelGrantAuthor<'info> {
         has_one = author
     )]
     grant: Account<'info, Grant>,
-
-    system_program: Program<'info, System>,
 }
 
 pub fn cancel_grant_author(ctx: Context<CancelGrantAuthor>) -> Result<()> {

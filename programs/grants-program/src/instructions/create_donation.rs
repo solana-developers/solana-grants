@@ -61,14 +61,15 @@ pub fn create_donation(ctx: Context<CreateDonation>, lamports: u64) -> Result<()
         ]
     )?;
 
-    // initialize escrow
-    ctx.accounts
-        .donation.set_inner(Donation::new(
+    // initialize donation account
+    let donation = Donation::new(
             *ctx.bumps.get(Donation::SEED_PREFIX).expect("we should have gotten the donation's canonical bump"),
             ctx.accounts.payer.key(), 
             ctx.accounts.grant.key(), 
-            lamports 
-        ));
+            lamports,
+        );
+    ctx.accounts
+        .donation.set_inner(donation.clone());
 
     // initialize index account
     ctx.accounts
@@ -83,7 +84,7 @@ pub fn create_donation(ctx: Context<CreateDonation>, lamports: u64) -> Result<()
     // update grant data
     ctx.accounts
         .grant
-        .update_with_new_donation(&ctx.accounts.donation.clone().into_inner());
+        .update_with_new_donation(&donation);
 
     Ok(())
 }

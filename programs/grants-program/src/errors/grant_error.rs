@@ -13,4 +13,7 @@ pub enum GrantError {
 
     #[msg("This grant has already been cancelled")]
     CancelledGrant,
+
+    #[msg("This grant is still active")]
+    GrantStillActive,
 }

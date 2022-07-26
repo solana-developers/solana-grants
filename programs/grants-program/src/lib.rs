@@ -62,5 +62,4 @@ pub mod grants_program {
     pub fn eligible_matching(ctx: Context<EligibleMatching>) -> Result<()> {
         instructions::eligible_matching(ctx)
     }
-
 }

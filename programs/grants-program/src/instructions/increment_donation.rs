@@ -23,7 +23,7 @@ pub struct IncrementDonation<'info> {
     payer: Signer<'info>,
 
     #[account(mut)]
-    /// CHECK: We check that the donation has this receiver
+    /// CHECK: We check that the donation has this grant
     grant: Account<'info, Grant>,
 
     system_program: Program<'info, System>,

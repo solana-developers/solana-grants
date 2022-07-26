@@ -22,7 +22,7 @@ pub struct ReleaseGrant<'info> {
     grant: Account<'info, Grant>,
 
     #[account(mut)]
-    /// CHECK: We check that the grant has this creator
+    /// CHECK: We check that the grant has this author
     author: AccountInfo<'info>,
 }
 

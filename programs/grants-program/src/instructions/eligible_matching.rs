@@ -4,7 +4,6 @@ use anchor_lang::prelude::*;
 /// This instruction lets an admin make a grant eligible for matching.
 #[derive(Accounts)]
 pub struct EligibleMatching<'info> {
-    #[account(mut)]
     admin: Signer<'info>,
 
     #[account(
@@ -20,8 +19,6 @@ pub struct EligibleMatching<'info> {
         has_one = admin
     )]
     program_info: Account<'info, ProgramInfo>,
-
-    system_program: Program<'info, System>,
 }
 
 pub fn eligible_matching(ctx: Context<EligibleMatching>) -> Result<()> {

@@ -6,12 +6,10 @@ import {
   LAMPORTS_PER_SOL,
   PublicKey,
   SendTransactionError,
-  SystemProgram,
-  Transaction,
 } from "@solana/web3.js";
 import { expect } from "chai";
 import { GrantsProgram } from "../../target/types/grants_program";
-import { makeDonation } from "../../app/src/transactions";
+import { makeDonation, cancelGrant } from "../../app/src/transactions";
 import { toBytesInt32 } from "../../app/src/utils/conversion";
 
 export default function donations() {
@@ -63,7 +61,7 @@ export default function donations() {
       );
 
     try {
-      const _tx = await program.methods
+      await program.methods
         .createDonation(lamports)
         .accounts({
           payer: donor.publicKey,
@@ -111,11 +109,6 @@ export default function donations() {
     return newGrantPDA;
   }
 
-  it("Creates a grant!", async () => {
-    author = await generateFundedKeypair();
-    await createGrant(author);
-  });
-
   it("Creates a donation", async () => {
     // Arrange
     const donor = await generateFundedKeypair();
@@ -148,7 +141,7 @@ export default function donations() {
     );
 
     // Act
-    const _tx = await program.methods
+    await program.methods
       .releaseGrant()
       .accounts({
         admin: admin.publicKey,
@@ -178,7 +171,7 @@ export default function donations() {
     const lamports = 0.7 * LAMPORTS_PER_SOL;
     const _donationPDA = await createDonation(grantPDA, donor, lamports);
 
-    const _tx = await program.methods
+    await program.methods
       .releaseGrant()
       .accounts({
         admin: admin.publicKey,
@@ -194,7 +187,7 @@ export default function donations() {
 
     // Act
     try {
-      const _tx = await program.methods
+      await program.methods
         .releaseGrant()
         .accounts({
           admin: admin.publicKey,
@@ -216,6 +209,49 @@ export default function donations() {
     }
   });
 
+  it("Fails when trying to release a cancelled grant", async () => {
+    // Arrange
+    const donor = await generateFundedKeypair();
+    const lamports = 0.7 * LAMPORTS_PER_SOL;
+    const _donationPDA = await createDonation(grantPDA, donor, lamports);
+
+    await program.methods
+      .cancelGrantAdmin()
+      .accounts({
+        admin: admin.publicKey,
+        grant: grantPDA,
+        programInfo: programInfoPDA,
+      })
+      .signers([admin])
+      .rpc();
+
+    const grant = await program.account.grant.fetch(grantPDA);
+    expect(grant.state).to.eql({ cancelled: {} });
+
+    // Act
+    try {
+      await program.methods
+        .releaseGrant()
+        .accounts({
+          admin: admin.publicKey,
+          author: author.publicKey,
+          grant: grantPDA,
+          programInfo: programInfoPDA,
+        })
+        .signers([admin])
+        .rpc();
+
+      // Assert
+      expect.fail("Should've failed but didn't");
+    } catch (_err) {
+      expect(_err).to.be.instanceOf(AnchorError);
+      const err: AnchorError = _err;
+      expect(err.error.errorCode.code).to.equal("CancelledGrant");
+      expect(err.error.errorCode.number).to.equal(6003);
+      expect(err.program.equals(program.programId)).is.true;
+    }
+  });
+
   it("Cannot create another donation account with same user and grant", async () => {
     // Arrange
     const donor = await generateFundedKeypair();
@@ -233,7 +269,7 @@ export default function donations() {
 
     try {
       // Act
-      const _tx = await program.methods
+      await program.methods
         .createDonation(0.7 * LAMPORTS_PER_SOL)
         .accounts({
           payer: donor.publicKey,
@@ -270,8 +306,18 @@ export default function donations() {
     const initialGrantBalance = await provider.connection.getBalance(grantPDA);
     const initialDonorBalance = await provider.connection.getBalance(payer);
 
+    await program.methods
+      .cancelGrantAdmin()
+      .accounts({
+        admin: admin.publicKey,
+        grant: grantPDA,
+        programInfo: programInfoPDA,
+      })
+      .signers([admin])
+      .rpc();
+    
     // Act
-    const _tx = await program.methods
+    await program.methods
       .cancelDonation()
       .accounts({
         admin: admin.publicKey,
@@ -293,7 +339,7 @@ export default function donations() {
     expect(donation.state).to.eql({ cancelled: {} });
   });
 
-  it("Fails when trying to cancel an already cancelled donation", async () => {
+  it("Forbids cancelling a donation when the grant is still active", async () => {
     // Arrange
     const donor = await generateFundedKeypair();
     const lamports = 2.1 * LAMPORTS_PER_SOL;
@@ -301,7 +347,48 @@ export default function donations() {
 
     const payer = donor.publicKey;
 
-    const _tx = await program.methods
+    // Act
+    try {
+      await program.methods
+      .cancelDonation()
+      .accounts({
+        admin: admin.publicKey,
+        programInfo: programInfoPDA,
+        donation: donationPDA,
+        payer,
+        grant: grantPDA,
+      })
+      .signers([admin])
+      .rpc();
+
+      // Assert
+      expect.fail("This should not be allowed");
+    } catch(e) {
+      expect(e).to.be.instanceOf(AnchorError);
+      const err: AnchorError = e;
+      expect(err.error.errorCode.code).to.equal("GrantStillActive");
+      expect(err.error.errorCode.number).to.equal(6004);
+      expect(err.program.equals(program.programId)).is.true;
+    }
+  });
+
+  it("Fails when trying to cancel an already cancelled donation", async () => {
+    // Arrange
+    const donor = await generateFundedKeypair();
+    const lamports = 2.1 * LAMPORTS_PER_SOL;
+    const donationPDA = await createDonation(grantPDA, donor, lamports);
+    await program.methods
+      .cancelGrantAdmin()
+      .accounts({
+        admin: admin.publicKey,
+        grant: grantPDA,
+        programInfo: programInfoPDA,
+      })
+      .signers([admin])
+      .rpc();
+    const payer = donor.publicKey;
+
+    await program.methods
       .cancelDonation()
       .accounts({
         admin: admin.publicKey,
@@ -318,7 +405,7 @@ export default function donations() {
 
     try {
       // Act
-      const _tx = await program.methods
+      await program.methods
         .cancelDonation()
         .accounts({
           admin: admin.publicKey,
@@ -352,7 +439,7 @@ export default function donations() {
     );
 
     // Act
-    const _tx = await program.methods
+    await program.methods
       .incrementDonation(1 * LAMPORTS_PER_SOL)
       .accounts({
         donation: donationPDA,
@@ -451,5 +538,47 @@ export default function donations() {
       expect(donation.state).to.eql({ funded: {} });
       expect(donation.amount.toNumber()).to.eql(2 * lamports);
     });
+  });
+  describe("cancelGrant helper", function () {
+    it("Cancels the grant and refunds all the grant's donors", async function () {
+      // Arrange
+      const initialGrantBalance = await provider.connection.getBalance(grantPDA);
+      const donor1 = await generateFundedKeypair();
+      const donor2 = await generateFundedKeypair();
+      const donor3 = await generateFundedKeypair();
+      const lamports1 = 2.1 * LAMPORTS_PER_SOL;
+      const lamports2 = 3.5 * LAMPORTS_PER_SOL;
+      const lamports3 = 4.2 * LAMPORTS_PER_SOL;
+      const donation1PDA = await createDonation(grantPDA, donor1, lamports1);
+      const donation2PDA = await createDonation(grantPDA, donor2, lamports2);
+      const donation3PDA = await createDonation(grantPDA, donor3, lamports3);
+      const initialDonor1Balance = await provider.connection.getBalance(donor1.publicKey);
+      const initialDonor2Balance = await provider.connection.getBalance(donor2.publicKey);
+      const initialDonor3Balance = await provider.connection.getBalance(donor3.publicKey);
+
+      // Act
+      let tx = await cancelGrant(grantPDA, admin.publicKey);
+      const _txSignature = await provider.sendAndConfirm(tx, [admin]);
+      
+      // Assert
+      const grantBalance = await provider.connection.getBalance(grantPDA);
+      const grant = await program.account.grant.fetch(grantPDA);
+      const donation1 = await program.account.donation.fetch(donation1PDA);
+      const donation2 = await program.account.donation.fetch(donation2PDA);
+      const donation3 = await program.account.donation.fetch(donation3PDA);
+      const donor1Balance = await provider.connection.getBalance(donor1.publicKey);
+      const donor2Balance = await provider.connection.getBalance(donor2.publicKey);
+      const donor3Balance = await provider.connection.getBalance(donor3.publicKey);
+      
+      expect(grant.state).to.eql({ cancelled: {} });
+      expect(donation1.state).to.eql({ cancelled: {} });
+      expect(donation2.state).to.eql({ cancelled: {} });
+      expect(donation3.state).to.eql({ cancelled: {} });
+    
+      expect(donor1Balance).to.eql(initialDonor1Balance + lamports1);
+      expect(donor2Balance).to.eql(initialDonor2Balance + lamports2);
+      expect(donor3Balance).to.eql(initialDonor3Balance + lamports3);
+      expect(grantBalance).to.eql(initialGrantBalance);
+    })
   });
 }

@@ -24,18 +24,22 @@ describe("grants-program", function () {
     this.programWallet = programWallet;
     this.admin = await generateFundedKeypair();
     this.generateFundedKeypair = generateFundedKeypair;
+    this.programInfoPDA = await initializeProgramInfo(this.admin);
   });
   
   it("Initializes Grant Program Info!", async function () {
-    this.programInfoPDA = await initializeProgramInfo(this.admin);
-
+    // Only assert it because we need it to initialize during `before` hook
+    // to be able to use `.only` on other specific tests.
     const programInfo = await program.account.programInfo.fetch(this.programInfoPDA);
     expect(programInfo.admin).to.eql(this.admin.publicKey);
     expect(programInfo.grantsCount).to.eql(0);
   });
 
-  describe("Grants", grants.bind(this));
-  describe("Donations", donations.bind(this));
+  describe("Grants", grants.bind(this)); // execute the grants suite
+  describe("Donations", donations.bind(this)); // execute the donations suite
+
+
+  // *** Rest of helper functions ***
 
   async function initializeProgramInfo(admin: Keypair) {
     const [newProgramInfoPDA, _bump] =

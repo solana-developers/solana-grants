@@ -13,11 +13,11 @@ pub struct CreateGrant<'info> {
     admin: Signer<'info>,
 
     #[account(
-    init,
-    payer = author,
-    seeds = [b"grant", program_info.grants_count.to_be_bytes().as_ref()],
-    bump,
-    space = 8 + Grant::MAXIMUM_SPACE
+        init,
+        payer = author,
+        seeds = [b"grant", program_info.grants_count.to_be_bytes().as_ref()],
+        bump,
+        space = 8 + Grant::MAXIMUM_SPACE
     )]
     grant: Account<'info, Grant>,
 

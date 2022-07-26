@@ -54,6 +54,7 @@ impl Grant {
     /// Checks if the grant is active and cancells it
     pub fn cancel_grant(&mut self) -> Result<()> {
         self.is_active()?;
+        
         self.state = GrantState::Cancelled;
 
         Ok(())

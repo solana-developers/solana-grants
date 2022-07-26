@@ -12,7 +12,7 @@ export default function suite() {
     let program: Program<GrantsProgram>;
     let admin: Keypair;
     let programInfoPDA: PublicKey;
-  let generateFundedKeypair: () => Promise<Keypair>;
+    let generateFundedKeypair: () => Promise<Keypair>;
 
 
     // create new for every test in `beforeEach`
