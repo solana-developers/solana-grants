@@ -1,9 +1,9 @@
 import * as anchor from "@project-serum/anchor";
-import {AnchorError, Program} from "@project-serum/anchor";
+import {AnchorError, BN, Program} from "@project-serum/anchor";
 import {GrantsProgram} from "../../target/types/grants_program";
 import {Transaction, SystemProgram, LAMPORTS_PER_SOL, PublicKey, Keypair, SendTransactionError} from "@solana/web3.js";
 import {encode} from "@project-serum/anchor/dist/cjs/utils/bytes/utf8";
-import {expect} from "chai";
+import {assert, expect} from "chai";
 import { toBytesInt32 } from "../../app/src/utils/conversion";
 
 export default function suite() {
@@ -45,7 +45,7 @@ export default function suite() {
 
     async function createGrant(author: Keypair) {
 
-        const targetLamports = LAMPORTS_PER_SOL;
+        const targetLamports = new BN(LAMPORTS_PER_SOL);
         const dueDate = 123124;
         const info = "";
 
@@ -64,7 +64,7 @@ export default function suite() {
 
     it("Creates a grant", async () => {
 
-        const targetLamports = LAMPORTS_PER_SOL;
+        const targetLamports = new BN(LAMPORTS_PER_SOL);
         const dueDate = 123124;
 
         const grant = await createGrant(author);
@@ -73,7 +73,7 @@ export default function suite() {
         expect(grant.author).to.eql(author.publicKey);
         expect(grant.lamportsRaised.toNumber()).to.eql(0);
         expect(grant.totalDonors).to.eql(0);
-        expect(grant.targetLamports.toNumber()).to.eql(targetLamports);
+        assert(grant.targetLamports.eq(targetLamports));
         expect(grant.escrowCount).to.eql(0);
         expect(grant.state).to.eql({ active: {} });
         expect(grant.info).to.eql("")

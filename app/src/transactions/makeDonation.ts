@@ -1,4 +1,5 @@
 import * as anchor from "@project-serum/anchor";
+import { BN } from "@project-serum/anchor";
 import { encode } from "@project-serum/anchor/dist/cjs/utils/bytes/utf8";
 import { PublicKey } from "@solana/web3.js";
 import { toBytesInt32 } from "../utils/conversion";
@@ -7,7 +8,7 @@ import { program } from "./index";
 export async function makeDonation(
   donor: PublicKey,
   grantPDA: PublicKey,
-  lamports: number
+  lamports: BN
 ): Promise<anchor.web3.Transaction> {
     
   // find the donation PDA

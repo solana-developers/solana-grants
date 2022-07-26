@@ -18,18 +18,18 @@ pub mod grants_program {
     use super::*;
 
     /// Initializes a grant and updates the program info's grant count
-    pub fn create_grant(ctx: Context<CreateGrant>, info: String, target_lamports: u32, due_date: u32) -> Result<()> {
+    pub fn create_grant(ctx: Context<CreateGrant>, info: String, target_lamports: u64, due_date: u32) -> Result<()> {
         instructions::create_grant(ctx, info, target_lamports, due_date)
     }
 
     /// Creates a donation which transfers money from the payer to the grant
-    pub fn create_donation(ctx: Context<CreateDonation>, lamports: u32) -> Result<()> {
-        instructions::create_donation(ctx, lamports as u64)
+    pub fn create_donation(ctx: Context<CreateDonation>, lamports: u64) -> Result<()> {
+        instructions::create_donation(ctx, lamports)
     }
 
     /// Increments the amount donated from a payer to a grant, effectively transferring it
-    pub fn increment_donation(ctx: Context<IncrementDonation>, lamports: u32) -> Result<()> {
-        instructions::increment_donation(ctx, lamports as u64)
+    pub fn increment_donation(ctx: Context<IncrementDonation>, lamports: u64) -> Result<()> {
+        instructions::increment_donation(ctx, lamports)
     }
 
     /// Releases the funds from the grant to the grant creator account

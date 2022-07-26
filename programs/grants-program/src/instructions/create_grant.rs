@@ -30,7 +30,7 @@ pub struct CreateGrant<'info> {
 pub fn create_grant(
     ctx: Context<CreateGrant>,
     info: String,
-    target_lamports: u32,
+    target_lamports: u64,
     due_date: u32,
 ) -> Result<()> {
     // TODO: validate due_date
