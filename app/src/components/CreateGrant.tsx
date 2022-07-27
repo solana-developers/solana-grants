@@ -55,7 +55,7 @@ export default function CreateGrant({ setpreview }) {
       return notify({ type: 'error', message: 'error', description: 'Please fill in all the fields!' });
     }
 
-    if (new Date(grant.dueDate + "00:00:00").getTime() <= new Date().getTime()) {
+    if (new Date(grant.dueDate + " 00:00:00").getTime() <= new Date().getTime()) {
       return notify({ type: 'error', message: 'error', description: 'Due date entered must be in the future!' });
     }
 
@@ -80,7 +80,7 @@ export default function CreateGrant({ setpreview }) {
     const grantDetails: GrantModel = {
       info: uploadResult.id,
       targetLamports: grant.targetAmount * LAMPORTS_PER_SOL,
-      dueDate: new Date(grant.dueDate + "23:59:59").getTime()
+      dueDate: new Date(grant.dueDate + " 23:59:59").getTime()
     }
 
     const provider = await GetProvider(wallet);
@@ -115,7 +115,7 @@ export default function CreateGrant({ setpreview }) {
                   <label>
                     <div className='grantsub'>
                       <h1 className='grantname'>Title:</h1>
-                      <input className='grantinput' placeholder='Grant Title Field' type="text" name="title" onChange={handleChange} />
+                      <input className='grantinput' placeholder='Grant Title' type="text" name="title" onChange={handleChange} />
                     </div>
                   </label>
                 </div>
@@ -124,7 +124,7 @@ export default function CreateGrant({ setpreview }) {
                   <label>
                     <div className='grantsub'>
                       <h1 className='grantname'>Description:</h1>
-                      <input className='grantinput' type="text" name="description" placeholder='Grant Image Field' onChange={handleChange} />
+                      <input className='grantinput' type="text" name="description" placeholder='Grant Description' onChange={handleChange} />
                     </div>
                   </label>
                 </div>
@@ -132,8 +132,8 @@ export default function CreateGrant({ setpreview }) {
                 <div>
                   <label>
                     <div className='grantsub'>
-                      <h1 className='grantname'>Image:</h1>
-                      <input className='grantinput' type="text" name="image" placeholder='Grant Description' onChange={handleChange} />
+                      <h1 className='grantname'>Image Link:</h1>
+                      <input className='grantinput' type="text" name="image" placeholder='Grant Image Link' onChange={handleChange} />
                     </div>
                   </label>
                 </div>
@@ -142,7 +142,7 @@ export default function CreateGrant({ setpreview }) {
                   <label>
                     <div className='grantsub'>
                       <h1 className='grantname'>Github Link:</h1>
-                      <input className='grantinput' type="text" placeholder='GitHub Link Field' name="link" onChange={handleChange} />
+                      <input className='grantinput' type="text" placeholder='GitHub Project Link' name="link" onChange={handleChange} />
                     </div>
                   </label>
                 </div>
