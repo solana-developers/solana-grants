@@ -27,16 +27,63 @@ export default function CreateGrant({ setpreview }) {
     }
   ]);
 
+  const wallet = useWallet();
+
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
     setGrant({ ...grant, [name]: value });
     console.log(grant);
   }
 
-  const handleSubmit = () => {
-    setShowTransactionFlow(true);
+  const handleSubmit = async () => {
+    if (!grant.description || !grant.image || !grant.link || !grant.title || !grant.dueDate || !grant.targetAmount) {
+      return notify({ type: 'error', message: 'error', description: 'Please fill in all the fields!' });
+    }
 
-    console.log(grant);
+    if (new Date(grant.dueDate + "00:00:00").getTime() <= new Date().getTime()) {
+      return notify({ type: 'error', message: 'error', description: 'Due date entered must be in the future!' });
+    }
+
+    if (grant.targetAmount <= 0) {
+      return notify({ type: 'error', message: 'error', description: 'target amount must be greater than zero' });
+    }
+
+    if (!wallet || !wallet.connected) {
+      return notify({ type: 'error', message: 'error', description: 'Wallet not connected!' });
+    }
+    
+    setShowTransactionFlow(true);
+    
+    const uploadResult = await uploadToWeb3DB(wallet, grant, setTransactionsList);
+    // console.log(uploadResult);
+
+    if (uploadResult.err) {
+      setpreview(false);
+      return notify({ type: 'error', message: 'error', description: 'Something went wrong! Please try again later' });
+    }
+
+    const grantDetails: GrantModel = {
+      info: uploadResult.id,
+      targetLamports: grant.targetAmount * LAMPORTS_PER_SOL,
+      dueDate: new Date(grant.dueDate + "23:59:59").getTime()
+    }
+
+    const provider = await GetProvider(wallet);
+    const grantCreationResult = await createGrant(provider, grantDetails);
+
+    if (grantCreationResult.err) {
+      setpreview(false);
+      return notify({ type: 'error', message: 'error', description: 'Something went wrong! Please try again later' });
+    }
+
+    setTransactionsList((transactionsList) => {
+      const newTransactionsList = [...transactionsList];
+      newTransactionsList[uploadResult.transactionCount].isCompleted = true;
+      return newTransactionsList;
+    })
+    
+    notify({ type: 'success', message: 'success', description: 'Grant created successfully' });
+    setpreview(false);
   }
 
   return (
