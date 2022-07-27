@@ -1,24 +1,34 @@
-import { TransactionDetail } from 'constants/types';
 import React, { useState } from 'react';
 import Modal from "./Modal";
 import TransactionSeries from './TransactionSeries';
+import { TransactionDetail } from '../constants/types';
+import { useWallet } from '@solana/wallet-adapter-react';
+import uploadToWeb3DB from '../utils/uploadToWeb3DB';
+import { LAMPORTS_PER_SOL } from "@solana/web3.js";
+import GetProvider from '../utils/getProvider';
+
+import { notify } from "../utils/notifications";
+import createGrant from '../instructions/createGrant';
+import { GrantModel } from '../models/grant';
 
 export default function CreateGrant({ setpreview }) {
   const [grant, setGrant] = useState({
-    title: '',
-    image: '',
-    description: '',
-    link: '',
+    title: "",
+    image: "",
+    description: "",
+    link: "",
+    dueDate: "",
+    targetAmount: 0
   });
 
   const [showTransactionFlow, setShowTransactionFlow] = useState(false);
-  const [transactionsDetails, setTransactionsDetails] = useState<Array<TransactionDetail>>([
+  const [transactionsList, setTransactionsList] = useState<Array<TransactionDetail>>([
     {
-      info: "Uploading data to Arweave",
-      isCompleted: true
+      info: "Funding the Bundlr node",
+      isCompleted: false
     },
     {
-      info: "Message signing",
+      info: "Uploading data to Arweave (message signing)",
       isCompleted: false
     },
     {
@@ -31,7 +41,12 @@ export default function CreateGrant({ setpreview }) {
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
-    setGrant({ ...grant, [name]: value });
+    if (name === "targetAmount") {
+      setGrant({ ...grant, [name]: value ? parseFloat(value) : 0 });
+    }
+    else {
+      setGrant({ ...grant, [name]: value });
+    }
     console.log(grant);
   }
 
@@ -88,18 +103,18 @@ export default function CreateGrant({ setpreview }) {
 
   return (
     <>
-      <Modal setpreview={setpreview} showCloseButton={true} classNameForModalBoxStyling={"maingrantbox"}>
-        <h1 className='text-[3rem] text-center	font-extrabold	mb-[3rem]'>Lets Get Funding!</h1>
-        <div className='grant-main mb-16'>
+      <Modal setpreview={setpreview} showCloseButton={!showTransactionFlow} classNameForModalBoxStyling={"maingrantbox"}>
+        <h1 className='text-[3rem] text-center	font-extrabold	mb-[2rem]'>Lets Get Funding!</h1>
+        <div className='grant-main mb-8'>
           <div className='grant-submain'>
             {showTransactionFlow ? (
-              <TransactionSeries transactionsList={transactionsDetails} />
+              <TransactionSeries transactionsList={transactionsList} />
             ) : (
               <>
                 <div>
                   <label>
                     <div className='grantsub'>
-                      <h1 className='grantname'>Grant Title:</h1>
+                      <h1 className='grantname'>Title:</h1>
                       <input className='grantinput' placeholder='Grant Title Field' type="text" name="title" onChange={handleChange} />
                     </div>
                   </label>
@@ -108,7 +123,7 @@ export default function CreateGrant({ setpreview }) {
                 <div>
                   <label>
                     <div className='grantsub'>
-                      <h1 className='grantname'>Grant Description:</h1>
+                      <h1 className='grantname'>Description:</h1>
                       <input className='grantinput' type="text" name="description" placeholder='Grant Image Field' onChange={handleChange} />
                     </div>
                   </label>
@@ -117,7 +132,7 @@ export default function CreateGrant({ setpreview }) {
                 <div>
                   <label>
                     <div className='grantsub'>
-                      <h1 className='grantname'>Grant Image:</h1>
+                      <h1 className='grantname'>Image:</h1>
                       <input className='grantinput' type="text" name="image" placeholder='Grant Description' onChange={handleChange} />
                     </div>
                   </label>
@@ -126,12 +141,29 @@ export default function CreateGrant({ setpreview }) {
                 <div>
                   <label>
                     <div className='grantsub'>
-                      <h1 className='grantname'> Grant Link:</h1>
+                      <h1 className='grantname'>Github Link:</h1>
                       <input className='grantinput' type="text" placeholder='GitHub Link Field' name="link" onChange={handleChange} />
                     </div>
                   </label>
                 </div>
                 <br />
+                <div>
+                  <label>
+                    <div className='grantsub'>
+                      <h1 className='grantname'>Due Date:</h1>
+                      <input className='grantinput' type="date" placeholder='Grant Due Date' name="dueDate" onChange={handleChange} />
+                    </div>
+                  </label>
+                </div>
+                <br />
+                <div>
+                  <label>
+                    <div className='grantsub'>
+                      <h1 className='grantname'>Target Amount (SOL):</h1>
+                      <input className='grantinput' type="number" placeholder='Grant Target Amount' name="targetAmount" value={grant.targetAmount} onChange={handleChange} />
+                    </div>
+                  </label>
+                </div>
                 <div className="modal-action flex justify-center">
                   <button className="btn bg-[#14F195] decoration-[#000] rounded-[20px] w-[210px] h-[38px]" onClick={handleSubmit}>
                     <h1 className='grantbuttonname'>Create Grant</h1>
