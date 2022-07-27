@@ -5,6 +5,11 @@ import getGrantPDA from "./pda/getGrantPDA";
 import {GrantModel} from "../models/grant";
 import {notify} from "../utils/notifications";
 
+/**
+ * Creates a grant and returns the grant
+ * @param provider
+ * @param grant
+ */
 export default async function createGrant(provider: Provider, grant: GrantModel): Promise<any> {
     const program = getProgram(provider)
 

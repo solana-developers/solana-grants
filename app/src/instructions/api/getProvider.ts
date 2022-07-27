@@ -6,7 +6,7 @@ import {notify} from "../../utils/notifications";
 
 /**
  *
- * @returns provider to the caller.
+ * @returns provider to the caller if wallet is connected else shows error
  */
 export default function getProvider(wallet: AnchorWallet | undefined) {
     if (!wallet) {

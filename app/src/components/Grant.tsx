@@ -2,9 +2,12 @@ import React, {useState} from 'react';
 import {useAnchorWallet} from "@solana/wallet-adapter-react";
 import getProvider from "../instructions/api/getProvider";
 import createGrant from "../instructions/createGrant";
+import {GrantModel} from "../models/grant";
+
+// TODO: refactor to show one error if wallet not connected
 
 export default function Grant({setpreview}) {
-    const [grant, setGrant] = useState({});
+    const [grant, setGrant] = useState<GrantModel>({});
 
     const handleChange = (event) => {
         const {name, value} = event.target;
@@ -16,8 +19,7 @@ export default function Grant({setpreview}) {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
-        const tsx = await createGrant(provider, grant)
-        console.log(tsx)
+        console.log(await createGrant(provider, grant))
         setpreview(false);
     }
 
