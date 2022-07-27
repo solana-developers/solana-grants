@@ -18,7 +18,7 @@ export default async function createGrant(provider: Provider, grant: GrantModel)
 
         const programInfo = await program.account.grantsProgramInfo.fetch(programInfoPDA)
 
-        const grantPDA = await getGrantPDA(program, programInfo)
+        const grantPDA = await getGrantPDA(program, programInfo.grantsCount);
 
         await program.methods
             .createGrant(grant.info, new BN(grant.targetLamports), new BN(grant.dueDate))

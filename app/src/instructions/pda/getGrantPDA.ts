@@ -19,11 +19,11 @@ const toBytesInt32 = (num: number): Buffer => {
  * @param program
  * @param programInfo
  */
-export default async function getGrantPDA(program: Program, programInfo: ProgramInfoModel) {
+export default async function getGrantPDA(program: Program, grantNumber: number) {
     const [grantPDA, grant_bump] = await anchor.web3.PublicKey.findProgramAddress(
         [
             encode("grant"),
-            toBytesInt32(programInfo.grantsCount),
+            toBytesInt32(grantNumber),
         ],
         program.programId
     );
