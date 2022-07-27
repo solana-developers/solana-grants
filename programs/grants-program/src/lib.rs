@@ -11,7 +11,7 @@ declare_id!("2BAJJedFtdAEv8BdDcQwnQEYuBieqkz3Yzdg8feBiCXc");
 pub mod grants_program {
     use super::*;
 
-    pub fn create_grant(ctx: Context<CreateGrant>, info: String, target_lamports: u32, due_date: u64) -> Result<()> {
+    pub fn create_grant(ctx: Context<CreateGrant>, info: String, target_lamports: u64, due_date: u64) -> Result<()> {
         instructions::create_grant(ctx, info, target_lamports, due_date)
     }
 
