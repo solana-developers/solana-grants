@@ -2,7 +2,7 @@ use crate::{
     errors::GrantError,
     state::{Grant, ProgramInfo},
 };
-use anchor_lang::{prelude::*, solana_program::clock::UnixTimestamp};
+use anchor_lang::prelude::*;
 
 #[derive(Accounts)]
 pub struct CreateGrant<'info> {
@@ -31,11 +31,15 @@ pub fn create_grant(
     ctx: Context<CreateGrant>,
     info: String,
     target_lamports: u64,
-    due_date: UnixTimestamp,
+    due_date: i64,
 ) -> Result<()> {
     // checking if info is longer than 45 characters
     if info.chars().count() > 45 {
-        return Err(GrantError::InfoTooLong.into());
+        return err!(GrantError::InfoTooLong);
+    }
+    
+    if due_date <= Clock::get()?.unix_timestamp {
+        return err!(GrantError::DueDateInPast);
     }
 
     ctx.accounts.grant.set_inner(Grant::new(

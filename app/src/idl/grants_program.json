@@ -42,7 +42,7 @@
         },
         {
           "name": "dueDate",
-          "type": "u32"
+          "type": "i64"
         }
       ]
     },
@@ -295,10 +295,6 @@
             "type": "publicKey"
           },
           {
-            "name": "escrowCount",
-            "type": "u32"
-          },
-          {
             "name": "info",
             "type": "string"
           },
@@ -316,7 +312,7 @@
           },
           {
             "name": "dueDate",
-            "type": "u32"
+            "type": "i64"
           },
           {
             "name": "state",
@@ -382,9 +378,6 @@
             "name": "InfoTooLong"
           },
           {
-            "name": "InvalidDateFormat"
-          },
-          {
             "name": "ReleasedGrant"
           },
           {
@@ -392,6 +385,9 @@
           },
           {
             "name": "GrantStillActive"
+          },
+          {
+            "name": "DueDateInPast"
           }
         ]
       }
@@ -434,8 +430,5 @@
       "name": "CancelledDonation",
       "msg": "This donation has already refunded the payer"
     }
-  ],
-  "metadata": {
-    "address": "4rYKkNGRQSe2hJEQGgmiEAcg4KQzP8h8QfwTmmgChAmZ"
-  }
+  ]
 }

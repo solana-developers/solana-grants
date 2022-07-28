@@ -5,9 +5,6 @@ pub enum GrantError {
     #[msg("The provided info string should be 200 characters long maximum.")]
     InfoTooLong,
 
-    #[msg("The provided date is not in the correct format.")]
-    InvalidDateFormat,
-
     #[msg("This grant has already transferred the funds to the receiver")]
     ReleasedGrant,
 
@@ -16,4 +13,7 @@ pub enum GrantError {
 
     #[msg("This grant is still active")]
     GrantStillActive,
+
+    #[msg("The due date has already passed")]
+    DueDateInPast
 }

@@ -1,7 +1,7 @@
 
 //! This library has all the logic for the smart contract of Solana Grants.
 
-use anchor_lang::{prelude::*, solana_program::clock::UnixTimestamp};
+use anchor_lang::prelude::*;
 use instructions::*;
 
 pub mod state;
@@ -18,7 +18,7 @@ pub mod grants_program {
     use super::*;
 
     /// Initializes a grant and updates the program info's grant count
-    pub fn create_grant(ctx: Context<CreateGrant>, info: String, target_lamports: u64, due_date: UnixTimestamp) -> Result<()> {
+    pub fn create_grant(ctx: Context<CreateGrant>, info: String, target_lamports: u64, due_date: i64) -> Result<()> {
         instructions::create_grant(ctx, info, target_lamports, due_date)
     }
 

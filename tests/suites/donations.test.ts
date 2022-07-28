@@ -81,7 +81,7 @@ export default function donations() {
 
   async function createGrant(author: Keypair) {
     const targetLamports = new BN(LAMPORTS_PER_SOL);
-    const dueDate = 123124;
+    const dueDate = new Date().getTime() + 1000 * 60 * 60 * 24 * 7;
     const info = "";
 
     const programInfo = await program.account.programInfo.fetch(programInfoPDA);
@@ -93,7 +93,7 @@ export default function donations() {
 
     try {
       await program.methods
-        .createGrant(info, targetLamports, dueDate)
+        .createGrant(info, targetLamports, new BN(dueDate))
         .accounts({
           grant: newGrantPDA,
           programInfo: programInfoPDA,
@@ -204,7 +204,7 @@ export default function donations() {
       expect(_err).to.be.instanceOf(AnchorError);
       const err: AnchorError = _err;
       expect(err.error.errorCode.code).to.equal("ReleasedGrant");
-      expect(err.error.errorCode.number).to.equal(6002);
+      expect(err.error.errorCode.number).to.equal(6001);
       expect(err.program.equals(program.programId)).is.true;
     }
   });
@@ -247,7 +247,7 @@ export default function donations() {
       expect(_err).to.be.instanceOf(AnchorError);
       const err: AnchorError = _err;
       expect(err.error.errorCode.code).to.equal("CancelledGrant");
-      expect(err.error.errorCode.number).to.equal(6003);
+      expect(err.error.errorCode.number).to.equal(6002);
       expect(err.program.equals(program.programId)).is.true;
     }
   });
@@ -367,7 +367,7 @@ export default function donations() {
       expect(e).to.be.instanceOf(AnchorError);
       const err: AnchorError = e;
       expect(err.error.errorCode.code).to.equal("GrantStillActive");
-      expect(err.error.errorCode.number).to.equal(6004);
+      expect(err.error.errorCode.number).to.equal(6003);
       expect(err.program.equals(program.programId)).is.true;
     }
   });

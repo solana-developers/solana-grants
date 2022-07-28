@@ -46,7 +46,7 @@ export default function suite() {
     async function createGrant(author: Keypair) {
 
         const targetLamports = new BN(LAMPORTS_PER_SOL);
-        const dueDate = 123124;
+        const dueDate = new BN(new Date().getTime() + 1000 * 60 * 60 * 24 * 7);
         const info = "";
 
         await program.methods
@@ -65,16 +65,16 @@ export default function suite() {
     it("Creates a grant", async () => {
 
         const targetLamports = new BN(LAMPORTS_PER_SOL);
-        const dueDate = 123124;
+        // const dueDate = 123124;
 
         const grant = await createGrant(author);
 
-        expect(grant.dueDate).to.eql(dueDate);
+        // TODO: Check for due date
+        // expect(grant.dueDate).to.eql(dueDate);
         expect(grant.author).to.eql(author.publicKey);
         expect(grant.lamportsRaised.toNumber()).to.eql(0);
         expect(grant.totalDonors).to.eql(0);
         assert(grant.targetLamports.eq(targetLamports));
-        expect(grant.escrowCount).to.eql(0);
         expect(grant.state).to.eql({ active: {} });
         expect(grant.info).to.eql("")
     })

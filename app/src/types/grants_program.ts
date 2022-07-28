@@ -42,7 +42,7 @@ export type GrantsProgram = {
         },
         {
           "name": "dueDate",
-          "type": "u32"
+          "type": "i64"
         }
       ]
     },
@@ -295,10 +295,6 @@ export type GrantsProgram = {
             "type": "publicKey"
           },
           {
-            "name": "escrowCount",
-            "type": "u32"
-          },
-          {
             "name": "info",
             "type": "string"
           },
@@ -316,7 +312,7 @@ export type GrantsProgram = {
           },
           {
             "name": "dueDate",
-            "type": "u32"
+            "type": "i64"
           },
           {
             "name": "state",
@@ -382,9 +378,6 @@ export type GrantsProgram = {
             "name": "InfoTooLong"
           },
           {
-            "name": "InvalidDateFormat"
-          },
-          {
             "name": "ReleasedGrant"
           },
           {
@@ -392,6 +385,9 @@ export type GrantsProgram = {
           },
           {
             "name": "GrantStillActive"
+          },
+          {
+            "name": "DueDateInPast"
           }
         ]
       }
@@ -481,7 +477,7 @@ export const IDL: GrantsProgram = {
         },
         {
           "name": "dueDate",
-          "type": "u32"
+          "type": "i64"
         }
       ]
     },
@@ -734,10 +730,6 @@ export const IDL: GrantsProgram = {
             "type": "publicKey"
           },
           {
-            "name": "escrowCount",
-            "type": "u32"
-          },
-          {
             "name": "info",
             "type": "string"
           },
@@ -755,7 +747,7 @@ export const IDL: GrantsProgram = {
           },
           {
             "name": "dueDate",
-            "type": "u32"
+            "type": "i64"
           },
           {
             "name": "state",
@@ -821,9 +813,6 @@ export const IDL: GrantsProgram = {
             "name": "InfoTooLong"
           },
           {
-            "name": "InvalidDateFormat"
-          },
-          {
             "name": "ReleasedGrant"
           },
           {
@@ -831,6 +820,9 @@ export const IDL: GrantsProgram = {
           },
           {
             "name": "GrantStillActive"
+          },
+          {
+            "name": "DueDateInPast"
           }
         ]
       }
