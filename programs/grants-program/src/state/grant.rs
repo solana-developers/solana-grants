@@ -1,5 +1,4 @@
-use anchor_lang::prelude::*;
-
+use anchor_lang::{prelude::*, solana_program::clock::UnixTimestamp};
 use crate::errors::GrantError;
 
 use super::Donation;
@@ -11,26 +10,25 @@ use super::Donation;
 pub struct Grant {
     pub bump: u8,                   // 1
     pub author: Pubkey,             // 32
-    escrow_count: u32,              // 8
-    info: String,                   // 4 + 200
+    info: String,                   // 4 + (4* 45)
     pub lamports_raised: u64,       // 16
     pub total_donors: u32,          // 8
     target_lamports: u64,           // 16
-    due_date: u32,                  // 8
+    due_date: UnixTimestamp,        // 16
     pub state: GrantState,          // 1
     pub is_matching_eligible: bool, // 1
     pub grant_num: u32,             // 8
 }
 
 impl Grant {
-    pub const MAXIMUM_SPACE: usize = 1+ 32 + 8 + (4 + 200) + 16 + 8 + 16 + 8 + 1 + 1 + 8;
+    pub const MAXIMUM_SPACE: usize = 1+ 32 + (4 + (4 * 45)) + 16 + 8 + 16 + 16 + 1 + 1 + 8;
 
     pub fn new(
         bump: u8,
         author: Pubkey,
         info: String,
         target_lamports: u64,
-        due_date: u32,
+        due_date: UnixTimestamp,
         grant_num: u32,
     ) -> Self {
         Grant {

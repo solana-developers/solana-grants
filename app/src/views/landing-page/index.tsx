@@ -1,5 +1,5 @@
 import { FC ,useState } from 'react';
-import Grant from "../../components/Grant";
+import CreateGrant from "../../components/CreateGrant";
 
 export const LandingPageView: FC = ({ }) => {
   const [preview, setpreview] = useState(false);
@@ -31,10 +31,10 @@ export const LandingPageView: FC = ({ }) => {
               <button className="bg-green-400 hover:bg-emerald-500 py-2 px-9 text-black text-sm rounded-full mr-4">
                 EXPLORE
               </button>
-              <a href="#my-modal-2" className="bg-transparent hover:bg-slate-500 py-2 px-6 text-fuchsia-300 border border-fuchsia-300 text-sm rounded-full btn"  onClick={()=>{ setpreview(true) }}>
+              <a href="#create-grant" className="bg-transparent hover:bg-slate-500 py-2 px-6 text-fuchsia-300 border border-fuchsia-300 text-sm rounded-full btn"  onClick={()=>{ setpreview(true) }}>
                 CREATE A GRANT
               </a> 
-              { preview && <Grant setpreview={setpreview} />}
+              { preview && <CreateGrant setpreview={setpreview} />}
             </div>
           </div> 
         </div>

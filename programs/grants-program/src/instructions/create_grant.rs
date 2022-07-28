@@ -2,7 +2,7 @@ use crate::{
     errors::GrantError,
     state::{Grant, ProgramInfo},
 };
-use anchor_lang::prelude::*;
+use anchor_lang::{prelude::*, solana_program::clock::UnixTimestamp};
 
 #[derive(Accounts)]
 pub struct CreateGrant<'info> {
@@ -31,21 +31,21 @@ pub fn create_grant(
     ctx: Context<CreateGrant>,
     info: String,
     target_lamports: u64,
-    due_date: u32,
+    due_date: UnixTimestamp,
 ) -> Result<()> {
-    // TODO: validate due_date
-
-    // checking if info is longer than 200 characters
-    if info.chars().count() > 200 {
+    // checking if info is longer than 45 characters
+    if info.chars().count() > 45 {
         return Err(GrantError::InfoTooLong.into());
     }
 
     ctx.accounts.grant.set_inner(Grant::new(
-        *ctx.bumps.get("grant").expect("We should've gotten the grant's canonical bump"),
+        *ctx.bumps
+            .get("grant")
+            .expect("We should've gotten the grant's canonical bump"),
         ctx.accounts.author.key(),
         info,
-        target_lamports as u64,
-        due_date as u32,
+        target_lamports,
+        due_date,
         ctx.accounts.program_info.grants_count as u32,
     ));
 

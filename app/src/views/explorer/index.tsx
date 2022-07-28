@@ -1,7 +1,7 @@
 import { FC, useEffect, useState } from "react";
 import personImage from "../../../public/images/person-opens-the-safe-with-the-money.png";
 import { ExplorerCard, ExplorerCardProps } from "../../components/ExplorerCard";
-import Grant from "../../components/Grant";
+import CreateGrant from "../../components/CreateGrant";
 
 export const ExplorerView: FC = ({ }) => {
   const [projects, setProjects] = useState<ExplorerCardProps[]>([]);
@@ -49,10 +49,10 @@ export const ExplorerView: FC = ({ }) => {
               </p>
             </h4>
             <div className='text-center pt-5'>
-            <a href="#my-modal-2" className="bg-transparent hover:bg-slate-500 py-2 px-6 text-fuchsia-300 border border-fuchsia-300 text-sm rounded-full btn"  onClick={()=>{ setpreview(true) }}>
+              <a href="#create-grant" className="bg-transparent hover:bg-slate-500 py-2 px-6 text-fuchsia-300 border border-fuchsia-300 text-sm rounded-full btn"  onClick={()=>{ setpreview(true) }}>
                 CREATE A GRANT
               </a>
-              { preview && <Grant setpreview={setpreview} />}
+              { preview && <CreateGrant setpreview={setpreview} />}
             </div>
           </div>
           <div className='pt-10 hidden lg:block'>
