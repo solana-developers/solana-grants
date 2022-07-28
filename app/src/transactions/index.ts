@@ -1,6 +1,6 @@
 import * as anchor from "@project-serum/anchor";
 import { Program } from "@project-serum/anchor";
-import { GrantsProgram } from "../../../target/types/grants_program";
+import { GrantsProgram } from "../types/grants_program";
 
 export const program = anchor.workspace.GrantsProgram as Program<GrantsProgram>;
 
