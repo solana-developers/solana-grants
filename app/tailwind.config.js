@@ -29,6 +29,8 @@ module.exports = {
       colors: {
         magenta: "#9c27b0",
         "royal-purple": "#6A1B9A",
+        "solana-green": "#14F195",
+        "solana-purple": "#9945FF",
         "safety-orange": "#FF6F00",
         thistle: "#E1BEE7",
       },

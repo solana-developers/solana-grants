@@ -7,7 +7,7 @@ const GrantPage: NextPage<{grantViewProps: GrantViewProps}> = (props) => {
   return (
     <div>
       <Head>
-        <title>{props.grantViewProps.name}</title>
+        <title>{props.grantViewProps.title}</title>
         <meta name='description' content='Grant details' />
       </Head>
       <GrantView {...props.grantViewProps} />
@@ -36,18 +36,19 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   // const res = await fetch(`https://.../posts/${params.id}`)
   // const grant = await res.json()
   const grantViewProps: GrantViewProps = {
-    id: 1,
-    name: "Miner Project",
+    grantNum: 1,
+    title: "Miner Project",
     author: {
       name: "Miners Collective",
-      link: "github.com/miners-collective",
-      address: "bvzr23a5sd1315s13d5f13c5sa1sd5fasfsa651scxz",
+      ghAccount: "github.com/miners-collective",
+      walletAddress: "bvzr23a5sd1315s13d5f13c5sa1sd5fasfsa651scxz",
     },
-    summary: loremIpsum({ count: 30, units: "words" }),
+    about: loremIpsum({ count: 30, units: "words" }),
     description: loremIpsum({ count: 200, units: "words" }),
     amountRaised: 23050,
     amountGoal: 100000,
     numContributors: 203,
+    targetDate: new Date("08/22/2022").getTime(),
     repo: "github.com/miner-project",
     website: "miner-project.com",
     image: "https://api.lorem.space/image/shoes?w=400&h=225",
