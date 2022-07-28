@@ -6,21 +6,21 @@ use anchor_lang::prelude::*;
 #[derive(Default)]
 pub struct Grant {
     pub author: Pubkey,        // 32
-    escrow_count: u32,     // 8
-    info: String,          // 4 + 200
-    lamports_raised: u64,  // 16
-    total_donors: u32,     // 8
-    target_lamports: u64,  // 16
-    due_date: u32,       // 8 im not sure about this type
+    escrow_count: u32,         // 8
+    info: String,              // 4 + (4 * 45) Added 4 at the beginning since we need to provide string length prefix
+    lamports_raised: u64,      // 16
+    total_donors: u32,         // 8
+    target_lamports: u64,      // 16
+    due_date: u64,             // 16
     pub is_active: bool,       // 1
-    matching_eligible: bool,       // 1
+    matching_eligible: bool,   // 1
     pub grant_num: u32,        // 8
 }
 
 impl Grant {
-    pub const MAXIMUM_SPACE: usize = 32 + 8 + (4 + 200) + 16 + 8 + 16 + 8 + 1 + 1 + 8;
+    pub const MAXIMUM_SPACE: usize = 32 + 8 + (4 + (4 * 45)) + 16 + 8 + 16 + 16 + 1 + 1 + 8;
 
-    pub fn new(author: Pubkey, info: String, target_lamports: u64, due_date: u32, grant_num: u32) -> Self {
+    pub fn new(author: Pubkey, info: String, target_lamports: u64, due_date: u64, grant_num: u32) -> Self {
         Grant {
             author,
             info,

@@ -1,7 +1,7 @@
 import { FC, useState } from 'react';
-import Link from "next/link";
 import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
-import { useSession, signIn, signOut } from 'next-auth/react'
+import Link from "next/link";
+import { useSession, signIn, signOut } from 'next-auth/react';
 
 export const AppBar: FC = props => {
   const [isOpen, setIsOpen] = useState(false);
