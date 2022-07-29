@@ -34,6 +34,7 @@
   },
   "devDependencies": {
     "@types/node": "17.0.10",
+    "@types/progressbar.js": "^1.1.2",
     "@types/react": "17.0.38",
     "@types/react-dom": "^18.0.5",
     "autoprefixer": "^10.4.2",

@@ -10,6 +10,7 @@ export interface Props {
   author: {
     name: string;       // ***
     ghAccount: string;  // from the gh authentication, could also be stored on the db
+    ghAvatar: string;
     walletAddress: string;   // ***
   };
   about: string;       // ***
@@ -34,7 +35,8 @@ export const GrantView: FC<Props> = (props) => {
       duration,
     });
     bar.set(0);
-    bar.animate(props.amountGoal / props.amountRaised);
+    let percentage = props.amountGoal / props.amountRaised
+    bar.animate(percentage);
   } 
 
   const oneDay = 24 * 60 * 60 * 1000; // hours*minutes*seconds*milliseconds
@@ -55,12 +57,10 @@ export const GrantView: FC<Props> = (props) => {
           />
         </div>
 
-        <div className=' w-1/3'>
-          <div className='flex flex-row  h-4/5'>
+        <div className='p-4 w-1/3'>
+          <div className='flex flex-row h-80'>
             <svg
-              className='stroke-slate-800 stroke-[10px] h-64 mt-2'
-              // width='52'
-              // height='100%'
+              className='stroke-slate-800 stroke-[10px] h-full pl-4 pb-4'
               viewBox='-10 10 50 180'
               fill='none'
               xmlns='http://www.w3.org/2000/svg'
@@ -72,7 +72,7 @@ export const GrantView: FC<Props> = (props) => {
                 stroke='#14F195'
               />
             </svg>
-            <div id='stats' className='grid gap-5 ml-4 '>
+            <div id='stats' className='grid gap-5'>
               <div className=''>
                 <p id='amount-raised' className='text-5xl'>
                   $
@@ -133,9 +133,9 @@ export const GrantView: FC<Props> = (props) => {
       <div className=' w-full flex flex-col sm:flex-row flex-wrap sm:flex-nowrap py-4 flex-grow'>
         {/* <!-- fixed-width --> */}
 
-        <main role='main' className='w-full flex-grow pt-1 px-3'>
+        <main role='main' className='w-2/3 flex-grow pt-1 px-3'>
           {/* <!-- fluid-width: main content goes here --> */}
-          <div className='prose mx-auto w-auto h-1/2'>
+          <div className='prose lg:prose-lg mx-auto'>
             <p>{props.description}</p>
             <p>{props.description}</p>
           </div>
@@ -144,6 +144,58 @@ export const GrantView: FC<Props> = (props) => {
           {/* <!-- fixed-width --> */}
           <div className='flex sm:flex-col px-2'>
             {/* <!-- sidebar goes here --> */}
+            <div className=' py-4 px-3 space-y-3 p-4'>
+              <div
+                className='grid grid-cols-6 items-center py-4 mb-4 border-b border-slate-800'
+                
+              >
+                <img
+                  className='rounded-full w-8 h-8'
+                  src='/images/website.png'
+                  alt='www logo'
+                />
+                <a className='link link-primary text-current col-span-5' href={props.website}>
+                  {props.website}
+                </a>
+              </div>
+              <p className='text-sm text-slate-400'>Created by:</p>
+              <ul className='space-y-3'>
+
+<li className='grid  grid-cols-6 items-center gap-3'>
+
+
+                <img
+                  className='rounded-full '
+                  src={props.author.ghAvatar}
+                  alt='github avatar'
+                />
+                <a className='link link-hover col-span-5 ' href={props.author.ghAccount}>
+                  {props.author.name}
+                </a>
+
+</li>
+
+              <li className='grid grid-cols-6 items-center gap-3'>
+
+              <img
+                className='rounded-full justify-self-center w-6 h-6'
+                src='/images/website.png'
+                alt='www logo'
+              />
+              <a
+                className='link link-hover text-solana-purple col-span-5 truncate'
+                href={
+                  "https://explorer.solana.com/address/" +
+                  props.author.walletAddress
+                }
+              >
+                {props.author.walletAddress}
+              </a>
+              </li>
+
+              </ul>
+
+            </div>
           </div>
         </div>
       </div>

@@ -41,6 +41,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     author: {
       name: "Miners Collective",
       ghAccount: "github.com/miners-collective",
+      ghAvatar: "https://avatars.githubusercontent.com/u/62079184?s=400&u=9939b9ad01eff085a4cd473cc27afff5662a247e&v=4",
       walletAddress: "bvzr23a5sd1315s13d5f13c5sa1sd5fasfsa651scxz",
     },
     about: loremIpsum({ count: 30, units: "words" }),
