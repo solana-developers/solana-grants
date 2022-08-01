@@ -45,7 +45,20 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
       walletAddress: "bvzr23a5sd1315s13d5f13c5sa1sd5fasfsa651scxz",
     },
     about: loremIpsum({ count: 30, units: "words" }),
-    description: loremIpsum({ count: 200, units: "words" }),
+    description: `# Heading 1 
+
+${loremIpsum({ count: 50, units: "words" })}
+
+## Heading 2
+
+This has lists as well:
+- number one
+- number two
+- etc
+
+### Heading 3
+      
+${loremIpsum({ count: 50, units: "words" })}`,
     amountRaised: 23050,
     amountGoal: 100000,
     numContributors: 203,
