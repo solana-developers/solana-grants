@@ -37,7 +37,7 @@ export const ExplorerCard: FC<ExplorerCardProps> = ({
   });
   return (
     <>
-      <div className='card w-96 bg-base-100 shadow-xl'>
+      <div className='card w-96 bg-base-100 shadow-xl z-[-1]'>
         <a href={projectLink}>
           <figure className='relative'>
             <div className='w-full h-full bg-slate-700 absolute transition-opacity opacity-0 hover:opacity-90 flex'>

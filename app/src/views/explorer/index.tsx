@@ -1,9 +1,11 @@
 import { FC, useEffect, useState } from "react";
 import personImage from "../../../public/images/person-opens-the-safe-with-the-money.png";
 import { ExplorerCard, ExplorerCardProps } from "../../components/ExplorerCard";
+import CreateGrant from "../../components/CreateGrant";
 
-export const ExplorerView: FC = ({}) => {
+export const ExplorerView: FC = ({ }) => {
   const [projects, setProjects] = useState<ExplorerCardProps[]>([]);
+  const [preview, setpreview] = useState(false);
   useEffect(() => {
     // TODO: fetch projects from the API
     let exampleProject = {
@@ -47,9 +49,10 @@ export const ExplorerView: FC = ({}) => {
               </p>
             </h4>
             <div className='text-center pt-5'>
-              <button className='bg-[#14F195] uppercase hover:bg-[#12d986] text-black font-bold py-2 px-12 rounded-full'>
-                Create grant
-              </button>
+              <a href="#create-grant" className="bg-transparent hover:bg-slate-500 py-2 px-6 text-fuchsia-300 border border-fuchsia-300 text-sm rounded-full btn"  onClick={()=>{ setpreview(true) }}>
+                CREATE A GRANT
+              </a>
+              { preview && <CreateGrant setpreview={setpreview} />}
             </div>
           </div>
           <div className='pt-10 hidden lg:block'>

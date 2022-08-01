@@ -1,15 +1,34 @@
 use anchor_lang::prelude::*;
+use instructions::*;
 
-declare_id!("Fg6PaFpoGXkYsidMpWTK6W2BeZ7FEfcYkg476zPFsLnS");
+pub mod state;
+mod instructions;
+mod errors;
+
+declare_id!("2BAJJedFtdAEv8BdDcQwnQEYuBieqkz3Yzdg8feBiCXc");
 
 #[program]
 pub mod grants_program {
     use super::*;
 
-    pub fn initialize(ctx: Context<Initialize>) -> Result<()> {
-        Ok(())
+    pub fn create_grant(ctx: Context<CreateGrant>, info: String, target_lamports: u64, due_date: u64) -> Result<()> {
+        instructions::create_grant(ctx, info, target_lamports, due_date)
     }
-}
 
-#[derive(Accounts)]
-pub struct Initialize {}
+    pub fn initialize_program_info(ctx: Context<Initialize>) -> Result<()> {
+        instructions::initialize(ctx)
+    }
+
+    pub fn cancel_grant_admin(ctx: Context<CancelGrantAdmin>) -> Result<()> {
+        instructions::cancel_grant_admin(ctx)
+    }
+
+    pub fn cancel_grant_author(ctx: Context<CancelGrantAuthor>) -> Result<()> {
+        instructions::cancel_grant_author(ctx)
+    }
+
+    pub fn eligible_matching(ctx: Context<EligibleMatching>) -> Result<()> {
+        instructions::eligible_matching(ctx)
+    }
+
+}
