@@ -27,7 +27,7 @@ pub struct CancelGrantAuthor<'info> {
 
 pub fn cancel_grant_author(ctx: Context<CancelGrantAuthor>) -> Result<()> {
     // checking if grant is inactive
-    if ctx.accounts.grant.is_active == false {
+    if ctx.accounts.grant.is_cancelled == true {
         return Err(GrantErrors::AlreadyInActive.into());
     }
 

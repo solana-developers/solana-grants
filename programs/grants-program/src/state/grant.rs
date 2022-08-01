@@ -12,7 +12,7 @@ pub struct Grant {
     total_donors: u32,         // 8
     target_lamports: u64,      // 16
     due_date: u64,             // 16
-    pub is_active: bool,       // 1
+    pub is_cancelled: bool,    // 1
     matching_eligible: bool,   // 1
     pub grant_num: u32,        // 8
 }
@@ -27,7 +27,6 @@ impl Grant {
             target_lamports,
             due_date,
             grant_num,
-            is_active: true,
             ..Default::default() // rest of the fields are initialized to default values
         }
     }
@@ -41,7 +40,7 @@ impl Grant {
     }
 
     pub fn cancel_grant(&mut self) {
-        self.is_active = false;
+        self.is_cancelled = true;
     }
 
     pub fn eligible_grant(&mut self) {
