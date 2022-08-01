@@ -22,7 +22,10 @@ pub struct EligibleMatching<'info> {
 }
 
 pub fn eligible_matching(ctx: Context<EligibleMatching>) -> Result<()> {
-    ctx.accounts.grant.is_active()?;
+    // checking if grant is inactive
+    if ctx.accounts.grant.is_cancelled == true {
+        return Err(GrantErrors::AlreadyInActive.into());
+    }
 
     // making grant matching eligible
     ctx.accounts.grant.is_matching_eligible = true;
