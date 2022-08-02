@@ -16,7 +16,7 @@ export const ExplorerView: FC = ({ }) => {
       authorLink: "https://minter.sol",
       summary:
         "Make minting process easier with this framework and then do a lot of subsequent lines until we reach more than 3 lines to test for line clamping",
-      projectLink: "/grants/1",
+      projectLink: "/grant/1",
       amtRaised: 3012.892,
       numContributors: 76,
     };

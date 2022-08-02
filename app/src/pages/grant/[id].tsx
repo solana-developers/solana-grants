@@ -40,7 +40,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     title: "Miner Project",
     author: {
       name: "Miners Collective",
-      ghAccount: "github.com/miners-collective",
+      ghUser: "miners-collective",
       ghAvatar: "https://avatars.githubusercontent.com/u/62079184?s=400&u=9939b9ad01eff085a4cd473cc27afff5662a247e&v=4",
       walletAddress: "bvzr23a5sd1315s13d5f13c5sa1sd5fasfsa651scxz",
     },
@@ -63,10 +63,9 @@ ${loremIpsum({ count: 50, units: "words" })}`,
     amountGoal: 100000,
     numContributors: 203,
     targetDate: new Date("08/22/2022").getTime(),
-    repo: "github.com/miner-project",
+    ghRepo: "github.com/user/miner-project",
     website: "miner-project.com",
     image: "https://api.lorem.space/image/shoes?w=400&h=225",
-    bgColor: "#9945FF",
   };
 
   // Pass grant data to the page via props

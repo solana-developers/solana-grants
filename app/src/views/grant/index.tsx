@@ -11,8 +11,8 @@ export interface Props {
   title: string; // ***
   author: {
     name: string; // anchor or ***
-    ghAccount: string; // from the gh authentication, could also be stored on the db
-    ghAvatar: string; // from gh auth, can also be stored on db
+    ghUser: string; // ***
+    ghAvatar: string; // from gh api
     walletAddress: string; // anchor
   };
   about: string; // ***
@@ -21,9 +21,8 @@ export interface Props {
   amountGoal: number; // anchor
   numContributors: number; // anchor
   targetDate: number; // anchor
-  repo: string; // anchor
+  ghRepo: string; // anchor
   website?: string; // ***
-  bgColor: string; // ***
   image: string; // ***
 }
 
@@ -139,16 +138,29 @@ export const GrantView: FC<Props> = (props) => {
       </main>
       <div className='max-w-sm mx-auto sm:w-1/3 flex-shrink flex-grow-0 px-2'>
         <div className='flex sm:flex-col pt-4 px-2'>
-          <div className=' py-4 px-3 space-y-3 p-4'>
-            <div className='grid grid-cols-6 items-center py-4 mb-4 border-b border-slate-800'>
+          <div className=' py-4 px-3 space-y-4 p-4'>
+            <div className='grid grid-cols-6 items-center'>
+              <img
+                className='justify-self-center w-6 h-6'
+                src='/images/github.png'
+                alt='www logo'
+              />
+              <a
+                className='link link-secondary link-hover text-current col-span-5'
+                href={"https://" + props.ghRepo}
+              >
+                {props.ghRepo}
+              </a>
+            </div>
+            <div className='grid grid-cols-6 items-center pb-4 mb-4 border-b border-slate-800'>
               <img
                 className='justify-self-center w-6 h-6'
                 src='/images/website.png'
                 alt='www logo'
               />
               <a
-                className='link link-primary text-current col-span-5'
-                href={props.website}
+                className='link link-secondary link-hover text-current col-span-5'
+                href={"https://" + props.website}
               >
                 {props.website}
               </a>
@@ -162,8 +174,8 @@ export const GrantView: FC<Props> = (props) => {
                   alt='github avatar'
                 />
                 <a
-                  className='link link-hover col-span-5 '
-                  href={props.author.ghAccount}
+                  className='link link-secondary link-hover col-span-5 '
+                  href={"https://github.com/" + props.author.ghUser}
                 >
                   {props.author.name}
                 </a>
