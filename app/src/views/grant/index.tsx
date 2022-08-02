@@ -114,7 +114,7 @@ export const GrantView: FC<Props> = (props) => {
             </div>
           </div>
         </div>
-        <button className='btn btn-success btn-wide mx-auto w-full gap-2 m-2'>
+        <button className='btn btn-success w-full mx-auto gap-2 m-2'>
           <svg
             xmlns='http://www.w3.org/2000/svg'
             className='h-6 w-6'
@@ -131,10 +131,9 @@ export const GrantView: FC<Props> = (props) => {
           </svg>
           Donate
         </button>
-        {/* </div> */}
       </div>
-      <main role='main' className='sm:w-2/3 flex-grow pt-4 md:px-6'>
-        <article className='prose prose-sm md:prose-base max-w-none mx-auto'>
+      <main role='main' className='sm:w-2/3 flex-grow sm:pt-4 md:px-6'>
+        <article className='prose prose-sm md:prose-base max-w-none lg:pr-16 mx-auto'>
           <Markdown>{props.description}</Markdown>
         </article>
       </main>
