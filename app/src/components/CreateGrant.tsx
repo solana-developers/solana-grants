@@ -14,9 +14,9 @@ import { GrantModel } from '../models/grant';
 export default function CreateGrant({ setpreview }) {
   const [grant, setGrant] = useState({
     title: "",
-    image: "",
+    imageLink: "",
     description: "",
-    link: "",
+    githubRepoLink: "",
     dueDate: "",
     targetAmount: 0
   });
@@ -51,7 +51,7 @@ export default function CreateGrant({ setpreview }) {
   }
 
   const handleSubmit = async () => {
-    if (!grant.description || !grant.image || !grant.link || !grant.title || !grant.dueDate || !grant.targetAmount) {
+    if (!grant.description || !grant.imageLink || !grant.githubRepoLink || !grant.title || !grant.dueDate || !grant.targetAmount) {
       return notify({ type: 'error', message: 'error', description: 'Please fill in all the fields!' });
     }
 
@@ -69,7 +69,12 @@ export default function CreateGrant({ setpreview }) {
     
     setShowTransactionFlow(true);
     
-    const uploadResult = await uploadToWeb3DB(wallet, grant, setTransactionsList);
+    const uploadResult = await uploadToWeb3DB(wallet, {
+      title: grant.title,
+      description: grant.description,
+      imageLink: grant.imageLink,
+      githubProjectLink: grant.githubRepoLink
+    }, setTransactionsList);
     // console.log(uploadResult);
 
     if (uploadResult.err) {
@@ -133,7 +138,7 @@ export default function CreateGrant({ setpreview }) {
                   <label>
                     <div className='grantsub'>
                       <h1 className='grantname'>Image Link:</h1>
-                      <input className='grantinput' type="text" name="image" placeholder='Grant Image Link' onChange={handleChange} />
+                      <input className='grantinput' type="text" name="imageLink" placeholder='Grant Image Link' onChange={handleChange} />
                     </div>
                   </label>
                 </div>
@@ -141,8 +146,8 @@ export default function CreateGrant({ setpreview }) {
                 <div>
                   <label>
                     <div className='grantsub'>
-                      <h1 className='grantname'>Github Link:</h1>
-                      <input className='grantinput' type="text" placeholder='GitHub Project Link' name="link" onChange={handleChange} />
+                      <h1 className='grantname'>Github Project Link:</h1>
+                      <input className='grantinput' type="text" placeholder='GitHub Project Link' name="githubRepoLink" onChange={handleChange} />
                     </div>
                   </label>
                 </div>
