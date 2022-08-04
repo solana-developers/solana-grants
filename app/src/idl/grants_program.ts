@@ -11,12 +11,12 @@ export type GrantsProgram = {
           "isSigner": true
         },
         {
-          "name": "admin",
+          "name": "grant",
           "isMut": true,
-          "isSigner": true
+          "isSigner": false
         },
         {
-          "name": "grant",
+          "name": "matchingDonation",
           "isMut": true,
           "isSigner": false
         },
@@ -70,6 +70,16 @@ export type GrantsProgram = {
           "isSigner": false
         },
         {
+          "name": "matchingDonation",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "programInfo",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
           "name": "systemProgram",
           "isMut": false,
           "isSigner": false
@@ -94,6 +104,16 @@ export type GrantsProgram = {
           "name": "payer",
           "isMut": true,
           "isSigner": true
+        },
+        {
+          "name": "matchingDonation",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "programInfo",
+          "isMut": true,
+          "isSigner": false
         },
         {
           "name": "grant",
@@ -429,6 +449,16 @@ export type GrantsProgram = {
       "code": 6000,
       "name": "CancelledDonation",
       "msg": "This donation has already refunded the payer"
+    },
+    {
+      "code": 6001,
+      "name": "NotMatchingEligible",
+      "msg": "The grant related to this donation is not eligible for matching"
+    },
+    {
+      "code": 6002,
+      "name": "InsufficientFunds",
+      "msg": "The matching account does not have to sufficient funds to match the donation"
     }
   ]
 };
@@ -446,12 +476,12 @@ export const IDL: GrantsProgram = {
           "isSigner": true
         },
         {
-          "name": "admin",
+          "name": "grant",
           "isMut": true,
-          "isSigner": true
+          "isSigner": false
         },
         {
-          "name": "grant",
+          "name": "matchingDonation",
           "isMut": true,
           "isSigner": false
         },
@@ -505,6 +535,16 @@ export const IDL: GrantsProgram = {
           "isSigner": false
         },
         {
+          "name": "matchingDonation",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "programInfo",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
           "name": "systemProgram",
           "isMut": false,
           "isSigner": false
@@ -529,6 +569,16 @@ export const IDL: GrantsProgram = {
           "name": "payer",
           "isMut": true,
           "isSigner": true
+        },
+        {
+          "name": "matchingDonation",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "programInfo",
+          "isMut": true,
+          "isSigner": false
         },
         {
           "name": "grant",
@@ -864,6 +914,16 @@ export const IDL: GrantsProgram = {
       "code": 6000,
       "name": "CancelledDonation",
       "msg": "This donation has already refunded the payer"
+    },
+    {
+      "code": 6001,
+      "name": "NotMatchingEligible",
+      "msg": "The grant related to this donation is not eligible for matching"
+    },
+    {
+      "code": 6002,
+      "name": "InsufficientFunds",
+      "msg": "The matching account does not have to sufficient funds to match the donation"
     }
   ]
 };
