@@ -22,10 +22,10 @@ impl Donation {
 
     pub const SEED_PREFIX: &'static str = "donation";
 
-    pub fn new(bump: u8, payer: Pubkey, receiver: Pubkey, amount: u64) -> Self {
+    pub fn new(bump: u8, payer: Pubkey, grant: Pubkey, amount: u64) -> Self {
         Donation {
             payer,
-            grant: receiver,
+            grant,
             amount,
             state: DonationState::Funded,
             bump,
@@ -38,5 +38,12 @@ impl Donation {
 
     pub fn bump(&self) -> u8 {
         self.bump
+    }
+
+    /// the equivalent of what will be matched with the current donation
+    pub fn matching_amount(&self) -> u64 {
+        // TODO: this will be replaced by quadratic matching or any other matching algorithm
+        // 1:1 matching
+        self.amount
     }
 }

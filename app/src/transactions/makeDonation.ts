@@ -10,20 +10,33 @@ export async function makeDonation(
   grantPDA: PublicKey,
   lamports: BN
 ): Promise<anchor.web3.Transaction> {
-    
   // find the donation PDA
   const [donationPDA, _bump0] = await anchor.web3.PublicKey.findProgramAddress(
     [encode("donation"), grantPDA.toBuffer(), donor.toBuffer()],
     program.programId
   );
 
+  const [matchingDonationPDA, _bump2] =
+    await anchor.web3.PublicKey.findProgramAddress(
+      [encode("matching_donation"), grantPDA.toBuffer()],
+      program.programId
+    );
+  
+  const [programInfoPDA, _bump] =
+      await anchor.web3.PublicKey.findProgramAddress(
+        [encode("program_info")],
+        program.programId
+      );
+
   // check if the account exists
   const donation = await program.account.donation.fetchNullable(donationPDA);
 
-  if (donation === null) { // Create a new donation account
+  if (donation === null) {
+    // Create a new donation account
 
     // find the donation index PDA with the latest donor count
-    const latestDonorCount = (await program.account.grant.fetch(grantPDA)).totalDonors;
+    const latestDonorCount = (await program.account.grant.fetch(grantPDA))
+      .totalDonors;
     const [donationIndexPDA, _bump1] =
       await anchor.web3.PublicKey.findProgramAddress(
         [
@@ -41,18 +54,21 @@ export async function makeDonation(
         grant: grantPDA,
         donation: donationPDA,
         donationIndex: donationIndexPDA,
+        matchingDonation: matchingDonationPDA,
+        programInfo: programInfoPDA,
       })
       .transaction();
-    
-  } else { // Increment the existing donation
-
-      return program.methods
-        .incrementDonation(lamports)
-        .accounts({
-          donation: donationPDA,
-          payer: donor,
-          grant: grantPDA,
-        })
-        .transaction();
+  } else {
+    // Increment the existing donation
+    return program.methods
+      .incrementDonation(lamports)
+      .accounts({
+        donation: donationPDA,
+        payer: donor,
+        grant: grantPDA,
+        matchingDonation: matchingDonationPDA,
+        programInfo: programInfoPDA,
+      })
+      .transaction();
   }
 }
