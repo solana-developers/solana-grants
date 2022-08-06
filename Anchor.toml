@@ -1,5 +1,6 @@
 [features]
 seeds = false
+
 [programs.localnet]
 grants_program = "4rYKkNGRQSe2hJEQGgmiEAcg4KQzP8h8QfwTmmgChAmZ"
 
@@ -15,3 +16,6 @@ test = "yarn run ts-mocha -p ./tsconfig.json -t 1000000 tests/**/*.ts"
 
 [test]
 startup_wait = 15000
+
+[workspace]
+types = "app/src/idl/"
