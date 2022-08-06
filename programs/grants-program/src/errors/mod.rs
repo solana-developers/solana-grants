@@ -1,3 +1,5 @@
-mod grant_errors;
+mod grant_error;
+mod donation_error;
 
-pub use grant_errors::*;
+pub use grant_error::*;
+pub use donation_error::*;
