@@ -5,8 +5,7 @@
         "prepare": "husky install"
     },
     "dependencies": {
-        "@project-serum/anchor": "^0.24.2",
-        "lorem-ipsum": "^2.0.8"
+        "@project-serum/anchor": "^0.24.2"
     },
     "devDependencies": {
         "@types/bn.js": "^5.1.0",
