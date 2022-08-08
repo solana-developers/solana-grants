@@ -43,7 +43,7 @@ pub mod grants_program {
         instructions::cancel_donation(ctx)
     }
 
-    /// Initializes the program info data, which sets the admin.
+    /// Initializes the program info data, which determines the admin.
     pub fn initialize_program_info(ctx: Context<Initialize>) -> Result<()> {
         instructions::initialize(ctx)
     }
