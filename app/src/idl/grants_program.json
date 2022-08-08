@@ -80,6 +80,11 @@
           "name": "lamports",
           "type": "u64"
         }
+      
+        {
+          "name": "lamports",
+          "type": "u64"
+        }
       ]
     },
     {
@@ -92,42 +97,6 @@
         },
         {
           "name": "payer",
-          "isMut": true,
-          "isSigner": true
-        },
-        {
-          "name": "grant",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "systemProgram",
-          "isMut": false,
-          "isSigner": false
-        }
-      ],
-      "args": [
-        {
-          "name": "lamports",
-          "type": "u64"
-        }
-      ]
-    },
-    {
-      "name": "releaseGrant",
-      "accounts": [
-        {
-          "name": "admin",
-          "isMut": false,
-          "isSigner": true
-        },
-        {
-          "name": "programInfo",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "grant",
           "isMut": true,
           "isSigner": false
         },
@@ -179,13 +148,155 @@
           "isSigner": true
         },
         {
-          "name": "programInfo",
-          "isMut": true,
+          "name": "systemProgram",
+          "isMut": false,
           "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "lamports",
+          "type": "u64"
+        }
+      ]
+    },
+    {
+      "name": "releaseGrant",
+      "accounts": [
+        {
+          "name": "admin",
+          "isMut": false,
+          "isSigner": true
         },
         {
           "name": "systemProgram",
           "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "lamports",
+          "type": "u64"
+        }
+      ]
+    },
+    {
+      "name": "releaseGrant",
+      "accounts": [
+        {
+          "name": "admin",
+          "isMut": false,
+          "isSigner": true
+        },
+        {
+          "name": "programInfo",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "grant",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "grant",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "author",
+          "isMut": true,
+          "isSigner": false
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "cancelDonation",
+      "accounts": [
+        {
+          "name": "admin",
+          "isMut": false,
+          "isSigner": true
+        },
+        {
+          "name": "programInfo",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "donation",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "payer",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "programInfo",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "donation",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "payer",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "grant",
+          "isMut": true,
+          "isSigner": false
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "initializeProgramInfo",
+      "accounts": [
+        {
+          "name": "admin",
+          "isMut": true,
+          "isSigner": true
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "initializeProgramInfo",
+      "accounts": [
+        {
+          "name": "admin",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "programInfo",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "cancelGrantAuthor",
+      "accounts": [
+        {
+          "name": "author",
+          "isMut": false,
+          "isSigner": true
+        },
+        {
+          "name": "grant",
+<<<<<<< HEAD
+          "isMut": true,
           "isSigner": false
         }
       ],
@@ -196,6 +307,11 @@
       "accounts": [
         {
           "name": "admin",
+          "isMut": false,
+          "isSigner": true
+        },
+        {
+          "name": "grant",
           "isMut": false,
           "isSigner": true
         },
@@ -218,10 +334,28 @@
         {
           "name": "author",
           "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "programInfo",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "cancelGrantAuthor",
+      "accounts": [
+        {
+          "name": "author",
+          "isMut": false,
           "isSigner": true
         },
         {
           "name": "grant",
+=======
+>>>>>>> Feat: Donations (#21)
           "isMut": true,
           "isSigner": false
         }
@@ -291,6 +425,10 @@
             "type": "u8"
           },
           {
+            "name": "bump",
+            "type": "u8"
+          },
+          {
             "name": "author",
             "type": "publicKey"
           },
@@ -327,6 +465,42 @@
           {
             "name": "grantNum",
             "type": "u32"
+          }
+        ]
+      }
+    },
+    {
+      "name": "Link",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "bump",
+            "type": "u8"
+          },
+          {
+            "name": "address",
+            "type": "publicKey"
+          }
+        ]
+      }
+    },
+    {
+      "name": "ProgramInfo",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "bump",
+            "type": "u8"
+          },
+          {
+            "name": "grantsCount",
+            "type": "u32"
+          },
+          {
+            "name": "admin",
+            "type": "publicKey"
           }
         ]
       }
@@ -430,5 +604,8 @@
       "name": "CancelledDonation",
       "msg": "This donation has already refunded the payer"
     }
-  ]
+  ],
+  "metadata": {
+    "address": "AE9VS9MXWqER7GXWVKprbgzcwgmpSNckUyJ5GzWWpRrD"
+  }
 }

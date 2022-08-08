@@ -1,5 +1,6 @@
 [features]
 seeds = false
+
 [programs.localnet]
 grants_program = "4rYKkNGRQSe2hJEQGgmiEAcg4KQzP8h8QfwTmmgChAmZ"
 
