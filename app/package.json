@@ -24,6 +24,7 @@
     "contrast-color": "^1.0.1",
     "daisyui": "^1.24.3",
     "immer": "^9.0.12",
+    "lorem-ipsum": "^2.0.8",
     "marked-react": "^1.2.0",
     "next": "12.2",
     "next-auth": "^4.10.0",
