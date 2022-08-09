@@ -24,6 +24,7 @@
     "contrast-color": "^1.0.1",
     "daisyui": "^1.24.3",
     "immer": "^9.0.12",
+    "marked": "^4.0.18",
     "next": "12.0.8",
     "next-auth": "^4.10.0",
     "next-compose-plugins": "^2.2.1",

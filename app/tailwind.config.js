@@ -15,6 +15,7 @@ module.exports = {
         'royal-purple': '#6A1B9A',
         'safety-orange': '#FF6F00',
         'thistle': '#E1BEE7',
+        'blue-magenta': '#2514ED',      /* Create grant flow primary color */
       },
       },
   },
@@ -58,6 +59,7 @@ module.exports = {
           'success': '#009485',           /* Success */
           'warning': '#ff9900',           /* Warning */
           'error': '#ff5724',             /* Error */
+
         },
       },
       // backup themes:
