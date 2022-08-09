@@ -4,33 +4,23 @@ use anchor_lang::prelude::*;
 
 #[account]
 #[derive(Default)]
-pub struct GrantsProgramInfo {
+pub struct ProgramInfo {
     pub bump: u8,           // 1
     pub grants_count: u32,  // 8
     pub admin: Pubkey,      // 32
 }
 
-impl GrantsProgramInfo {
+impl ProgramInfo {
     pub const MAXIMUM_SPACE: usize = 1 + 8 + 32;
 
-    pub fn new(bump: u8, admin: Pubkey, grants_count: u32) -> Self {
-        GrantsProgramInfo {
+    pub const SEED: &'static str = "program_info";
+
+    pub fn new(bump: u8, admin: Pubkey) -> Self {
+        Self {
             bump,
-            grants_count,
             admin,
+            ..Default::default()
         }
-    }
-
-    pub fn bump(&self) -> u8 {
-        self.bump
-    }
-
-    pub fn grants_count(&self) -> u32 {
-        self.grants_count
-    }
-
-    pub fn admin(&self) -> Pubkey {
-        self.admin
     }
 
     /// Increment the number of grants by one
