@@ -58,6 +58,12 @@ This has lists as well:
 
 ### Heading 3
       
+You can add \`code snippets\` as well
+
+\`\`\`javascript
+// and also code blocks
+const foo = bar;
+\`\`\`
 ${loremIpsum({ count: 50, units: "words" })}`,
     amountRaised: 23050,
     amountGoal: 100000,
