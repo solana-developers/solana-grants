@@ -1,8 +1,13 @@
 import { FC ,useState } from 'react';
-import CreateGrant from "../../components/CreateGrant";
+import { useRouter } from "next/router";
 
 export const LandingPageView: FC = ({ }) => {
-  const [preview, setpreview] = useState(false);
+  const router = useRouter();
+
+  const navigateToCreateGrantPage = () => {
+    router.push("/create-grant");
+  }
+
   const slide = ({ forward }) => {
     const scroller = document.querySelector('.carousel-container');
     const itemWidth = document.querySelector('.slide-content').clientWidth;
@@ -31,10 +36,9 @@ export const LandingPageView: FC = ({ }) => {
               <button className="bg-green-400 hover:bg-emerald-500 py-2 px-9 text-black text-sm rounded-full mr-4">
                 EXPLORE
               </button>
-              <a href="#create-grant" className="bg-transparent hover:bg-slate-500 py-2 px-6 text-fuchsia-300 border border-fuchsia-300 text-sm rounded-full btn"  onClick={()=>{ setpreview(true) }}>
+              <button className="bg-transparent hover:bg-slate-500 py-2 px-6 text-fuchsia-300 border border-fuchsia-300 text-sm rounded-full btn"  onClick={navigateToCreateGrantPage}>
                 CREATE A GRANT
-              </a> 
-              { preview && <CreateGrant setpreview={setpreview} />}
+              </button>
             </div>
           </div> 
         </div>
