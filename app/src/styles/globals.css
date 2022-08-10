@@ -184,15 +184,21 @@ a {
     height: 32px;
   }
 }
-@media screen and (max-width: 768px) {
+
+@media screen and (max-width: 1100px) {
   .creategrant{
-  width: 23rem;
-  left:2%;
+    width: 45rem;
   }  
   .grantborder{
-  width: 0;
+    width: 0;
   }
   .grantheading{
-  font-size: 0;
+    font-size: 0;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .creategrant{
+    width: 23rem;
   }
 }
