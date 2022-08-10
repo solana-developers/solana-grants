@@ -233,7 +233,7 @@ export const GrantCreationView: FC = ({ }) => {
                 <button className="text-base  ml-2  hover:scale-110 focus:outline-none flex justify-center px-4 py-2 rounded font-bold cursor-pointer 
                   hover:bg-teal-600  
                   bg-teal-600 
-                  text-teal-100 
+                  text-white 
                   border duration-200 ease-in-out 
                   border-teal-600 transition"
                   disabled={active == 4}
@@ -267,7 +267,7 @@ export const GrantCreationView: FC = ({ }) => {
               <button className="text-base hover:scale-110 focus:outline-none flex justify-center px-4 py-2 rounded font-bold cursor-pointer 
                   hover:bg-gray-200  
                   bg-gray-100 
-                  text-gray-700 
+                  text-black 
                   border duration-200 ease-in-out 
                   border-gray-600 transition"
                 disabled={active == 1}
@@ -277,7 +277,7 @@ export const GrantCreationView: FC = ({ }) => {
                 <button className="text-base  ml-2  hover:scale-110 focus:outline-none flex justify-center px-4 py-2 rounded font-bold cursor-pointer 
                   hover:bg-teal-600  
                   bg-teal-600 
-                  text-teal-100 
+                  text-white 
                   border duration-200 ease-in-out 
                   border-teal-600 transition"
                   disabled={active == 4}
@@ -385,7 +385,7 @@ export const GrantCreationView: FC = ({ }) => {
               <button className="text-base hover:scale-110 focus:outline-none flex justify-center px-4 py-2 rounded font-bold cursor-pointer 
                 hover:bg-gray-200  
                 bg-gray-100 
-                text-gray-700 
+                text-black 
                 border duration-200 ease-in-out 
                 border-gray-600 transition"
                 disabled={active == 1}
@@ -395,12 +395,12 @@ export const GrantCreationView: FC = ({ }) => {
                 <button className="text-base  ml-2  hover:scale-110 focus:outline-none flex justify-center px-4 py-2 rounded font-bold cursor-pointer 
                   hover:bg-teal-600  
                   bg-teal-600 
-                  text-teal-100 
+                  text-white 
                   border duration-200 ease-in-out 
                   border-teal-600 transition"
                   disabled={active == 4}
                   onClick={goToNextSection}
-                >Next</button>
+                >Submit</button>
               </div>
             </div>
           </div>
