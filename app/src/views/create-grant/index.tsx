@@ -10,7 +10,7 @@ import TransactionSeries from '../../components/TransactionSeries';
 import { useSession } from 'next-auth/react';
 import { toastError, toastSuccess } from '../../components/Toast';
 
-export const GrantCreationFlowView: FC = ({ }) => {
+export const GrantCreationView: FC = ({ }) => {
   const [active, setactive] = useState(1);
   const [grant, setGrant] = useState({
     title: "",

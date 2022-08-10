@@ -1,6 +1,6 @@
 import type { NextPage } from "next";
 import Head from "next/head";
-import { ExplorerView } from "views/explorer";
+import { ExplorerView } from "views";
 
 const Explorer: NextPage = (props) => {
   return (
