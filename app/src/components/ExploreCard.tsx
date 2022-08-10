@@ -1,56 +1,55 @@
 import { contrastColor } from "contrast-color";
-import { FC } from "react";
+import { BN } from "@project-serum/anchor";
+import { LAMPORTS_PER_SOL } from "@solana/web3.js";
 
-export interface ExploreCardProps {
-  image: string;
-  bgColor: string;
+export interface ExplorerCardProps {
+  imageLink: string;
   title: string;
-  author: string;
+  author: BN | string;
   authorLink: string;
-  summary: string;
-  projectLink: string;
-  amtRaised: number;
-  numContributors: number;
+  description: string;
+  githubProjectLink: string;
+  numDonors: number;
+  dueDate: BN | number;
+  matchingEligible: boolean;
+  isCancelled: boolean;
+  lamportsRaised: BN | number;
+  targetLamports: BN | number;
 }
 
 /**
- * A card to show a summary of a project in the explorer view.
+ * A card to show a description of a project in the explorer view.
  * @param bgColor is expected to be taken from the image, ideally provided by the backend
  */
-export const ExploreCard: FC<ExploreCardProps> = ({
-  image,
-  bgColor,
+export const ExplorerCard: FC<ExplorerCardProps> = ({
+  imageLink,
   title,
   author,
   authorLink,
-  summary,
-  projectLink,
-  amtRaised,
-  numContributors,
+  description,
+  githubProjectLink,
+  numDonors,
+  lamportsRaised
 }) => {
-  const roundedAmtRaised = Math.round(amtRaised);
-  const textColor = contrastColor({
-    bgColor,
-    fgLightColor: "text-slate-200",
-    fgDarkColor: "text-slate-800",
-  });
+  const roundedAmtRaised = Math.round(lamportsRaised as number / LAMPORTS_PER_SOL);
+  const textColor = contrastColor({ bgColor: "yellow", fgLightColor: "text-slate-200", fgDarkColor: "text-slate-800", });
   return (
     <>
-      <div className='shadow-xl card w-96 bg-base-100'>
-        <a href={projectLink}>
+      <div className='card w-96 bg-base-100 shadow-xl z-[-1]'>
+        <a href={githubProjectLink}>
           <figure className='relative'>
             <div className='absolute flex w-full h-full transition-opacity opacity-0 bg-slate-700 hover:opacity-90'>
               <button className='m-auto btn btn-secondary'>Learn More</button>
             </div>
-            <img className='w-full' src={image} alt='Project image' />
+            <img className='w-full' src={imageLink || "https://api.lorem.space/image/shoes?w=400&h=225"} alt='Project image' />
           </figure>
         </a>
         <div
           className={"card-body " + textColor}
-          style={{ background: bgColor }}
+          style={{ background: "yellow" }}
         >
-          <a href={projectLink}>
-            <h2 id='title' className='mb-1 font-mono card-title'>
+          <a href={githubProjectLink}>
+            <h2 id='title' className='card-title mb-1 font-mono'>
               {title}
             </h2>
           </a>
@@ -60,27 +59,13 @@ export const ExploreCard: FC<ExploreCardProps> = ({
               {author}
             </a>
           </p>
-          <p
-            id='summary'
-            className={"line-clamp-3 text-opacity-90 " + textColor}
-          >
-            {summary}
+          <p id='description' className={'line-clamp-3 text-opacity-90 ' + textColor}>
+            {description}
           </p>
           <div className='card-actions'>
-            <p
-              className={
-                "font-mono mx-auto text-sm text-right text-opacity-90 " +
-                textColor
-              }
-            >
-              <p
-                className={
-                  "text-xl text-left font-semibold color-green " + textColor
-                }
-              >
-                ${roundedAmtRaised}
-              </p>
-              Raised from <strong>{numContributors}</strong> supporters
+            <p className={'font-mono mx-auto text-sm text-right text-opacity-90 '+textColor}>
+              <p className={'text-xl text-left font-semibold color-green '+textColor}>${roundedAmtRaised}</p>
+              Raised from <strong>{numDonors}</strong> supporters
             </p>
             <button className='m-auto btn btn-primary'>Donate</button>
           </div>
@@ -89,17 +74,3 @@ export const ExploreCard: FC<ExploreCardProps> = ({
     </>
   );
 };
-
-export const _exampleCard = (
-  <ExploreCard
-    image='https://api.lorem.space/image/shoes?w=400&h=225'
-    bgColor='#001020'
-    title='Minter Project'
-    author='minter.sol'
-    authorLink='https://minter.sol'
-    summary='Make minting process easier with this framework and then do a lot of subsequent lines until we reach more than 3 lines to test for line clamping'
-    projectLink='https://solanagrants.com/minter-project'
-    amtRaised={3012.892}
-    numContributors={76}
-  />
-);
