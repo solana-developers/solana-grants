@@ -2,14 +2,13 @@ import { FC, useState } from 'react';
 import uploadToWeb3DB from '../../utils/uploadToWeb3DB';
 import { LAMPORTS_PER_SOL } from "@solana/web3.js";
 import GetProvider from '../../utils/getProvider';
-
-import { notify } from "../../utils/notifications";
 import { useWallet } from '@solana/wallet-adapter-react';
 import { TransactionDetail } from '../../constants/types';
 import { GrantModel } from '../../models/grant';
 import createGrant from '../../instructions/createGrant';
 import TransactionSeries from '../../components/TransactionSeries';
 import { useSession } from 'next-auth/react';
+import { toastError, toastSuccess } from '../../components/Toast';
 
 export const GrantCreationFlowView: FC = ({ }) => {
   const [active, setactive] = useState(1);
@@ -50,27 +49,27 @@ export const GrantCreationFlowView: FC = ({ }) => {
   const runValidations = () => {
     if (active == 1) {
       if (!wallet || !wallet.connected) {
-        notify({ type: 'error', message: 'error', description: 'Wallet not connected!' });
+        toastError("Wallet not connected!");
         return false;
       }
 
       if (!githubAuthSession || !githubAuthSession.data) {
-        notify({ type: 'error', message: 'error', description: 'Please sign in with your GitHub Account' });
+        toastError("Please sign in with your GitHub Account");
         return false;
       }
 
       if (!grant.title || !grant.description || !grant.about || !grant.imageLink || !grant.projectGithubLink || !grant.dueDate || !grant.targetAmount) {
-        notify({ type: 'error', message: 'error', description: 'Please fill in all the fields!' });
+        toastError("Please fill in all the fields!");
         return false;
       }
 
       if (parseFloat(grant.targetAmount) <= 0) {
-        notify({ type: 'error', message: 'error', description: 'target amount must be greater than zero' });
+        toastError("Target amount must be greater than zero");
         return false;
       }
   
       if (new Date(grant.dueDate + " 00:00:00").getTime() <= new Date().getTime()) {
-        notify({ type: 'error', message: 'error', description: 'Due date entered must be in the future!' });
+        toastError("Due date entered must be in the future!");
         return false;
       }
     }
@@ -105,7 +104,7 @@ export const GrantCreationFlowView: FC = ({ }) => {
     const uploadResult = await uploadToWeb3DB(wallet, grantDetailsToBeUploaded, setTransactionsList);
 
     if (uploadResult.err) {
-      notify({ type: 'error', message: 'error', description: 'Something went wrong! Please try again later' });
+      toastError("Something went wrong! Please try again later");
       setactive(active - 1);
       return;
     }
@@ -120,7 +119,7 @@ export const GrantCreationFlowView: FC = ({ }) => {
     const grantCreationResult = await createGrant(provider, grantDetails);
 
     if (grantCreationResult.err) {
-      notify({ type: 'error', message: 'error', description: 'Something went wrong! Please try again later' });
+      toastError("Something went wrong! Please try again later");
       setactive(active - 1);
       return;
     }
@@ -131,7 +130,7 @@ export const GrantCreationFlowView: FC = ({ }) => {
       return newTransactionsList;
     })
     
-    notify({ type: 'success', message: 'success', description: 'Grant created successfully' });
+    toastSuccess("Grant created successfully");
   }
 
   return (

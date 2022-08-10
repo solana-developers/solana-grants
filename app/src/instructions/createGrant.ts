@@ -3,12 +3,12 @@ import getProgram from "./api/getProgram";
 import { getProgramInfoPDA } from "./pda/getProgramInfoPDA";
 import getGrantPDA from "./pda/getGrantPDA";
 import { GrantModel } from "../models/grant";
-import { notify } from "../utils/notifications";
+import { toastError } from "components/Toast";
 
 export default async function createGrant(provider: Provider, grant: GrantModel): Promise<any> {
     try {
         if (!provider) {
-            notify({ type: "error", message: "error", description: "Wallet not connected!" });
+            toastError("Wallet not connected!");
             return { err: true };
         }
 

@@ -41,4 +41,16 @@ export const toastError = (message: string) => {
   });
 }
 
+export const toastSuccess = (message: string) => {
+  toast.success(message, {
+    position: "bottom-left",
+    autoClose: 2500,
+    hideProgressBar: false,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+    theme: "colored"
+  });
+}
+
 export default Toast;
