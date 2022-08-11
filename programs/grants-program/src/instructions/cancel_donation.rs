@@ -13,20 +13,20 @@ pub struct CancelDonation<'info> {
         mut,
         has_one = payer,
         has_one = grant,
-        seeds = [
-            Donation::SEED_PREFIX.as_bytes().as_ref(),
-            donation.grant.as_ref(), 
-            donation.payer.as_ref()
-        ],
-        bump = donation.bump()
     )]
+    /// CHECK: We don't check for the seeds because they can be normal donations 
+    ///        or a matching donation, which have different seed formats.
     donation: Account<'info, Donation>,
 
     #[account(mut)]
     /// CHECK: We check that the donation has this payer
     payer: AccountInfo<'info>,
 
-    #[account(mut)]
+    #[account(
+        mut,
+        seeds = [b"grant", grant.grant_num.to_be_bytes().as_ref()],
+        bump = grant.bump,
+    )]
     /// CHECK: We check that the donation has this grant
     grant: Account<'info, Grant>,
 }
