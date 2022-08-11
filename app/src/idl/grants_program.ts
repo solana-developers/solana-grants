@@ -1,9 +1,15 @@
 export type GrantsProgram = {
   "version": "0.1.0",
   "name": "grants_program",
+  "docs": [
+    "Main program entrypoint"
+  ],
   "instructions": [
     {
       "name": "createGrant",
+      "docs": [
+        "Initializes a grant and updates the program info's grant count"
+      ],
       "accounts": [
         {
           "name": "author",
@@ -48,6 +54,9 @@ export type GrantsProgram = {
     },
     {
       "name": "createDonation",
+      "docs": [
+        "Creates a donation which transfers money from the payer to the grant"
+      ],
       "accounts": [
         {
           "name": "payer",
@@ -84,6 +93,9 @@ export type GrantsProgram = {
     },
     {
       "name": "incrementDonation",
+      "docs": [
+        "Increments the amount donated from a payer to a grant, effectively transferring it"
+      ],
       "accounts": [
         {
           "name": "donation",
@@ -115,6 +127,9 @@ export type GrantsProgram = {
     },
     {
       "name": "releaseGrant",
+      "docs": [
+        "Releases the funds from the grant to the grant creator account"
+      ],
       "accounts": [
         {
           "name": "admin",
@@ -141,6 +156,10 @@ export type GrantsProgram = {
     },
     {
       "name": "cancelDonation",
+      "docs": [
+        "Cancels a specific donation and refunds the money to the donor,",
+        "this need authorization by an admin or DAO."
+      ],
       "accounts": [
         {
           "name": "admin",
@@ -172,6 +191,9 @@ export type GrantsProgram = {
     },
     {
       "name": "initializeProgramInfo",
+      "docs": [
+        "Initializes the program info data, which determines the admin."
+      ],
       "accounts": [
         {
           "name": "admin",
@@ -193,6 +215,9 @@ export type GrantsProgram = {
     },
     {
       "name": "cancelGrantAdmin",
+      "docs": [
+        "Lets an admin cancel a grant"
+      ],
       "accounts": [
         {
           "name": "admin",
@@ -214,6 +239,9 @@ export type GrantsProgram = {
     },
     {
       "name": "cancelGrantAuthor",
+      "docs": [
+        "Lets an author cancel a grant"
+      ],
       "accounts": [
         {
           "name": "author",
@@ -230,6 +258,9 @@ export type GrantsProgram = {
     },
     {
       "name": "eligibleMatching",
+      "docs": [
+        "Sets the matching eligibility to true"
+      ],
       "accounts": [
         {
           "name": "admin",
@@ -253,6 +284,10 @@ export type GrantsProgram = {
   "accounts": [
     {
       "name": "donation",
+      "docs": [
+        "This account will keep track of the money given to a grant, which can be",
+        "either a user donation or a match. This will not hold the money."
+      ],
       "type": {
         "kind": "struct",
         "fields": [
@@ -283,6 +318,9 @@ export type GrantsProgram = {
     },
     {
       "name": "grant",
+      "docs": [
+        "This account holds the information for a grant account"
+      ],
       "type": {
         "kind": "struct",
         "fields": [
@@ -333,6 +371,10 @@ export type GrantsProgram = {
     },
     {
       "name": "link",
+      "docs": [
+        "This is just a linking account intended to be used as a PDA for",
+        "when a different seed is needed to reach another account."
+      ],
       "type": {
         "kind": "struct",
         "fields": [
@@ -349,6 +391,9 @@ export type GrantsProgram = {
     },
     {
       "name": "programInfo",
+      "docs": [
+        "This account holds the information of number of grants and admin"
+      ],
       "type": {
         "kind": "struct",
         "fields": [
@@ -436,9 +481,15 @@ export type GrantsProgram = {
 export const IDL: GrantsProgram = {
   "version": "0.1.0",
   "name": "grants_program",
+  "docs": [
+    "Main program entrypoint"
+  ],
   "instructions": [
     {
       "name": "createGrant",
+      "docs": [
+        "Initializes a grant and updates the program info's grant count"
+      ],
       "accounts": [
         {
           "name": "author",
@@ -483,6 +534,9 @@ export const IDL: GrantsProgram = {
     },
     {
       "name": "createDonation",
+      "docs": [
+        "Creates a donation which transfers money from the payer to the grant"
+      ],
       "accounts": [
         {
           "name": "payer",
@@ -519,6 +573,9 @@ export const IDL: GrantsProgram = {
     },
     {
       "name": "incrementDonation",
+      "docs": [
+        "Increments the amount donated from a payer to a grant, effectively transferring it"
+      ],
       "accounts": [
         {
           "name": "donation",
@@ -550,6 +607,9 @@ export const IDL: GrantsProgram = {
     },
     {
       "name": "releaseGrant",
+      "docs": [
+        "Releases the funds from the grant to the grant creator account"
+      ],
       "accounts": [
         {
           "name": "admin",
@@ -576,6 +636,10 @@ export const IDL: GrantsProgram = {
     },
     {
       "name": "cancelDonation",
+      "docs": [
+        "Cancels a specific donation and refunds the money to the donor,",
+        "this need authorization by an admin or DAO."
+      ],
       "accounts": [
         {
           "name": "admin",
@@ -607,6 +671,9 @@ export const IDL: GrantsProgram = {
     },
     {
       "name": "initializeProgramInfo",
+      "docs": [
+        "Initializes the program info data, which determines the admin."
+      ],
       "accounts": [
         {
           "name": "admin",
@@ -628,6 +695,9 @@ export const IDL: GrantsProgram = {
     },
     {
       "name": "cancelGrantAdmin",
+      "docs": [
+        "Lets an admin cancel a grant"
+      ],
       "accounts": [
         {
           "name": "admin",
@@ -649,6 +719,9 @@ export const IDL: GrantsProgram = {
     },
     {
       "name": "cancelGrantAuthor",
+      "docs": [
+        "Lets an author cancel a grant"
+      ],
       "accounts": [
         {
           "name": "author",
@@ -665,6 +738,9 @@ export const IDL: GrantsProgram = {
     },
     {
       "name": "eligibleMatching",
+      "docs": [
+        "Sets the matching eligibility to true"
+      ],
       "accounts": [
         {
           "name": "admin",
@@ -688,6 +764,10 @@ export const IDL: GrantsProgram = {
   "accounts": [
     {
       "name": "donation",
+      "docs": [
+        "This account will keep track of the money given to a grant, which can be",
+        "either a user donation or a match. This will not hold the money."
+      ],
       "type": {
         "kind": "struct",
         "fields": [
@@ -718,6 +798,9 @@ export const IDL: GrantsProgram = {
     },
     {
       "name": "grant",
+      "docs": [
+        "This account holds the information for a grant account"
+      ],
       "type": {
         "kind": "struct",
         "fields": [
@@ -768,6 +851,10 @@ export const IDL: GrantsProgram = {
     },
     {
       "name": "link",
+      "docs": [
+        "This is just a linking account intended to be used as a PDA for",
+        "when a different seed is needed to reach another account."
+      ],
       "type": {
         "kind": "struct",
         "fields": [
@@ -784,6 +871,9 @@ export const IDL: GrantsProgram = {
     },
     {
       "name": "programInfo",
+      "docs": [
+        "This account holds the information of number of grants and admin"
+      ],
       "type": {
         "kind": "struct",
         "fields": [

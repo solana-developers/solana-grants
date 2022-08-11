@@ -252,14 +252,16 @@ export const GrantCreationView: FC = ({ }) => {
               <div className="flex flex-col md:flex-row">
                 <div className="w-full flex-1 mx-2 svelte-1l8159u">
                   <div className="bg-white my-2 p-1 flex border border-gray-200 rounded svelte-1l8159u">
-                    <input placeholder="Name" value={githubAuthSession?.data?.user?.name || ""} disabled className="p-1 px-2 appearance-none outline-none w-full text-gray-800" /> </div>
+                    <text className="p-2 px-2 appearance-none outline-none w-full text-white">{githubAuthSession?.data?.user?.name || ""}</text>
+                  </div>
                 </div>
               </div>
               <div className="flex flex-col md:flex-row">
                 <div className="w-full mx-2 flex-1 svelte-1l8159u">
                   <div className="font-bold h-6 mt-3 text-white text-s leading-8 uppercase"> Wallet Address*</div>
                   <div className="bg-white my-2 p-1 flex border border-gray-200 rounded svelte-1l8159u">
-                    <input placeholder="Wallet Address" value={wallet?.publicKey?.toString() || ""} disabled className="p-1 px-2 appearance-none outline-none w-full text-gray-800" /> </div>
+                    <text className="p-2 px-2 appearance-none outline-none w-full text-white">{wallet?.publicKey?.toString() || ""}</text>
+                  </div>
                 </div>
               </div>
             </div>
@@ -300,7 +302,7 @@ export const GrantCreationView: FC = ({ }) => {
               <div className="flex flex-col md:flex-row">
                 <div className="w-full flex-1 mx-2 svelte-1l8159u">
                 <div className="bg-[#24292F]  my-2 p-1 flex border border-gray-800 rounded svelte-1l8159u">
-                    <text className="p-2 px-2 appearance-none outline-none w-full text-white"></text>
+                    <text className="p-2 px-2 appearance-none outline-none w-full text-white">{grant.title}</text>
                   </div>
                 </div>
               </div>
@@ -308,7 +310,7 @@ export const GrantCreationView: FC = ({ }) => {
                 <div className="w-full mx-2 flex-1 svelte-1l8159u">
                   <div className="font-bold h-6 mt-3 text-white text-s leading-8 uppercase"> About*</div>
                   <div className="bg-[#24292F] my-2 p-1 flex border border-gray-800 rounded svelte-1l8159u">
-                    <text className="p-2 px-2 appearance-none outline-none w-full text-white"></text>
+                    <text className="p-2 px-2 appearance-none outline-none w-full text-white">{grant.about}</text>
                   </div>
                 </div>
               </div>
@@ -316,7 +318,7 @@ export const GrantCreationView: FC = ({ }) => {
                 <div className="w-full mx-2 flex-1 svelte-1l8159u">
                   <div className="font-bold h-6 mt-3 text-white text-s leading-8 uppercase"> Description*</div>
                   <div className="bg-[#24292F]  my-2 p-1 flex border border-gray-800 rounded svelte-1l8159u">
-                    <text className="p-2 px-2 appearance-none outline-none w-full text-white"></text>
+                    <text className="p-2 px-2 appearance-none outline-none w-full text-white">{grant.description}</text>
                   </div>
                 </div>
               </div>
@@ -324,7 +326,7 @@ export const GrantCreationView: FC = ({ }) => {
                 <div className="w-full mx-2 flex-1 svelte-1l8159u">
                   <div className="font-bold h-6 mt-3 text-white text-s leading-8 uppercase"> Project Header URl*</div>
                   <div className="bg-[#24292F] my-2 p-1 flex border border-gray-800 rounded svelte-1l8159u">
-                    <text className="p-2 px-2 appearance-none outline-none w-full text-white"></text>
+                    <text className="p-2 px-2 appearance-none outline-none w-full text-white">{grant.imageLink}</text>
                   </div>
                 </div>
               </div>
@@ -332,7 +334,7 @@ export const GrantCreationView: FC = ({ }) => {
                 <div className="w-full mx-2 flex-1 svelte-1l8159u">
                   <div className="font-bold h-6 mt-3 text-white text-s leading-8 uppercase"> Project GitHub URl*</div>
                   <div className="bg-[#24292F] my-2 p-1 flex border border-gray-800 rounded svelte-1l8159u">
-                    <text className="p-2 px-2 appearance-none outline-none w-full text-white"></text>
+                    <text className="p-2 px-2 appearance-none outline-none w-full text-white">{grant.projectGithubLink}</text>
                   </div>
                 </div>
               </div>
@@ -340,7 +342,7 @@ export const GrantCreationView: FC = ({ }) => {
                 <div className="w-full mx-2 flex-1 svelte-1l8159u">
                   <div className="font-bold h-6 mt-3 text-white text-s leading-8 uppercase"> Project Website*</div>
                   <div className="bg-[#24292F] my-2 p-1 flex border border-gray-800 rounded svelte-1l8159u">
-                    <text className="p-2 px-2 appearance-none outline-none w-full text-white"></text>
+                    <text className="p-2 px-2 appearance-none outline-none w-full text-white">{grant.projectWebsite}</text>
                   </div>
                 </div>
               </div>
@@ -348,7 +350,7 @@ export const GrantCreationView: FC = ({ }) => {
                 <div className="w-full mx-2 flex-1 svelte-1l8159u">
                   <div className="font-bold h-6 mt-3 text-white text-s leading-8 uppercase"> Amount Goal in SOL*</div>
                   <div className="bg-[#24292F]  my-2 p-1 flex border border-gray-800 rounded svelte-1l8159u">
-                    <text className="p-2 px-2 appearance-none outline-none w-full text-white"></text>
+                    <text className="p-2 px-2 appearance-none outline-none w-full text-white">{grant.targetAmount}</text>
                   </div>
                 </div>
               </div>
@@ -356,7 +358,7 @@ export const GrantCreationView: FC = ({ }) => {
                 <div className="w-full mx-2 flex-1 svelte-1l8159u">
                   <div className="font-bold h-6 mt-3 text-white text-s leading-8 uppercase"> Due Date*</div>
                   <div className="bg-[#24292F] my-2 p-1 flex border border-gray-800 rounded svelte-1l8159u">
-                    <text className="p-2 px-2 appearance-none outline-none w-full text-white"></text>
+                    <text className="p-2 px-2 appearance-none outline-none w-full text-white">{grant.dueDate} (YYYY-MM-DD)</text>
                   </div>
                 </div>
               </div>
@@ -370,16 +372,8 @@ export const GrantCreationView: FC = ({ }) => {
               <div className="font-bold text-white text-s leading-8 uppercase h-6 mx-2 mt-3">Name*</div>
               <div className="flex flex-col md:flex-row">
                 <div className="w-full flex-1 mx-2 svelte-1l8159u">
-                <div className="bg-[#24292F] my-2 p-1 flex border border-gray-800 rounded svelte-1l8159u">
-                    <text className="p-2 px-2 appearance-none outline-none w-full text-white"></text>
-                  </div>
-                </div>
-              </div>
-              <div className="flex flex-col md:flex-row">
-                <div className="w-full mx-2 flex-1 svelte-1l8159u">
-                  <div className="font-bold h-6 mt-3 text-white text-s leading-8 uppercase"> GitHub Handle*</div>
                   <div className="bg-[#24292F] my-2 p-1 flex border border-gray-800 rounded svelte-1l8159u">
-                    <text className="p-2 px-2 appearance-none outline-none w-full text-white"></text>
+                    <text className="p-2 px-2 appearance-none outline-none w-full text-white">{githubAuthSession?.data?.user?.name || ""}</text>
                   </div>
                 </div>
               </div>
@@ -387,7 +381,7 @@ export const GrantCreationView: FC = ({ }) => {
                 <div className="w-full mx-2 flex-1 svelte-1l8159u">
                   <div className="font-bold h-6 mt-3 text-white text-s leading-8 uppercase"> Wallet Address</div>
                   <div className="bg-[#24292F] my-2 p-1 flex border border-gray-800 rounded svelte-1l8159u">
-                    <text className="p-2 px-2 appearance-none outline-none w-full text-white"></text>
+                    <text className="p-2 px-2 appearance-none outline-none w-full text-white">{wallet?.publicKey?.toString() || ""}</text>
                   </div>
                 </div>
               </div>

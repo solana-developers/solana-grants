@@ -16,8 +16,8 @@ export default async function createGrant(provider: Provider, grant: GrantModel)
 
         const programInfoPDA = await getProgramInfoPDA(program)
 
-        const programInfo = await program.account.grantsProgramInfo.fetch(programInfoPDA)
-
+        const programInfo = await program.account.programInfo.fetch(programInfoPDA)
+        
         const grantPDA = await getGrantPDA(program, programInfo.grantsCount);
 
         await program.methods
@@ -29,7 +29,7 @@ export default async function createGrant(provider: Provider, grant: GrantModel)
             })
             .rpc();
 
-        console.log(await program.account.grant.fetch(grantPDA));
+        // console.log(await program.account.grant.fetch(grantPDA));
 
         return { err: false }
     } catch (error) {
