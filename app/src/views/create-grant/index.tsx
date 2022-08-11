@@ -8,6 +8,7 @@ import { GrantModel } from '../../models/grant';
 import createGrant from '../../instructions/createGrant';
 import TransactionSeries from '../../components/TransactionSeries';
 import { useSession } from 'next-auth/react';
+import { useRouter } from 'next/router'
 import { toastError, toastSuccess } from '../../components/Toast';
 
 export const GrantCreationView: FC = ({ }) => {
@@ -40,6 +41,7 @@ export const GrantCreationView: FC = ({ }) => {
 
   const wallet = useWallet();
   const githubAuthSession = useSession();
+  const router = useRouter();
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
@@ -131,6 +133,7 @@ export const GrantCreationView: FC = ({ }) => {
     })
     
     toastSuccess("Grant created successfully");
+    router.push("/");
   }
 
   return (
@@ -414,11 +417,12 @@ export const GrantCreationView: FC = ({ }) => {
               <div className="font-bold text-white text-xl leading-8 uppercase h-6 mx-2 mt-3">
                 <h1>Creating Grant</h1>
               </div>
+              <p className="mt-6 mx-2">Please <b>DO NOT</b> leave this page or close this window until you sign all transactions/messages</p>
               <div className="my-12">
                 <TransactionSeries transactionsList={transactionsList} />
               </div>
             </div>
-            <div className="flex p-2 mt-4">
+            {active != 4 && <div className="flex p-2 mt-4">
               <button className="text-base hover:scale-110 focus:outline-none flex justify-center px-4 py-2 rounded font-bold cursor-pointer 
                 hover:bg-gray-200  
                 bg-gray-100 
@@ -428,7 +432,7 @@ export const GrantCreationView: FC = ({ }) => {
                 disabled={active == 1 || active == 4}
                 onClick={goToPreviousSection}
               >Previous</button>
-            </div>
+            </div>}
           </div>
         </div>
       </div>
