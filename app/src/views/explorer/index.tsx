@@ -23,40 +23,19 @@ export const ExplorerView: FC = ({ }) => {
   const wallet = useWallet()
 
   useEffect(() => {
-    // let exampleProject = {
-    //   imageLink: "https://api.lorem.space/image/shoes?w=400&h=225",
-    //   title: "Minter Project",
-    //   author: "minter.sol",
-    //   authorLink: "https://minter.sol",
-    //   description:
-    //     "Make minting process easier with this framework and then do a lot of subsequent lines until we reach more than 3 lines to test for line clamping",
-    //   githubProjectLink: "https://solanagrants.com/minter-project",
-    //   numDonors: 76,
-    //   dueDate: new Date().getTime(),
-    //   matchingEligible: true,
-    //   isCancelled: false,
-    //   lamportsRaised: 100000000,
-    //   targetLamports: 200000000,
-    // };
-    if (wallet && wallet.connected) {
-      fetchGrants()
-    }
-  }, [wallet.connected]);
+    fetchGrants()
+  }, [])
   
   const fetchGrants = async () => {
     try {
-      if (!wallet || !wallet.connected) {
-        return notify({ type: 'error', message: 'error', description: 'Wallet not connected!' });
-      }
-      
       setLoadingView(1);
-      const provider = getProvider(wallet);
+      const provider = getProvider(wallet, true);
   
       if (!programInfo.current) {
         const program = getProgram(provider);
         const programInfoPDA = await getProgramInfoPDA(program);
         const programInfoFetched = await program.account.grantsProgramInfo.fetch(programInfoPDA);
-        console.log(programInfoFetched)
+        // console.log(programInfoFetched)
         if (!programInfoFetched) {
           setLoadingView(0);
           return notify({ type: 'error', message: 'error', description: 'Something went wrong! please try again later' });
