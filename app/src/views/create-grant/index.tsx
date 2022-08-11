@@ -160,7 +160,7 @@ export const GrantCreationView: FC = ({ }) => {
               <div className="flex items-center text-gray-500 relative">
                 <div className={active == 4 ? 'rounded-full transition duration-500 ease-in-out h-12 w-12 py-3 border-2 bg-teal-600 border-teal-600' : 'rounded-full transition duration-500 ease-in-out h-12 w-12 py-3 border-2 border-gray-300'}>
                 </div>
-                <div className="absolute top-0 -ml-10 text-center mt-16 w-32 text-xs font-medium uppercase text-gray-500">Create Grant</div>
+                <div className={active == 4 ? 'grantheading absolute top-0 -ml-10 text-center mt-16 w-32 text-xs font-medium uppercase text-teal-600' : 'grantheading absolute top-0 -ml-10 text-center mt-16 w-32 text-xs font-medium uppercase text-gray-500'}>Create Grant</div>
               </div>
             </div>
           </div>
@@ -299,57 +299,65 @@ export const GrantCreationView: FC = ({ }) => {
               <div className="font-bold text-white text-s leading-8 uppercase h-6 mx-2 mt-3">Title*</div>
               <div className="flex flex-col md:flex-row">
                 <div className="w-full flex-1 mx-2 svelte-1l8159u">
-                  <div className="bg-white my-2 p-1 flex border border-gray-200 rounded svelte-1l8159u">
-                    <text className="p-4 px-2 appearance-none outline-none w-full text-gray-800" values='abcd' /> </div>
+                <div className="bg-[#24292F]  my-2 p-1 flex border border-gray-800 rounded svelte-1l8159u">
+                    <text className="p-2 px-2 appearance-none outline-none w-full text-white"></text>
+                  </div>
                 </div>
               </div>
               <div className="flex flex-col md:flex-row">
                 <div className="w-full mx-2 flex-1 svelte-1l8159u">
                   <div className="font-bold h-6 mt-3 text-white text-s leading-8 uppercase"> About*</div>
-                  <div className="bg-white my-2 p-1 flex border border-gray-200 rounded svelte-1l8159u">
-                    <text className="p-4 px-2 appearance-none outline-none w-full text-gray-800" /> </div>
+                  <div className="bg-[#24292F] my-2 p-1 flex border border-gray-800 rounded svelte-1l8159u">
+                    <text className="p-2 px-2 appearance-none outline-none w-full text-white"></text>
+                  </div>
                 </div>
               </div>
               <div className="flex flex-col md:flex-row">
                 <div className="w-full mx-2 flex-1 svelte-1l8159u">
                   <div className="font-bold h-6 mt-3 text-white text-s leading-8 uppercase"> Description*</div>
-                  <div className="bg-white my-2 p-1 flex border border-gray-200 rounded svelte-1l8159u">
-                    <text className="p-4 px-2 appearance-none outline-none w-full text-gray-800" /> </div>
+                  <div className="bg-[#24292F]  my-2 p-1 flex border border-gray-800 rounded svelte-1l8159u">
+                    <text className="p-2 px-2 appearance-none outline-none w-full text-white"></text>
+                  </div>
                 </div>
               </div>
               <div className="flex flex-col md:flex-row">
                 <div className="w-full mx-2 flex-1 svelte-1l8159u">
                   <div className="font-bold h-6 mt-3 text-white text-s leading-8 uppercase"> Project Header URl*</div>
-                  <div className="bg-white my-2 p-1 flex border border-gray-200 rounded svelte-1l8159u">
-                    <text className="p-4 px-2 appearance-none outline-none w-full text-gray-800" /> </div>
+                  <div className="bg-[#24292F] my-2 p-1 flex border border-gray-800 rounded svelte-1l8159u">
+                    <text className="p-2 px-2 appearance-none outline-none w-full text-white"></text>
+                  </div>
                 </div>
               </div>
               <div className="flex flex-col md:flex-row">
                 <div className="w-full mx-2 flex-1 svelte-1l8159u">
                   <div className="font-bold h-6 mt-3 text-white text-s leading-8 uppercase"> Project GitHub URl*</div>
-                  <div className="bg-white my-2 p-1 flex border border-gray-200 rounded svelte-1l8159u">
-                    <text className="p-4 px-2 appearance-none outline-none w-full text-gray-800" /> </div>
+                  <div className="bg-[#24292F] my-2 p-1 flex border border-gray-800 rounded svelte-1l8159u">
+                    <text className="p-2 px-2 appearance-none outline-none w-full text-white"></text>
+                  </div>
                 </div>
               </div>
               <div className="flex flex-col md:flex-row">
                 <div className="w-full mx-2 flex-1 svelte-1l8159u">
                   <div className="font-bold h-6 mt-3 text-white text-s leading-8 uppercase"> Project Website*</div>
-                  <div className="bg-white my-2 p-1 flex border border-gray-200 rounded svelte-1l8159u">
-                    <text className="p-4 px-2 appearance-none outline-none w-full text-gray-800" /> </div>
+                  <div className="bg-[#24292F] my-2 p-1 flex border border-gray-800 rounded svelte-1l8159u">
+                    <text className="p-2 px-2 appearance-none outline-none w-full text-white"></text>
+                  </div>
                 </div>
               </div>
               <div className="flex flex-col md:flex-row">
                 <div className="w-full mx-2 flex-1 svelte-1l8159u">
                   <div className="font-bold h-6 mt-3 text-white text-s leading-8 uppercase"> Amount Goal in SOL*</div>
-                  <div className="bg-white my-2 p-1 flex border border-gray-200 rounded svelte-1l8159u">
-                    <text className="p-4 px-2 appearance-none outline-none w-full text-gray-800" /> </div>
+                  <div className="bg-[#24292F]  my-2 p-1 flex border border-gray-800 rounded svelte-1l8159u">
+                    <text className="p-2 px-2 appearance-none outline-none w-full text-white"></text>
+                  </div>
                 </div>
               </div>
               <div className="flex flex-col md:flex-row">
                 <div className="w-full mx-2 flex-1 svelte-1l8159u">
                   <div className="font-bold h-6 mt-3 text-white text-s leading-8 uppercase"> Due Date*</div>
-                  <div className="bg-white my-2 p-1 flex border border-gray-200 rounded svelte-1l8159u">
-                    <text className="p-4 px-2 appearance-none outline-none w-full text-gray-800" /> </div>
+                  <div className="bg-[#24292F] my-2 p-1 flex border border-gray-800 rounded svelte-1l8159u">
+                    <text className="p-2 px-2 appearance-none outline-none w-full text-white"></text>
+                  </div>
                 </div>
               </div>
             </div>
@@ -362,22 +370,25 @@ export const GrantCreationView: FC = ({ }) => {
               <div className="font-bold text-white text-s leading-8 uppercase h-6 mx-2 mt-3">Name*</div>
               <div className="flex flex-col md:flex-row">
                 <div className="w-full flex-1 mx-2 svelte-1l8159u">
-                  <div className="bg-white my-2 p-1 flex border border-gray-200 rounded svelte-1l8159u">
-                    <text className="p-4 px-2 appearance-none outline-none w-full text-gray-800" /> </div>
+                <div className="bg-[#24292F] my-2 p-1 flex border border-gray-800 rounded svelte-1l8159u">
+                    <text className="p-2 px-2 appearance-none outline-none w-full text-white"></text>
+                  </div>
                 </div>
               </div>
               <div className="flex flex-col md:flex-row">
                 <div className="w-full mx-2 flex-1 svelte-1l8159u">
                   <div className="font-bold h-6 mt-3 text-white text-s leading-8 uppercase"> GitHub Handle*</div>
-                  <div className="bg-white my-2 p-1 flex border border-gray-200 rounded svelte-1l8159u">
-                    <text className="p-4 px-2 appearance-none outline-none w-full text-gray-800" /> </div>
+                  <div className="bg-[#24292F] my-2 p-1 flex border border-gray-800 rounded svelte-1l8159u">
+                    <text className="p-2 px-2 appearance-none outline-none w-full text-white"></text>
+                  </div>
                 </div>
               </div>
               <div className="flex flex-col md:flex-row">
                 <div className="w-full mx-2 flex-1 svelte-1l8159u">
                   <div className="font-bold h-6 mt-3 text-white text-s leading-8 uppercase"> Wallet Address</div>
-                  <div className="bg-white my-2 p-1 flex border border-gray-200 rounded svelte-1l8159u">
-                    <text className="p-4 px-2 appearance-none outline-none w-full text-gray-800" /> </div>
+                  <div className="bg-[#24292F] my-2 p-1 flex border border-gray-800 rounded svelte-1l8159u">
+                    <text className="p-2 px-2 appearance-none outline-none w-full text-white"></text>
+                  </div>
                 </div>
               </div>
             </div>
