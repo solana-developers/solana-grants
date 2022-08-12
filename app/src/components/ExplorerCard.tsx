@@ -42,7 +42,7 @@ export const ExplorerCard: FC<ExplorerCardProps> = ({
             <div className='w-full h-full bg-slate-700 absolute transition-opacity opacity-0 hover:opacity-90 flex'>
               <button className='btn btn-secondary m-auto'>Learn More</button>
             </div>
-            <img className='w-full' src={imageLink || "https://api.lorem.space/image/shoes?w=400&h=225"} alt='Project image' />
+            <img className='w-full' src={imageLink} alt='Project image' />
           </figure>
         </a>
         <div

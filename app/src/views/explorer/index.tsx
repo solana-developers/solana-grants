@@ -11,6 +11,7 @@ import getProgram from "../../instructions/api/getProgram";
 import { getProgramInfoPDA } from "../../instructions/pda/getProgramInfoPDA";
 import { PublicKey } from "@solana/web3.js";
 import fetchDataFromArweave from "../../utils/fetchDataFromArweave";
+import fetchGithubUserDataFromUserId from "utils/fetchGithubUserDataFromUserId";
 
 export const ExplorerView: FC = ({ }) => {
   const [projects, setProjects] = useState<ExplorerCardProps[]>([]);
@@ -34,7 +35,7 @@ export const ExplorerView: FC = ({ }) => {
       if (!programInfo.current) {
         const program = getProgram(provider);
         const programInfoPDA = await getProgramInfoPDA(program);
-        const programInfoFetched = await program.account.grantsProgramInfo.fetch(programInfoPDA);
+        const programInfoFetched = await program.account.programInfo.fetch(programInfoPDA);
         // console.log(programInfoFetched)
         if (!programInfoFetched) {
           setLoadingView(0);
@@ -103,14 +104,23 @@ export const ExplorerView: FC = ({ }) => {
       }
 
       await Promise.all(grantsData.map(async (grant) => {
-        const dataFromArweave = await fetchDataFromArweave(grant.info);
-        console.log(dataFromArweave);
-        // if (dataFromArweave.err) {
-
-        // }
+        const arweaveResponse = await fetchDataFromArweave(grant.info);
+        // console.log(arweaveResponse);
+        if (arweaveResponse.err) {
+          return;
+        }
+        const dataFromArweave = arweaveResponse.data;
         Object.keys(dataFromArweave).map((key) => {
           grant[key] = dataFromArweave[key];
         });
+
+        const githubUserDataResponse = await fetchGithubUserDataFromUserId(dataFromArweave.githubUserId);
+        if (githubUserDataResponse.err) {
+          return;
+        }
+        grant.author = githubUserDataResponse.data.name;
+        grant.authorLink = `https://github.com/${githubUserDataResponse.data.login}`;
+        console.log(grant);
       }));
   
       console.log(grantsData);
@@ -122,7 +132,9 @@ export const ExplorerView: FC = ({ }) => {
         setLoadingView(0);
       }
     } catch (error) {
-      
+      console.log(error);
+      setLoadingView(0);
+      return notify({ type: 'error', message: 'error', description: 'Something went wrong! please try again later' });
     }
   }
 
