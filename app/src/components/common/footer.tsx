@@ -96,22 +96,22 @@ export const Footer: FC = () => {
                 Community
               </h6>
               <p className="mb-4">
-                <a href="#" className="text-white">
+                <a href="components/common/Footer#" className="text-white">
                   Donec dignissim
                 </a>
               </p>
               <p className="mb-4">
-                <a href="#" className="text-white">
+                <a href="components/common/Footer#" className="text-white">
                   Curabitur egestas
                 </a>
               </p>
               <p className="mb-4">
-                <a href="#" className="text-white">
+                <a href="components/common/Footer#" className="text-white">
                   Curabitur egestas
                 </a>
               </p>
               <p className="mb-4">
-                <a href="#" className="text-white">
+                <a href="components/common/Footer#" className="text-white">
                   Curabitur egestas
                 </a>
               </p>
@@ -121,22 +121,22 @@ export const Footer: FC = () => {
                 Services
               </h6>
               <p className="mb-4">
-                <a href="#" className="text-white">
+                <a href="components/common/Footer#" className="text-white">
                   Donec dignissim
                 </a>
               </p>
               <p className="mb-4">
-                <a href="#" className="text-white">
+                <a href="components/common/Footer#" className="text-white">
                   Curabitur egestas
                 </a>
               </p>
               <p className="mb-4">
-                <a href="#" className="text-white">
+                <a href="components/common/Footer#" className="text-white">
                   Donec dignissim
                 </a>
               </p>
               <p className="mb-4">
-                <a href="#" className="text-white">
+                <a href="components/common/Footer#" className="text-white">
                   Curabitur egestas
                 </a>
               </p>
@@ -146,22 +146,22 @@ export const Footer: FC = () => {
                 resources
               </h6>
               <p className="mb-4">
-                <a href="#" className="text-white">
+                <a href="components/common/Footer#" className="text-white">
                   Donec dignissim
                 </a>
               </p>
               <p className="mb-4">
-                <a href="#" className="text-white">
+                <a href="components/common/Footer#" className="text-white">
                   Curabitur egestas
                 </a>
               </p>
               <p className="mb-4">
-                <a href="#" className="text-white">
+                <a href="components/common/Footer#" className="text-white">
                   Donec dignissim
                 </a>
               </p>
               <p className="mb-4">
-                <a href="#" className="text-white">
+                <a href="components/common/Footer#" className="text-white">
                   Curabitur egestas
                 </a>
               </p>
@@ -213,7 +213,7 @@ export const Footer: FC = () => {
                   >
                     <li>
                       <a
-                        href="#"
+                        href="components/common/Footer#"
                         className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
                       >
                         Dashboard
@@ -221,7 +221,7 @@ export const Footer: FC = () => {
                     </li>
                     <li>
                       <a
-                        href="#"
+                        href="components/common/Footer#"
                         className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
                       >
                         Settings
@@ -229,7 +229,7 @@ export const Footer: FC = () => {
                     </li>
                     <li>
                       <a
-                        href="#"
+                        href="components/common/Footer#"
                         className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
                       >
                         Earnings
@@ -237,7 +237,7 @@ export const Footer: FC = () => {
                     </li>
                     <li>
                       <a
-                        href="#"
+                        href="components/common/Footer#"
                         className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
                       >
                         Sign out

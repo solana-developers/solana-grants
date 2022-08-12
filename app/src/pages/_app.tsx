@@ -3,7 +3,7 @@ import { FC } from "react";
 import { SessionProvider } from 'next-auth/react'
 import { ContextProvider } from "../contexts/ContextProvider";
 import { AppBar } from "../components/AppBar";
-import { Footer } from "../components/Footer";
+import { Footer } from "../components/common/footer";
 import Notifications from "../components/Notification";
 
 require("@solana/wallet-adapter-react-ui/styles.css");
