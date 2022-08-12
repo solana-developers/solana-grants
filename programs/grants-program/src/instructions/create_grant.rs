@@ -1,6 +1,6 @@
 use crate::{
     errors::GrantError,
-    state::{Grant, ProgramInfo},
+    state::{Grant, ProgramInfo, Donation},
 };
 use anchor_lang::prelude::*;
 
@@ -8,9 +8,6 @@ use anchor_lang::prelude::*;
 pub struct CreateGrant<'info> {
     #[account(mut)]
     author: Signer<'info>,
-
-    #[account(mut)]
-    admin: Signer<'info>,
 
     #[account(
         init,
@@ -20,6 +17,15 @@ pub struct CreateGrant<'info> {
         space = 8 + Grant::MAXIMUM_SPACE
     )]
     grant: Account<'info, Grant>,
+
+    #[account(
+        init,
+        payer = author,
+        seeds = [b"matching_donation", grant.key().as_ref()],
+        bump,
+        space = 8 + Donation::MAXIMUM_SPACE
+    )]
+    matching_donation: Account<'info, Donation>,
 
     #[account(mut, seeds = [ProgramInfo::SEED.as_bytes().as_ref()], bump = program_info.bump)]
     program_info: Account<'info, ProgramInfo>,
@@ -51,6 +57,15 @@ pub fn create_grant(
         target_lamports,
         due_date,
         ctx.accounts.program_info.grants_count as u32,
+    ));
+
+    ctx.accounts.matching_donation.set_inner(Donation::new(
+        *ctx.bumps
+            .get("matching_donation")
+            .expect("We should've gotten the matching donation's canonical bump"),
+        ctx.accounts.program_info.key(),
+        ctx.accounts.grant.key(),
+        0,
     ));
 
     // Increment the number of grants by one
