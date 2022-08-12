@@ -21,7 +21,7 @@ export interface ExplorerCardProps {
  * A card to show a description of a project in the explorer view.
  * @param bgColor is expected to be taken from the image, ideally provided by the backend
  */
-export const ExplorerCard: FC<ExplorerCardProps> = ({
+export const ExplorerCard = ({
   imageLink,
   title,
   author,
@@ -30,7 +30,7 @@ export const ExplorerCard: FC<ExplorerCardProps> = ({
   githubProjectLink,
   numDonors,
   lamportsRaised
-}) => {
+}: ExplorerCardProps) => {
   const roundedAmtRaised = Math.round(lamportsRaised as number / LAMPORTS_PER_SOL);
   const textColor = contrastColor({ bgColor: "yellow", fgLightColor: "text-slate-200", fgDarkColor: "text-slate-800", });
   return (
