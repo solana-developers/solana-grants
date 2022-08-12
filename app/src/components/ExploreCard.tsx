@@ -41,7 +41,7 @@ export const ExplorerCard = ({
             <div className='absolute flex w-full h-full transition-opacity opacity-0 bg-slate-700 hover:opacity-90'>
               <button className='m-auto btn btn-secondary'>Learn More</button>
             </div>
-            <img className='w-full' src={imageLink || "https://api.lorem.space/image/shoes?w=400&h=225"} alt='Project image' />
+            <img className='w-full' src={imageLink} alt='Project image' />
           </figure>
         </a>
         <div
