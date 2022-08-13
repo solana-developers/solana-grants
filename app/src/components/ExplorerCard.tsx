@@ -62,11 +62,15 @@ export const ExplorerCard = ({
               {title}
             </h2>
           </a>
-          <p id='author' className='mb-3 font-mono text-xs'>
+          <p id='author' className='mb-3 font-mono text-xs flex'>
             By{" "}
-            <a className='underline underline-offset-4' href={authorLink}>
-              {author}
-            </a>
+            {author ? (
+              <a className='underline underline-offset-4 ml-2' href={authorLink}>
+                {author}
+              </a>
+            ) : (
+              <div className='w-3 h-3 rounded-full animate-spin loading-spinner-gradients ml-2'></div>
+            )}
           </p>
           <p id='description' className={'line-clamp-3 text-opacity-90 ' + textColor}>
             {description}
