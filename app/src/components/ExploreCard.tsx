@@ -1,7 +1,7 @@
-import { FC } from "react";
 import { contrastColor } from "contrast-color";
+import { FC } from "react";
 
-export interface ExplorerCardProps {
+export interface ExploreCardProps {
   image: string;
   bgColor: string;
   title: string;
@@ -17,7 +17,7 @@ export interface ExplorerCardProps {
  * A card to show a summary of a project in the explorer view.
  * @param bgColor is expected to be taken from the image, ideally provided by the backend
  */
-export const ExplorerCard: FC<ExplorerCardProps> = ({
+export const ExploreCard: FC<ExploreCardProps> = ({
   image,
   bgColor,
   title,
@@ -29,14 +29,18 @@ export const ExplorerCard: FC<ExplorerCardProps> = ({
   numContributors,
 }) => {
   const roundedAmtRaised = Math.round(amtRaised);
-  const textColor = contrastColor({ bgColor, fgLightColor: "text-slate-200", fgDarkColor: "text-slate-800", });
+  const textColor = contrastColor({
+    bgColor,
+    fgLightColor: "text-slate-200",
+    fgDarkColor: "text-slate-800",
+  });
   return (
     <>
-      <div className='card w-96 bg-base-100 shadow-xl z-[-1]'>
+      <div className='shadow-xl card w-96 bg-base-100'>
         <a href={projectLink}>
           <figure className='relative'>
-            <div className='w-full h-full bg-slate-700 absolute transition-opacity opacity-0 hover:opacity-90 flex'>
-              <button className='btn btn-secondary m-auto'>Learn More</button>
+            <div className='absolute flex w-full h-full transition-opacity opacity-0 bg-slate-700 hover:opacity-90'>
+              <button className='m-auto btn btn-secondary'>Learn More</button>
             </div>
             <img className='w-full' src={image} alt='Project image' />
           </figure>
@@ -46,25 +50,39 @@ export const ExplorerCard: FC<ExplorerCardProps> = ({
           style={{ background: bgColor }}
         >
           <a href={projectLink}>
-            <h2 id='title' className='card-title mb-1 font-mono'>
+            <h2 id='title' className='mb-1 font-mono card-title'>
               {title}
             </h2>
           </a>
-          <p id='author' className='text-xs mb-3 font-mono'>
+          <p id='author' className='mb-3 font-mono text-xs'>
             By{" "}
             <a className='underline underline-offset-4' href={authorLink}>
               {author}
             </a>
           </p>
-          <p id='description' className={'line-clamp-3 text-opacity-90 ' + textColor}>
+          <p
+            id='summary'
+            className={"line-clamp-3 text-opacity-90 " + textColor}
+          >
             {summary}
           </p>
           <div className='card-actions'>
-            <p className={'font-mono mx-auto text-sm text-right text-opacity-90 '+textColor}>
-              <p className={'text-xl text-left font-semibold color-green '+textColor}>${roundedAmtRaised}</p>
+            <p
+              className={
+                "font-mono mx-auto text-sm text-right text-opacity-90 " +
+                textColor
+              }
+            >
+              <p
+                className={
+                  "text-xl text-left font-semibold color-green " + textColor
+                }
+              >
+                ${roundedAmtRaised}
+              </p>
               Raised from <strong>{numContributors}</strong> supporters
             </p>
-            <button className='btn btn-primary m-auto'>Donate</button>
+            <button className='m-auto btn btn-primary'>Donate</button>
           </div>
         </div>
       </div>
@@ -73,7 +91,7 @@ export const ExplorerCard: FC<ExplorerCardProps> = ({
 };
 
 export const _exampleCard = (
-  <ExplorerCard
+  <ExploreCard
     image='https://api.lorem.space/image/shoes?w=400&h=225'
     bgColor='#001020'
     title='Minter Project'

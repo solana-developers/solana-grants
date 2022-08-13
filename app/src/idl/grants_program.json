@@ -42,9 +42,133 @@
         },
         {
           "name": "dueDate",
+          "type": "i64"
+        }
+      ]
+    },
+    {
+      "name": "createDonation",
+      "accounts": [
+        {
+          "name": "payer",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "grant",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "donation",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "donationIndex",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "lamports",
           "type": "u64"
         }
       ]
+    },
+    {
+      "name": "incrementDonation",
+      "accounts": [
+        {
+          "name": "donation",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "payer",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "grant",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "lamports",
+          "type": "u64"
+        }
+      ]
+    },
+    {
+      "name": "releaseGrant",
+      "accounts": [
+        {
+          "name": "admin",
+          "isMut": false,
+          "isSigner": true
+        },
+        {
+          "name": "programInfo",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "grant",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "author",
+          "isMut": true,
+          "isSigner": false
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "cancelDonation",
+      "accounts": [
+        {
+          "name": "admin",
+          "isMut": false,
+          "isSigner": true
+        },
+        {
+          "name": "programInfo",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "donation",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "payer",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "grant",
+          "isMut": true,
+          "isSigner": false
+        }
+      ],
+      "args": []
     },
     {
       "name": "initializeProgramInfo",
@@ -72,7 +196,7 @@
       "accounts": [
         {
           "name": "admin",
-          "isMut": true,
+          "isMut": false,
           "isSigner": true
         },
         {
@@ -82,11 +206,6 @@
         },
         {
           "name": "programInfo",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "systemProgram",
           "isMut": false,
           "isSigner": false
         }
@@ -98,22 +217,12 @@
       "accounts": [
         {
           "name": "author",
-          "isMut": true,
+          "isMut": false,
           "isSigner": true
         },
         {
           "name": "grant",
           "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "programInfo",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "systemProgram",
-          "isMut": false,
           "isSigner": false
         }
       ],
@@ -124,7 +233,7 @@
       "accounts": [
         {
           "name": "admin",
-          "isMut": true,
+          "isMut": false,
           "isSigner": true
         },
         {
@@ -134,11 +243,6 @@
         },
         {
           "name": "programInfo",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "systemProgram",
           "isMut": false,
           "isSigner": false
         }
@@ -148,10 +252,37 @@
   ],
   "accounts": [
     {
-      "name": "GrantsProgramInfo",
-      "docs": [
-        "This account holds the information of number of grants and admin"
-      ],
+      "name": "Donation",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "payer",
+            "type": "publicKey"
+          },
+          {
+            "name": "grant",
+            "type": "publicKey"
+          },
+          {
+            "name": "amount",
+            "type": "u64"
+          },
+          {
+            "name": "state",
+            "type": {
+              "defined": "DonationState"
+            }
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "Grant",
       "type": {
         "kind": "struct",
         "fields": [
@@ -160,31 +291,8 @@
             "type": "u8"
           },
           {
-            "name": "grantsCount",
-            "type": "u32"
-          },
-          {
-            "name": "admin",
-            "type": "publicKey"
-          }
-        ]
-      }
-    },
-    {
-      "name": "Grant",
-      "docs": [
-        "This account holds the information for a grant account"
-      ],
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
             "name": "author",
             "type": "publicKey"
-          },
-          {
-            "name": "escrowCount",
-            "type": "u32"
           },
           {
             "name": "info",
@@ -204,14 +312,16 @@
           },
           {
             "name": "dueDate",
-            "type": "u64"
+            "type": "i64"
           },
           {
-            "name": "isActive",
-            "type": "bool"
+            "name": "state",
+            "type": {
+              "defined": "GrantState"
+            }
           },
           {
-            "name": "matchingEligible",
+            "name": "isMatchingEligible",
             "type": "bool"
           },
           {
@@ -220,23 +330,105 @@
           }
         ]
       }
+    },
+    {
+      "name": "Link",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "bump",
+            "type": "u8"
+          },
+          {
+            "name": "address",
+            "type": "publicKey"
+          }
+        ]
+      }
+    },
+    {
+      "name": "ProgramInfo",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "bump",
+            "type": "u8"
+          },
+          {
+            "name": "grantsCount",
+            "type": "u32"
+          },
+          {
+            "name": "admin",
+            "type": "publicKey"
+          }
+        ]
+      }
+    }
+  ],
+  "types": [
+    {
+      "name": "GrantError",
+      "type": {
+        "kind": "enum",
+        "variants": [
+          {
+            "name": "InfoTooLong"
+          },
+          {
+            "name": "ReleasedGrant"
+          },
+          {
+            "name": "CancelledGrant"
+          },
+          {
+            "name": "GrantStillActive"
+          },
+          {
+            "name": "DueDateInPast"
+          }
+        ]
+      }
+    },
+    {
+      "name": "DonationState",
+      "type": {
+        "kind": "enum",
+        "variants": [
+          {
+            "name": "Funded"
+          },
+          {
+            "name": "Cancelled"
+          }
+        ]
+      }
+    },
+    {
+      "name": "GrantState",
+      "type": {
+        "kind": "enum",
+        "variants": [
+          {
+            "name": "Active"
+          },
+          {
+            "name": "Released"
+          },
+          {
+            "name": "Cancelled"
+          }
+        ]
+      }
     }
   ],
   "errors": [
     {
       "code": 6000,
-      "name": "InfoTooLong",
-      "msg": "The provided info string should be 200 characters long maximum."
-    },
-    {
-      "code": 6001,
-      "name": "InvalidDateFormat",
-      "msg": "The provided date is not in the correct format."
-    },
-    {
-      "code": 6002,
-      "name": "AlreadyInActive",
-      "msg": "The provided grant is already inactive."
+      "name": "CancelledDonation",
+      "msg": "This donation has already refunded the payer"
     }
   ],
   "metadata": {
