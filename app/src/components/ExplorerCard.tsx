@@ -1,6 +1,7 @@
 import { contrastColor } from "contrast-color";
 import { BN } from "@project-serum/anchor";
 import { LAMPORTS_PER_SOL } from "@solana/web3.js";
+import { useRouter } from "next/router";
 
 export interface ExplorerCardProps {
   imageLink: string;
@@ -15,6 +16,7 @@ export interface ExplorerCardProps {
   isCancelled: boolean;
   lamportsRaised: BN | number;
   targetLamports: BN | number;
+  idx: number;
 }
 
 /**
@@ -29,17 +31,24 @@ export const ExplorerCard = ({
   description,
   githubProjectLink,
   numDonors,
-  lamportsRaised
+  lamportsRaised,
+  idx
 }: ExplorerCardProps) => {
   const roundedAmtRaised = Math.round(lamportsRaised as number / LAMPORTS_PER_SOL);
   const textColor = contrastColor({ bgColor: "yellow", fgLightColor: "text-slate-200", fgDarkColor: "text-slate-800", });
+  const router = useRouter();
+
+  const goToGrantDetailView = () => {
+    router.push(`/grant/${idx}`);
+  }
+
   return (
     <>
-      <div className='card w-96 bg-base-100 shadow-xl z-[-1]'>
+      <div className='card w-96 bg-base-100 shadow-xl'>
         <a href={githubProjectLink}>
           <figure className='relative'>
             <div className='absolute flex w-full h-full transition-opacity opacity-0 bg-slate-700 hover:opacity-90'>
-              <button className='m-auto btn btn-secondary'>Learn More</button>
+              <button className='m-auto btn btn-secondary' onClick={goToGrantDetailView}>Learn More</button>
             </div>
             <img className='w-full' src={imageLink} alt='Project image' />
           </figure>
