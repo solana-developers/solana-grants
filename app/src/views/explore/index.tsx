@@ -44,7 +44,7 @@ export const ExplorerView: FC = ({ }) => {
         programInfo.current = programInfoFetched;
       }
   
-      const numGrantsToFetchAtATime = 18;
+      const numGrantsToFetchAtATime = 12;
       let grantsData = [];
   
       while (programInfo.current.grantsCount > totalGrantsFetched.current && grantsData.length < numGrantsToFetchAtATime) {
@@ -180,8 +180,8 @@ export const ExplorerView: FC = ({ }) => {
       </div>
       <div className='mx-auto px-2 lg:container'>
         <div className='flex flex-wrap justify-center gap-8'>
-          {projects.map((props) => (
-            <ExplorerCard {...props} />
+          {projects.map((props, idx) => (
+            <ExplorerCard {...props} idx={idx} />
           ))}
         </div>
       </div>
