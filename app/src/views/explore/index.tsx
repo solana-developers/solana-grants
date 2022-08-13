@@ -113,24 +113,35 @@ export const ExplorerView: FC = ({ }) => {
         Object.keys(dataFromArweave).map((key) => {
           grant[key] = dataFromArweave[key];
         });
-
-        const githubUserDataResponse = await fetchGithubUserDataFromUserId(dataFromArweave.githubUserId);
-        if (githubUserDataResponse.err) {
-          return;
-        }
-        grant.author = githubUserDataResponse.data.name;
-        grant.authorLink = `https://github.com/${githubUserDataResponse.data.login}`;
-        console.log(grant);
       }));
-  
-      console.log(grantsData);
-      setProjects(grantsData);  
+
+      const currentProjects = [...projects];
+
+      // we setProjects data and render it before creator details are fetched from github to reduce the waiting time of the user
+      // since its better to load and display some content for the user early (Lazy rendering), than to load and display all content together but late
+      setProjects([...currentProjects, ...grantsData]);
+
       if (programInfo.current.grantsCount === totalGrantsFetched.current) {
         setLoadingView(-1);
       }
       else {
         setLoadingView(0);
       }
+
+      await Promise.all(grantsData.map(async (grant) => {
+        const githubUserDataResponse = await fetchGithubUserDataFromUserId(grant.githubUserId);
+        if (githubUserDataResponse.err) {
+          grant.author = "Author name could not be loaded";
+          grant.authorLink = "";
+          return;
+        }
+        grant.author = githubUserDataResponse.data.name;
+        grant.authorLink = `https://github.com/${githubUserDataResponse.data.login}`;
+        // console.log(grant);
+      }));
+
+      // since we have now loaded the creator details from github, we rerender by setting projects again
+      setProjects([...currentProjects, ...grantsData]);
     } catch (error) {
       console.log(error);
       setLoadingView(0);
