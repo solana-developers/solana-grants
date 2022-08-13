@@ -186,14 +186,23 @@ export const ExplorerView: FC = ({ }) => {
         </div>
       </div>
       <div className="flex justify-center mb-4">
-        {loadingView != -1 && (
-          loadingView == 0 ? (
-            <button className="bg-cyan-300 hover:bg-blue-700 text-black hover:text-white font-bold py-2 px-4 rounded" onClick={fetchGrants}>
-              Load More
-            </button>
-          ) : (
-            <div className='w-12 h-12 rounded-full animate-spin loading-spinner-gradients'></div>
-          )
+        {loadingView == -1 ? (
+          <div className="my-10">
+            {projects.length == 0
+              ? <div className="text-xl font-bold">No grants available</div>
+              : <div className="text-xl font-bold">That's all folks</div>
+            }
+          </div>
+        ) : (
+          <>
+            {loadingView == 0 ? (
+              <button className="bg-cyan-300 hover:bg-blue-700 text-black hover:text-white font-bold py-2 px-4 rounded" onClick={fetchGrants}>
+                Load More
+              </button>
+            ) : (
+              <div className='w-12 h-12 rounded-full animate-spin loading-spinner-gradients'></div>
+            )}
+          </>
         )}
       </div>
     </>
