@@ -1,8 +1,7 @@
 import getProvider from "instructions/api/getProvider";
 import getGrant from "instructions/getGrant";
 import getProgramInfo from "instructions/getProgramInfo";
-import { loremIpsum } from "lorem-ipsum";
-import type { GetStaticPaths, GetStaticProps, InferGetStaticPropsType, NextPage } from "next";
+import type { GetStaticPaths, GetStaticProps, NextPage } from "next";
 import Head from "next/head";
 import { GrantView, Props as GrantViewProps } from "views/grant";
 import { PublicKey } from "@solana/web3.js";
@@ -25,8 +24,8 @@ const GrantPage: NextPage<{grantViewProps: GrantViewProps}> = (props) => {
 };
 
 export const getStaticPaths: GetStaticPaths = async () => {
-  /* using new PhantomWalletAdapter to just fake a wallet connection here, since an actual wallet is not
-     not needed for this operation, we just provide it since "new AnchorProvider()" expects a parameter type of AnchorWallet
+  /* using new PhantomWalletAdapter to just fake a wallet here, since an actual connected wallet is not
+     needed for this operation, we just provide it since "new AnchorProvider()" expects a parameter type of AnchorWallet
   */
   const provider = getProvider(new PhantomWalletAdapter(), true);
   
@@ -44,8 +43,8 @@ export const getStaticPaths: GetStaticPaths = async () => {
 }
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
-  /* using new PhantomWalletAdapter to just fake a wallet connection here, since an actual wallet is not
-     not needed for this operation, we just provide it since "new AnchorProvider()" expects a parameter type of AnchorWallet
+  /* using new PhantomWalletAdapter to just fake a wallet here, since an actual connected wallet is not
+     needed for this operation, we just provide it since "new AnchorProvider()" expects a parameter type of AnchorWallet
   */
   const provider = getProvider(new PhantomWalletAdapter(), true);
   console.log(params);
