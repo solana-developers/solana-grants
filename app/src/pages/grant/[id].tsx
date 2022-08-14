@@ -1,7 +1,19 @@
+import getProvider from "instructions/api/getProvider";
+import getGrant from "instructions/getGrant";
+import getProgramInfo from "instructions/getProgramInfo";
 import { loremIpsum } from "lorem-ipsum";
 import type { GetStaticPaths, GetStaticProps, InferGetStaticPropsType, NextPage } from "next";
 import Head from "next/head";
 import { GrantView, Props as GrantViewProps } from "views/grant";
+import { PublicKey } from "@solana/web3.js";
+import { BN } from "@project-serum/anchor";
+import fetchDataFromArweave from "../../utils/fetchDataFromArweave";
+import fetchGithubUserDataFromUserId from "utils/fetchGithubUserDataFromUserId";
+import { LAMPORTS_PER_SOL } from "@solana/web3.js";
+import { useWallet } from "@solana/wallet-adapter-react";
+import {
+  PhantomWalletAdapter,
+} from '@solana/wallet-adapter-wallets';
 
 const GrantPage: NextPage<{grantViewProps: GrantViewProps}> = (props) => {
   return (
@@ -16,62 +28,111 @@ const GrantPage: NextPage<{grantViewProps: GrantViewProps}> = (props) => {
 };
 
 export const getStaticPaths: GetStaticPaths = async () => {
-// TODO: fetch them from the API
-  const grants = [
-    {
-      id: 1,
-    },
-  ];
+  /* using new PhantomWalletAdapter to just fake a wallet connection here, since an actual wallet is not
+     not needed for this operation, we just provide it since "new AnchorProvider()" expects a parameter type of AnchorWallet
+  */
+  const provider = getProvider(new PhantomWalletAdapter(), true);
   
-  const paths = grants.map((grant) => ({
-    params: { id: grant.id.toString() },
+  const programInfoResponse = await getProgramInfo(provider)
+
+  if (programInfoResponse.err || !programInfoResponse.data.grantsCount) {
+    return { paths: [], fallback: "blocking" }
+  }
+  
+  const paths = Array(programInfoResponse.data.grantsCount).map((_, i) => ({
+    params: { id: i.toString() },
   }));
 
-  return { paths, fallback: false };
+  return { paths, fallback: "blocking" };
 }
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
-  // TODO: fetch from the API
-  // If the route is like /grants/1, then params.id is 1
-  // const res = await fetch(`https://.../posts/${params.id}`)
-  // const grant = await res.json()
+  /* using new PhantomWalletAdapter to just fake a wallet connection here, since an actual wallet is not
+     not needed for this operation, we just provide it since "new AnchorProvider()" expects a parameter type of AnchorWallet
+  */
+  const provider = getProvider(new PhantomWalletAdapter(), true);
+
+  const grantInfo = await getGrant(provider, parseInt(params.id as string));
+  if(grantInfo.err) {
+    return { props: { err: true } }
+  }
+
+  const grant = grantInfo.data;
+
+  if (!grant) {
+    return { props: { message: "Not Found" } }
+  }
+
+  let allowDonation = true;
+  let reasonForNotAllowingDonation = "";
+  if (grant.dueDate instanceof BN) {
+    grant.dueDate = grant.dueDate.toNumber();
+  }
+  if (new Date().getTime() > grant.dueDate) {
+    allowDonation = false;
+    reasonForNotAllowingDonation = "The due date has passed";
+  }
+
+  if (grant.lamportsRaised instanceof BN && grant.targetLamports instanceof BN) {
+    grant.lamportsRaised = grant.lamportsRaised.toNumber();
+    grant.targetLamports = grant.targetLamports.toNumber();
+  }
+  if (grant.lamportsRaised >= grant.targetLamports) {
+    allowDonation = false;
+    reasonForNotAllowingDonation = "The target amount has already been achieved";
+  }
+
+  if (!grant.matchingEligible) {
+    allowDonation = false;
+    reasonForNotAllowingDonation = "This grant is not currently ready to accept donations";
+  }
+
+  if (grant.isCancelled) {
+    allowDonation = false;
+    reasonForNotAllowingDonation = "This grant has been cancelled";
+  }
+
+  if (grant.author instanceof PublicKey) {
+    grant.walletAddress = grant.author.toString();
+  }
+
+  const arweaveResponse = await fetchDataFromArweave(grant.info);
+  // console.log(arweaveResponse);
+  if (arweaveResponse.err) {
+    return { props: { err: true } }
+  }
+  const dataFromArweave = arweaveResponse.data;
+  Object.keys(dataFromArweave).map((key) => {
+    grant[key] = dataFromArweave[key];
+  });
+
+  const githubUserDataResponse = await fetchGithubUserDataFromUserId(dataFromArweave.githubUserId);
+  if (!githubUserDataResponse.err) {
+    grant.name = githubUserDataResponse.data.name;
+    grant.ghUser = githubUserDataResponse.data.login;
+    grant.ghAvatar = githubUserDataResponse.data.avatar_url; 
+  }
+
   const grantViewProps: GrantViewProps = {
-    grantNum: 1,
-    title: "Miner Project",
+    grantNum: parseInt(params.id as string),
+    title: grant.title,
     author: {
-      name: "Miners Collective",
-      ghUser: "miners-collective",
-      ghAvatar: "https://avatars.githubusercontent.com/u/62079184?s=400&u=9939b9ad01eff085a4cd473cc27afff5662a247e&v=4",
-      walletAddress: "bvzr23a5sd1315s13d5f13c5sa1sd5fasfsa651scxz",
+      name: grant.name,
+      ghUser: grant.ghUser,
+      ghAvatar: grant.ghAvatar,
+      walletAddress: grant.walletAddress,
     },
-    about: loremIpsum({ count: 30, units: "words" }),
-    description: `# Heading 1 
-
-${loremIpsum({ count: 50, units: "words" })}
-
-## Heading 2
-
-This has lists as well:
-- number one
-- number two
-- etc
-
-### Heading 3
-      
-You can add \`code snippets\` as well
-
-\`\`\`javascript
-// and also code blocks
-const foo = bar;
-\`\`\`
-${loremIpsum({ count: 50, units: "words" })}`,
-    amountRaised: 23050,
-    amountGoal: 100000,
-    numContributors: 203,
-    targetDate: new Date("08/22/2022").getTime(),
-    ghRepo: "github.com/user/miner-project",
-    website: "miner-project.com",
-    image: "https://api.lorem.space/image/shoes?w=400&h=225",
+    about: grant.about,
+    description: grant.description,
+    amountRaised: parseFloat((grant.lamportsRaised / LAMPORTS_PER_SOL).toFixed(2)),
+    amountGoal: parseFloat((grant.targetLamports / LAMPORTS_PER_SOL).toFixed(2)),
+    numContributors: grant.totalDonors,
+    targetDate: grant.dueDate,
+    ghRepo: grant.projectGithubLink,
+    website: grant.projectWebsite,
+    image: grant.imageLink,
+    allowDonation,
+    reasonForNotAllowingDonation
   };
 
   // Pass grant data to the page via props

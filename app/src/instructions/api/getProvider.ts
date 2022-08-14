@@ -8,8 +8,8 @@ import {notify} from "../../utils/notifications";
  *
  * @returns provider to the caller.
  */
-export default function getProvider(wallet: AnchorWallet | undefined, allowWithoutWalletConnection?: boolean) {
-    if (!allowWithoutWalletConnection && (!wallet || !wallet.publicKey)) {
+export default function getProvider(wallet: AnchorWallet, allowWithoutWalletConnection?: boolean) {
+    if (!wallet || (!allowWithoutWalletConnection && !wallet.publicKey)) {
         notify({ type: 'error', message: 'error', description: 'Wallet not connected!' });
         return;
     }

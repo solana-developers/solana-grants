@@ -1,6 +1,4 @@
-import { FC, useEffect, useState } from "react";
-import { SignMessage } from "../../components/SignMessage";
-import { SendTransaction } from "../../components/SendTransaction";
+import { FC } from "react";
 import Markdown from "marked-react";
 import { Path } from "progressbar.js";
 import CountUp from "react-countup";
@@ -24,6 +22,8 @@ export interface Props {
   ghRepo: string; // anchor
   website?: string; // ***
   image: string; // ***
+  allowDonation: boolean;
+  reasonForNotAllowingDonation: string;
 }
 
 export const GrantView: FC<Props> = (props) => {
@@ -113,7 +113,7 @@ export const GrantView: FC<Props> = (props) => {
             </div>
           </div>
         </div>
-        <button className='btn btn-success w-full mx-auto gap-2 m-2'>
+        <button className='btn btn-success w-full mx-auto gap-2 m-2' disabled={!props.allowDonation}>
           <svg
             xmlns='http://www.w3.org/2000/svg'
             className='h-6 w-6'
