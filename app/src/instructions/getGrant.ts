@@ -13,6 +13,6 @@ export default async function getGrant(provider: Provider, grantNumber: number) 
       return { err: false, data: grant }
     } catch (error) {
       console.log(error);
-      return { err: true }
+      return { err: true, message: error.message }
     }
 }

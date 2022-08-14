@@ -10,10 +10,7 @@ import { BN } from "@project-serum/anchor";
 import fetchDataFromArweave from "../../utils/fetchDataFromArweave";
 import fetchGithubUserDataFromUserId from "utils/fetchGithubUserDataFromUserId";
 import { LAMPORTS_PER_SOL } from "@solana/web3.js";
-import { useWallet } from "@solana/wallet-adapter-react";
-import {
-  PhantomWalletAdapter,
-} from '@solana/wallet-adapter-wallets';
+import { PhantomWalletAdapter } from '@solana/wallet-adapter-wallets';
 
 const GrantPage: NextPage<{grantViewProps: GrantViewProps}> = (props) => {
   return (
@@ -51,16 +48,19 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
      not needed for this operation, we just provide it since "new AnchorProvider()" expects a parameter type of AnchorWallet
   */
   const provider = getProvider(new PhantomWalletAdapter(), true);
+  console.log(params);
 
   const grantInfo = await getGrant(provider, parseInt(params.id as string));
   if(grantInfo.err) {
-    return { props: { err: true } }
+    if (grantInfo.message?.includes("Account does not exist")) {
+      return { props: { grantViewProps: { err: true, message: "Not Found" } } }
+    }
+    return { props: { grantViewProps: { err: true, message: "Something went wrong" } } }
   }
 
   const grant = grantInfo.data;
-
   if (!grant) {
-    return { props: { message: "Not Found" } }
+    return { props: { grantViewProps: { err: true, message: "Something went wrong" } } }
   }
 
   let allowDonation = true;
@@ -84,7 +84,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
 
   if (!grant.matchingEligible) {
     allowDonation = false;
-    reasonForNotAllowingDonation = "This grant is not currently ready to accept donations";
+    reasonForNotAllowingDonation = "This grant is not currently ready to accept donations. Please check again later";
   }
 
   if (grant.isCancelled) {
@@ -99,7 +99,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   const arweaveResponse = await fetchDataFromArweave(grant.info);
   // console.log(arweaveResponse);
   if (arweaveResponse.err) {
-    return { props: { err: true } }
+    return { props: { grantViewProps: { err: true, message: "Something went wrong" } } }
   }
   const dataFromArweave = arweaveResponse.data;
   Object.keys(dataFromArweave).map((key) => {

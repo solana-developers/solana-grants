@@ -2,6 +2,8 @@ import { FC } from "react";
 import Markdown from "marked-react";
 import { Path } from "progressbar.js";
 import CountUp from "react-countup";
+import { useRouter } from "next/router";
+import Error from "next/error";
 
 export interface Props {
   // *** = should come from the db
@@ -24,11 +26,14 @@ export interface Props {
   image: string; // ***
   allowDonation: boolean;
   reasonForNotAllowingDonation: string;
+  err?: boolean;
+  message?: string;
 }
 
 export const GrantView: FC<Props> = (props) => {
   const animationDuration = 3; // secs
   const roundedAmtRaised = Math.round(props.amountRaised);
+  const router = useRouter();
 
   const handleCounterStart = (duration: number) => {
     let bar = new Path("#progress-bar", {
@@ -39,11 +44,16 @@ export const GrantView: FC<Props> = (props) => {
     const percentage = props.amountRaised / props.amountGoal;
     bar.animate(percentage);
   };
+  console.log(props);
 
   const oneDay = 24 * 60 * 60 * 1000; // hours*minutes*seconds*milliseconds
   const daysToRelease = Math.round(
     Math.abs((new Date().getTime() - props.targetDate) / oneDay)
   );
+
+  if (props.err) {
+    return <Error statusCode={props.message === "Not Found" ? 404 : 500} title={props.message} />
+  }
 
   return (
     <div className='flex flex-row flex-wrap space-y-10 max-w-6xl mx-auto p-4'>
@@ -77,7 +87,6 @@ export const GrantView: FC<Props> = (props) => {
           <div id='stats' className='flex flex-wrap content-between pb-4'>
             <div className='w-full'>
               <p id='amount-raised' className='text-5xl'>
-                $
                 <CountUp
                   end={roundedAmtRaised}
                   duration={animationDuration}
@@ -85,8 +94,9 @@ export const GrantView: FC<Props> = (props) => {
                   useEasing={true}
                   onStart={() => handleCounterStart(animationDuration * 1000)}
                 />
+                {" "}SOL
               </p>
-              <p className='text-base'>out of ${props.amountGoal}</p>
+              <p className='text-base'>out of {props.amountGoal} SOL</p>
             </div>
             <div className='w-1/2 md:w-full'>
               <h1 className='text-5xl'>
@@ -130,6 +140,7 @@ export const GrantView: FC<Props> = (props) => {
           </svg>
           Donate
         </button>
+        {!props.allowDonation && <p className="text-sm">{props.reasonForNotAllowingDonation}</p>}
       </div>
       <main role='main' className='sm:w-2/3 flex-grow sm:pt-4 md:px-6'>
         <article className='prose prose-sm md:prose-base max-w-none lg:pr-16 mx-auto'>
@@ -168,17 +179,23 @@ export const GrantView: FC<Props> = (props) => {
             <p className='text-sm text-slate-400'>Created by:</p>
             <ul className='space-y-3'>
               <li className='grid  grid-cols-6 items-center gap-3'>
-                <img
-                  className='rounded-full '
-                  src={props.author.ghAvatar}
-                  alt='github avatar'
-                />
-                <a
-                  className='link link-secondary link-hover col-span-5 '
-                  href={"https://github.com/" + props.author.ghUser}
-                >
-                  {props.author.name}
-                </a>
+                {props.author.name ? (
+                  <>
+                    <img
+                      className='rounded-full '
+                      src={props.author.ghAvatar}
+                      alt='github avatar'
+                    />
+                    <a
+                      className='link link-secondary link-hover col-span-5 '
+                      href={"https://github.com/" + props.author.ghUser}
+                    >
+                      {props.author.name}
+                    </a>
+                  </>
+                ) : (
+                  <p>Could not load author details</p>
+                )}
               </li>
 
               <li className='grid grid-cols-6 items-center gap-3'>
