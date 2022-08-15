@@ -11,6 +11,11 @@ export interface ExplorerCardProps {
   description: string;
   githubProjectLink: string;
   numDonors: number;
+  fundingState: {
+    cancelled?: Object
+    resolved?: Object
+    active?: Object
+  };
   dueDate: BN | number;
   matchingEligible: boolean;
   isCancelled: boolean;

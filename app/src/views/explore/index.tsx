@@ -89,7 +89,7 @@ export const ExplorerView: FC = ({ }) => {
             return false;
           }
   
-          if (grant.isCancelled) {
+          if (grant.fundingState?.cancelled) {
             return false;
           }
 
@@ -181,7 +181,7 @@ export const ExplorerView: FC = ({ }) => {
       <div className='mx-auto px-2 lg:container'>
         <div className='flex flex-wrap justify-center gap-8'>
           {projects.map((props, idx) => (
-            <ExplorerCard {...props} idx={idx} />
+            <ExplorerCard {...props} key={idx} idx={idx} />
           ))}
         </div>
       </div>
@@ -190,7 +190,7 @@ export const ExplorerView: FC = ({ }) => {
           <div className="my-10">
             {projects.length == 0
               ? <div className="text-xl font-bold">No grants available</div>
-              : <div className="text-xl font-bold">That's all folks</div>
+              : <div className="text-xl font-bold">That{"\&apos"}s all folks</div>
             }
           </div>
         ) : (
