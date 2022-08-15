@@ -1,8 +1,8 @@
-import { FC } from "react";
+import { FC, useEffect, useState } from "react";
 import Markdown from "marked-react";
 import { Path } from "progressbar.js";
 import CountUp from "react-countup";
-import { useRouter } from "next/router";
+import fetchGithubUserDataFromUserId from "utils/fetchGithubUserDataFromUserId";
 import Error from "next/error";
 
 export interface Props {
@@ -10,8 +10,8 @@ export interface Props {
   grantNum: number; // anchor
   title: string; // ***
   author: {
-    name: string; // anchor or ***
-    ghUser: string; // ***
+    name: string; // from ghApi
+    ghUser: string; // from ghApi
     ghAvatar: string; // from gh api
     walletAddress: string; // anchor
   };
@@ -22,6 +22,7 @@ export interface Props {
   numContributors: number; // anchor
   targetDate: number; // anchor
   ghRepo: string; // anchor
+  ghUserId: string; // anchor
   website?: string; // ***
   image: string; // ***
   allowDonation: boolean;
@@ -33,7 +34,7 @@ export interface Props {
 export const GrantView: FC<Props> = (props) => {
   const animationDuration = 3; // secs
   const roundedAmtRaised = Math.round(props.amountRaised);
-  const router = useRouter();
+  const [loadingCreatorDetailsFromGithub, setLoadingCreatorDetailsFromGithub] = useState(true);
 
   const handleCounterStart = (duration: number) => {
     let bar = new Path("#progress-bar", {
@@ -44,12 +45,26 @@ export const GrantView: FC<Props> = (props) => {
     const percentage = props.amountRaised / props.amountGoal;
     bar.animate(percentage);
   };
-  console.log(props);
+  // console.log(props);
 
   const oneDay = 24 * 60 * 60 * 1000; // hours*minutes*seconds*milliseconds
   const daysToRelease = Math.round(
     Math.abs((new Date().getTime() - props.targetDate) / oneDay)
   );
+
+  const fetchCreatorDetailsFromGithubApi = async () => {
+    const githubUserDataResponse = await fetchGithubUserDataFromUserId(props.ghUserId);
+    if (!githubUserDataResponse.err) {
+      props.author.name = githubUserDataResponse.data.name;
+      props.author.ghUser = githubUserDataResponse.data.login;
+      props.author.ghAvatar = githubUserDataResponse.data.avatar_url; 
+    }
+    setLoadingCreatorDetailsFromGithub(false);
+  }
+
+  useEffect(() => {
+    fetchCreatorDetailsFromGithubApi()
+  }, []);
 
   if (props.err) {
     return <Error statusCode={props.message === "Not Found" ? 404 : 500} title={props.message} />
@@ -177,44 +192,48 @@ export const GrantView: FC<Props> = (props) => {
               </a>
             </div>
             <p className='text-sm text-slate-400'>Created by:</p>
-            <ul className='space-y-3'>
-              <li className='grid  grid-cols-6 items-center gap-3'>
-                {props.author.name ? (
-                  <>
-                    <img
-                      className='rounded-full '
-                      src={props.author.ghAvatar}
-                      alt='github avatar'
-                    />
-                    <a
-                      className='link link-secondary link-hover col-span-5 '
-                      href={"https://github.com/" + props.author.ghUser}
-                    >
-                      {props.author.name}
-                    </a>
-                  </>
-                ) : (
-                  <p>Could not load author details</p>
-                )}
-              </li>
+            {loadingCreatorDetailsFromGithub ? (
+              <div className='w-7 h-7 rounded-full animate-spin loading-spinner-gradients'></div>
+            ) : (
+              <ul className='space-y-3'>
+                <li className='grid  grid-cols-6 items-center gap-3'>
+                  {props.author.name ? (
+                    <>
+                      <img
+                        className='rounded-full '
+                        src={props.author.ghAvatar}
+                        alt='github avatar'
+                      />
+                      <a
+                        className='link link-secondary link-hover col-span-5 '
+                        href={"https://github.com/" + props.author.ghUser}
+                      >
+                        {props.author.name}
+                      </a>
+                    </>
+                  ) : (
+                    <p>Could not load author details</p>
+                  )}
+                </li>
 
-              <li className='grid grid-cols-6 items-center gap-3'>
-                <img
-                  className='rounded-full justify-self-center w-6 h-6'
-                  src='/images/website.png'
-                  alt='www logo'
-                />
-                <a
-                  className='link link-hover text-solana-purple col-span-5 truncate'
-                  href={
-                    "https://explorer.solana.com/address/" +
-                    props.author.walletAddress
-                  }
-                >
-                  {props.author.walletAddress}
-                </a>
-              </li>
-            </ul>
+                <li className='grid grid-cols-6 items-center gap-3'>
+                  <img
+                    className='rounded-full justify-self-center w-6 h-6'
+                    src='/images/website.png'
+                    alt='www logo'
+                  />
+                  <a
+                    className='link link-hover text-solana-purple col-span-5 truncate'
+                    href={
+                      "https://explorer.solana.com/address/" +
+                      props.author.walletAddress
+                    }
+                  >
+                    {props.author.walletAddress}
+                  </a>
+                </li>
+              </ul>
+            )}
           </div>
         </div>
       </div>

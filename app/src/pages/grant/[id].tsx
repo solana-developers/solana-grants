@@ -7,7 +7,6 @@ import { GrantView, Props as GrantViewProps } from "views/grant";
 import { PublicKey } from "@solana/web3.js";
 import { BN } from "@project-serum/anchor";
 import fetchDataFromArweave from "../../utils/fetchDataFromArweave";
-import fetchGithubUserDataFromUserId from "utils/fetchGithubUserDataFromUserId";
 import { LAMPORTS_PER_SOL } from "@solana/web3.js";
 import { PhantomWalletAdapter } from '@solana/wallet-adapter-wallets';
 
@@ -86,7 +85,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     reasonForNotAllowingDonation = "This grant is not currently ready to accept donations. Please check again later";
   }
 
-  if (grant.isCancelled) {
+  if (grant.fundingState?.cancelled) {
     allowDonation = false;
     reasonForNotAllowingDonation = "This grant has been cancelled";
   }
@@ -105,20 +104,13 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     grant[key] = dataFromArweave[key];
   });
 
-  const githubUserDataResponse = await fetchGithubUserDataFromUserId(dataFromArweave.githubUserId);
-  if (!githubUserDataResponse.err) {
-    grant.name = githubUserDataResponse.data.name;
-    grant.ghUser = githubUserDataResponse.data.login;
-    grant.ghAvatar = githubUserDataResponse.data.avatar_url; 
-  }
-
   const grantViewProps: GrantViewProps = {
     grantNum: parseInt(params.id as string),
     title: grant.title,
     author: {
-      name: grant.name,
-      ghUser: grant.ghUser,
-      ghAvatar: grant.ghAvatar,
+      name: "", // will be populated on frontend
+      ghUser: "", // will be populated on frontend
+      ghAvatar: "", // will be populated on frontend
       walletAddress: grant.walletAddress,
     },
     about: grant.about,
@@ -128,6 +120,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     numContributors: grant.totalDonors,
     targetDate: grant.dueDate,
     ghRepo: grant.projectGithubLink,
+    ghUserId: grant.githubUserId,
     website: grant.projectWebsite,
     image: grant.imageLink,
     allowDonation,
