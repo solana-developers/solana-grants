@@ -1,5 +1,5 @@
 import React, { FC, useState } from "react";
-import { Input } from "../markdownConvert";
+import { Input } from "../../components/markdownConvert";
 
 export const GrantCreationFlowView: FC = ({}) => {
   enum DescriptionTab {
