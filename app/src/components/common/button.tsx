@@ -45,7 +45,7 @@ const Button = ({
     <button
         className={cn(
             variants[variant],
-            'flex h-11 max-h-full w-fit items-center justify-center gap-3 whitespace-nowrap rounded-full border transition-all',
+            'flex h-11 max-h-full w-fit items-center justify-center gap-3 whitespace-nowrap rounded-full transition-all',
             textColorVariants[textColorVariant],
             'hover:!text-black',
             'hover:-translate-y-[0.15rem] active:translate-y-[0.025rem] active:scale-[0.975]',

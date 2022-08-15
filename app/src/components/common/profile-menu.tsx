@@ -2,12 +2,9 @@ import {MdContentCopy, MdDone, MdLogout} from 'react-icons/md';
 import {TbBrandGithub, TbUser, TbWallet, TbWalletOff} from 'react-icons/tb';
 import React, {useRef, useState} from 'react';
 import Card from '../common/card';
-import Link from 'next/link';
 import Text from '../common/text';
-import Chip from '../common/chip';
 import Button from '../common/button';
 import {signIn, signOut, useSession} from 'next-auth/react';
-import Image from '../common/image';
 import CustomWalletMultiButton from "./custom-wallet-multi-button";
 
 import {useWallet} from '@solana/wallet-adapter-react';
@@ -15,15 +12,15 @@ import DisplayPublicKey from "../../utils/displayPubKey";
 import copyText from "../../utils/copyContent";
 
 
-const OverflowMenu = () => {
+const ProfileMenu = () => {
     const buttonRef = useRef();
-    const {data: session} = useSession();
+    const session = useSession();
     const [menuOpen, setMenuOpen] = useState(false);
 
     const {wallet, publicKey, connected} = useWallet();
 
     const onProfileClick = async () => {
-        if (session) {
+        if (session?.data) {
             await signOut();
         } else {
             await signIn('github');
@@ -36,7 +33,9 @@ const OverflowMenu = () => {
                 <label tabIndex={0}>
                     <div className="flex flex-row items-center gap-3">
                         <Button
-                            variant="transparent"
+                            className="hover:bg-[#14F195] border-[#9945FF]"
+                            variant={'transparent'}
+                            textColorVariant={'white'}
                             icon={TbUser}
                             onClick={() => setMenuOpen(!menuOpen)}
                             ref={buttonRef}
@@ -49,7 +48,7 @@ const OverflowMenu = () => {
                     bg-[#052C29]
                      sm:w-80"
                 >
-                    <div className="flex flex-col gap-3 p-5">
+                    <div className="flex flex-col gap-4 p-5">
                         <div className="flex items-center justify-between">
                             <div className="flex w-full flex-col gap-1">
                                 <Text
@@ -61,57 +60,44 @@ const OverflowMenu = () => {
                                 </Text>
                                 <Text
                                     variant="nav-heading"
-                                    className={`${session} font-semi-bold text-[#14F195]`}
+                                    className={`${session?.data} font-semi-bold text-[#14F195]`}
                                 >
-                                    {session ? (
-                                        <Link
-                                            href={`/${session.login}`}
-                                            onClick={() => setMenuOpen(false)}
-                                            passHref
-                                        >
-                                            {session.login}
-                                        </Link>
-                                    ) : (
-                                        'Sign in with GitHub'
-                                    )}
+                                    {session?.data ? ('Signed in') : "Sign in with GitHub"}
                                 </Text>
-                                {!session ? (
-                                    <Text
-                                        variant="label"
-                                        className="!normal-case text-white"
-                                    >
-                                        Informative text about enhanced
-                                        experience, public profile and claiming
-                                        bounties.
-                                    </Text>
-                                ) : (
-                                    <div className="flex flex-row items-center gap-1">
-                                        <Chip
-                                            highlightValue="0"
-                                            value="Bounties"
+                                {session?.data ? (
+                                    <div className="flex gap-3">
+                                        <img
+                                            className='justify-self-center w-12 h-12 rounded-full'
+                                            src={session?.data?.user?.image}
+                                            alt='github profile picture'
                                         />
-                                        <Chip value="Lv. 1"/>
+                                        <Button
+                                            text={'Sign out'}
+                                            icon={TbBrandGithub}
+                                            className="!w-full text-black font-bold hover:bg-[#9945FF] bg-[#14F195] border-2 border-[#9945FF] hover:border-[#14F195]"
+                                            onClick={onProfileClick}
+                                        />
                                     </div>
+                                ) : (
+                                    <>
+                                        <Text
+                                            variant="label"
+                                            className="!normal-case text-white pb-1">
+                                            Informative text about enhanced
+                                            experience, public profile.
+                                        </Text>
+                                        <Button
+                                            text={'Sign in'}
+                                            icon={MdLogout}
+                                            className="!w-full text-black font-bold hover:bg-[#9945FF] bg-[#14F195] border-2 border-[#9945FF] hover:border-[#14F195]"
+                                            onClick={onProfileClick}
+                                        />
+                                    </>
                                 )}
                             </div>
-                            {session && (
-                                // eslint-disable-next-line jsx-a11y/alt-text
-                                <Image
-                                    src={session.user.image}
-                                    // alt={session.login}
-                                    height={40}
-                                    className="aspect-square"
-                                    style={{borderRadius: '50%'}}
-                                />
-                            )}
+
+
                         </div>
-                        <Button
-                            text={'Sign ' + (session ? 'out' : 'in')}
-                            icon={session ? MdLogout : TbBrandGithub}
-                            variant={'orange'}
-                            className="!w-full text-black font-bold hover:bg-[#9945FF] bg-[#14F195] border-2 border-[#9945FF] hover:border-black"
-                            onClick={onProfileClick}
-                        />
                     </div>
                     <div className="h-px w-full bg-line"/>
                     <div className="flex flex-col gap-3 p-5">
@@ -125,7 +111,7 @@ const OverflowMenu = () => {
                                     Wallet{' '}
                                 </Text>
                                 <Text variant="nav-heading"
-                                      className="font-semi-bold text-[#9945FF]">
+                                      className="font-semi-bold text-[#9945FF] pb-1">
                                     {connected
                                         ? wallet.adapter.name
                                         : 'Connect your crypto wallet'}
@@ -134,29 +120,26 @@ const OverflowMenu = () => {
                                     <>
                                         <Text
                                             variant="label"
-                                            className="!normal-case text-black"
+                                            className="!normal-case text-white"
                                         >
                                             Informative text about enhanced
-                                            experience, public profile and
-                                            claiming bounties.
+                                            experience, public profile.
                                         </Text>
                                     </>
                                 ) : (
                                     <div className='flex'>
                                         <CustomWalletMultiButton
                                             text={DisplayPublicKey(publicKey)}
-                                            variant="transparent"
                                             connected={connected}
                                             disabled={true}
                                             className="w-full text-black gap-1 mr-2"
                                         />
-                                        {/*<Chip copyValue={publicKey.toBase58()}/>*/}
 
                                         <Button
                                             text={'Copy'}
                                             icon={MdContentCopy}
                                             variant={"transparent"}
-                                            className="w-full text-black font-bold hover:bg-[#9945FF] bg-[#14F195] gap-1 border-2 border-[#9945FF] hover:border-black"
+                                            className="w-full text-black font-bold hover:bg-[#9945FF] bg-[#14F195] gap-1 border-[#9945FF] hover:border-[#14F195]"
                                             onClick={async () => {
                                                 await copyText(publicKey.toBase58())
                                             }}
@@ -191,4 +174,4 @@ const OverflowMenu = () => {
     );
 };
 
-export default OverflowMenu;
+export default ProfileMenu;

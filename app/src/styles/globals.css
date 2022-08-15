@@ -28,12 +28,12 @@ a {
 /* example: override wallet button style */
 .wallet-adapter-button:not([disabled]):hover {
   background-color: #14F195;
-  border: 2px solid black;
+  border: 2px solid #9945FF;
 }
 
 .wallet-adapter-button:disabled:hover {
   background-color: #14F195;
-  border: 2px solid black;
+  border: 2px solid #9945FF;
 }
 
 .wallet-adapter-button:disabled {

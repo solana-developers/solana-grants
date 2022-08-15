@@ -1,6 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
-import { cn } from 'utils';
+import {cn} from 'utils';
 
 /**
  * Properties for a card component.
@@ -48,7 +48,7 @@ const variants = {
  * @param href
  * @param children Child elements to be rendered within the component.
  */
-const Text = ({ variant, className, href, children}: TextProps) => (
+const Text = ({variant, className, href, children}: TextProps) => (
     <text className={cn(className, variants[variant])}>
         {href ? (
             <Link href={href}>
