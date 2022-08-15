@@ -250,16 +250,16 @@ export const GrantCreationView: FC = ({ }) => {
               <div className="font-bold text-white text-s leading-8 uppercase h-6 mx-2 mt-3">Name*</div>
               <div className="flex flex-col md:flex-row">
                 <div className="w-full flex-1 mx-2 svelte-1l8159u">
-                  <div className="bg-white my-2 p-1 flex border border-gray-200 rounded svelte-1l8159u">
-                    <input value={githubAuthSession?.data?.user?.name || ""} readOnly={true} className="p-2 px-2 appearance-none outline-none w-full text-black"/>
+                  <div className="bg-[#24292F] my-2 p-1 flex rounded svelte-1l8159u">
+                    <input value={githubAuthSession?.data?.user?.name || ""} readOnly={true} className="p-2 px-2 appearance-none outline-none w-full bg-[#24292F] text-white"/>
                   </div>
                 </div>
               </div>
               <div className="flex flex-col md:flex-row">
                 <div className="w-full mx-2 flex-1 svelte-1l8159u">
                   <div className="font-bold h-6 mt-3 text-white text-s leading-8 uppercase"> Wallet Address*</div>
-                  <div className="bg-white my-2 p-1 flex border border-gray-200 rounded svelte-1l8159u">
-                    <input value={wallet?.publicKey?.toString() || ""} readOnly={true} className="p-2 px-2 appearance-none outline-none w-full text-black"/>
+                  <div className="bg-[#24292F] my-2 p-1 flex rounded svelte-1l8159u">
+                    <input value={wallet?.publicKey?.toString() || ""} readOnly={true} className="p-2 px-2 appearance-none outline-none w-full bg-[#24292F] text-white"/>
                   </div>
                 </div>
               </div>
@@ -300,54 +300,61 @@ export const GrantCreationView: FC = ({ }) => {
               <div className="font-bold text-white text-s leading-8 uppercase h-6 mx-2 mt-3">Title*</div>
               <div className="flex flex-col md:flex-row">
                 <div className="w-full flex-1 mx-2 svelte-1l8159u">
-                  <div className="bg-white my-2 p-1 flex border border-gray-200 rounded svelte-1l8159u">
-                    <input value={grant.title} name="title" className="p-1 px-2 appearance-none outline-none w-full text-gray-800" onChange={handleChange}
-                           readOnly={true}/> </div>
+                  <div className="bg-[#24292F] my-2 p-1 flex rounded svelte-1l8159u">
+                    <input value={grant.title} readOnly={true} className="p-2 px-2 appearance-none outline-none w-full bg-[#24292F] text-white"/>
+                  </div>
                 </div>
               </div>
               <div className="flex flex-col md:flex-row">
                 <div className="w-full mx-2 flex-1 svelte-1l8159u">
                   <div className="font-bold h-6 mt-3 text-white text-s leading-8 uppercase"> About*</div>
-                  <div className="bg-white my-2 p-1 flex border border-gray-200 rounded svelte-1l8159u">
-                    <input value={grant.about} readOnly={true} name="about" className="p-1 px-2 appearance-none outline-none w-full text-gray-800" onChange={handleChange} /> </div>
+                  <div className="bg-[#24292F] my-2 p-1 flex rounded svelte-1l8159u">
+                    <input value={grant.about} readOnly={true} className="p-2 px-2 appearance-none outline-none w-full bg-[#24292F] text-white"/>
+                  </div>
                 </div>
               </div>
               <div className="flex flex-col md:flex-row">
                 <div className="w-full mx-2 flex-1 svelte-1l8159u">
                   <div className="font-bold h-6 mt-3 text-white text-s leading-8 uppercase"> Description*</div>
-                  <div className="bg-white my-2 p-1 flex border border-gray-200 rounded svelte-1l8159u">
-                    <input value={grant.description} readOnly={true} name="description" className="p-1 px-2 appearance-none outline-none w-full text-gray-800" onChange={handleChange} /> </div>
+                  <div className="bg-[#24292F] my-2 p-1 flex rounded svelte-1l8159u">
+                    <input value={grant.description} readOnly={true} className="p-2 px-2 appearance-none outline-none w-full bg-[#24292F] text-white"/>
+                  </div>
                 </div>
               </div>
               <div className="flex flex-col md:flex-row">
                 <div className="w-full mx-2 flex-1 svelte-1l8159u">
                   <div className="font-bold h-6 mt-3 text-white text-s leading-8 uppercase"> Project GitHub URl*</div>
-                  <div className="bg-white my-2 p-1 flex border border-gray-200 rounded svelte-1l8159u">
-                    <input value={grant.projectGithubLink} readOnly={true} name="projectGithubLink" className="p-1 px-2 appearance-none outline-none w-full text-gray-800" onChange={handleChange} /> </div>
+                  <div className="bg-[#24292F] my-2 p-1 flex rounded svelte-1l8159u">
+                    <input value={grant.projectGithubLink} readOnly={true} className="p-2 px-2 appearance-none outline-none w-full bg-[#24292F] text-white"/>
+                  </div>
                 </div>
               </div>
               <div className="flex flex-col md:flex-row">
                 <div className="w-full mx-2 flex-1 svelte-1l8159u">
                   <div className="font-bold h-6 mt-3 text-white text-s leading-8 uppercase"> Project Header URl*</div>
-                  <div className="bg-white my-2 p-1 flex border border-gray-200 rounded svelte-1l8159u">
-                    <input value={grant.imageLink} readOnly={true} name="imageLink" className="p-1 px-2 appearance-none outline-none w-full text-gray-800" onChange={handleChange} /> </div>
+                  <div className="bg-[#24292F] my-2 p-1 flex rounded svelte-1l8159u">
+                    <input value={grant.about} readOnly={true} className="p-2 px-2 appearance-none outline-none w-full bg-[#24292F] text-white"/>
+                  </div>
                 </div>
                 <div className="w-full mx-2 flex-1 svelte-1l8159u">
                   <div className="font-bold h-6 mt-3 text-white text-s leading-8 uppercase"> Project Website</div>
-                  <div className="bg-white my-2 p-1 flex border border-gray-200 rounded svelte-1l8159u">
-                    <input value={grant.projectWebsite} readOnly={true} name="projectWebsite" className="p-1 px-2 appearance-none outline-none w-full text-gray-800" onChange={handleChange} /> </div>
+                  <div className="bg-[#24292F] my-2 p-1 flex rounded svelte-1l8159u">
+                    <input value={grant.projectWebsite} readOnly={true} className="p-2 px-2 appearance-none outline-none w-full bg-[#24292F] text-white"/>
+                  </div>
                 </div>
               </div>
               <div className="flex flex-col md:flex-row">
                 <div className="w-full mx-2 flex-1 svelte-1l8159u">
                   <div className="font-bold h-6 mt-3 text-white text-s leading-8 uppercase"> Amount Goal in SOL*</div>
-                  <div className="bg-white my-2 p-1 flex border border-gray-200 rounded svelte-1l8159u">
-                    <input value={grant.targetAmount} readOnly={true} type="number" min="0" name="targetAmount" className="p-1 px-2 appearance-none outline-none w-full text-gray-800" onChange={handleChange} /> </div>
+                  <div className="bg-[#24292F] my-2 p-1 flex rounded svelte-1l8159u">
+                    <input value={grant.targetAmount} readOnly={true} className="p-2 px-2 appearance-none outline-none w-full bg-[#24292F] text-white"/>
+                  </div>
                 </div>
                 <div className="w-full mx-2 flex-1 svelte-1l8159u">
                   <div className="font-bold h-6 mt-3 text-white text-s leading-8 uppercase"> Due Date*</div>
-                  <div className="bg-white my-2 p-1 flex border border-gray-200 rounded svelte-1l8159u">
-                    <input value={grant.dueDate} readOnly={true} type="date" name="dueDate" min={new Date().toISOString().split('T')[0]} className="p-1 px-2 appearance-none outline-none w-full text-gray-800" onChange={handleChange} /> </div>
+                  <div className="bg-[#24292F] my-2 p-1 flex rounded svelte-1l8159u">
+                    <input value={grant.dueDate} readOnly={true} className="p-2 px-2 appearance-none outline-none w-full bg-[#24292F] text-white"/>
+                  </div>
                 </div>
               </div>
 
@@ -358,16 +365,15 @@ export const GrantCreationView: FC = ({ }) => {
               <div className="font-bold text-white text-s leading-8 uppercase h-6 mx-2 mt-3">Name*</div>
               <div className="flex flex-col md:flex-row">
                 <div className="w-full flex-1 mx-2 svelte-1l8159u">
-                  <div className="bg-white my-2 p-1 flex border border-gray-200 rounded svelte-1l8159u">
-                    <input value={githubAuthSession?.data?.user?.name || ""} readOnly={true} className="p-2 px-2 appearance-none outline-none w-full text-black"/>
+                  <div className="bg-[#24292F] my-2 p-1 flex rounded svelte-1l8159u">
+                    <input value={githubAuthSession?.data?.user?.name} readOnly={true} className="p-2 px-2 appearance-none outline-none w-full bg-[#24292F] text-white"/>
                   </div>
                 </div>
               </div>
               <div className="flex flex-col md:flex-row">
                 <div className="w-full mx-2 flex-1 svelte-1l8159u">
-                  <div className="font-bold h-6 mt-3 text-white text-s leading-8 uppercase"> Wallet Address*</div>
-                  <div className="bg-white my-2 p-1 flex border border-gray-200 rounded svelte-1l8159u">
-                    <input value={wallet?.publicKey?.toString() || ""} readOnly={true} className="p-2 px-2 appearance-none outline-none w-full text-black"/>
+                  <div className="bg-[#24292F] my-2 p-1 flex rounded svelte-1l8159u">
+                    <input value={wallet?.publicKey} readOnly={true} className="p-2 px-2 appearance-none outline-none w-full bg-[#24292F] text-white"/>
                   </div>
                 </div>
               </div>
