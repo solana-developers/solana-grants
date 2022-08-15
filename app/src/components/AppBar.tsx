@@ -18,7 +18,7 @@ export const AppBar: FC = props => {
                     </a>
                 </Link>
 
-                <div className="navbar-center">
+                <div className="navbar-end">
                     <div className="hidden lg:flex">
                         <ul className="menu menu-horizontal p-0">
                             <li><Link href='/explorer'><a>Explore</a></Link></li>
@@ -27,9 +27,6 @@ export const AppBar: FC = props => {
                             <li><a>Menu 4</a></li>
                             <li><a>Menu 5</a></li>
                         </ul>
-                    </div>
-                    <div className="lg:hidden">
-                        <ProfileMenu/>
                     </div>
                 </div>
 
@@ -82,6 +79,9 @@ export const AppBar: FC = props => {
                     <div className='mr-4'>
                         <ProfileMenu/>
                     </div>
+                </div>
+                <div className="lg:hidden">
+                <ProfileMenu/>
                 </div>
             </div>
 
