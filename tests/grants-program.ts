@@ -31,6 +31,7 @@ describe("grants-program", function () {
     this.admin = await generateFundedKeypair();
     this.generateFundedKeypair = generateFundedKeypair;
     this.createGrant = createGrant; 
+    this.createGrantWithDueDate = createGrantWithDueDate; 
     programInfoPDA = await initializeProgramInfo(this.admin);
     this.programInfoPDA = programInfoPDA;
   });
@@ -87,14 +88,12 @@ describe("grants-program", function () {
 
     return newKeypair;
   }
-  
-  async function createGrant(author: Keypair) {
+  async function createGrantWithDueDate(author: Keypair, dueDate: number) {
     const targetLamports = new BN(LAMPORTS_PER_SOL);
-    const dueDate = new Date().getTime() + 1000 * 60 * 60 * 24 * 7;
     const info = "";
 
     const programInfo = await program.account.programInfo.fetch(programInfoPDA);
-    
+
     const [newGrantPDA, _grantBump] =
       await anchor.web3.PublicKey.findProgramAddress(
         [encode("grant"), toBytesInt32(programInfo.grantsCount)],
@@ -124,6 +123,11 @@ describe("grants-program", function () {
     }
 
     return newGrantPDA;
+  }
+  async function createGrant(author: Keypair) {
+    // Unix timestamp in solana is in seconds, getTime() gives it in milliseconds
+    const dueDate = Math.floor(new Date().getTime() / 1000) + 60 * 60 * 24 * 7;
+    return createGrantWithDueDate(author, dueDate);
   }
 });
 
