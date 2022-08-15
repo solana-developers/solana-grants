@@ -77,11 +77,13 @@ export const GrantView: FC<Props> = (props) => {
         <p className='mx-auto md:text-xl'>{props.about}</p>
       </div>
       <div className='relative pb-2/3 w-full md:pb-1/3 md:w-2/3'>
-        <img
-          className='absolute h-full object-cover'
-          src={props.image}
-          alt='grant background'
-        />
+        <object className='absolute h-full object-cover' data={props.image} type="image/png">
+          <img
+            className='h-full object-cover'
+            src={"/images/default-grant-image.png"}
+            alt='grant background'
+          />
+        </object>
       </div>
 
       <div className=' sm:px-4 w-sm md:w-1/3 mx-auto '>
