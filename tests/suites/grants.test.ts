@@ -49,15 +49,22 @@ export default function suite() {
         const dueDate = new BN(new Date().getTime() + 1000 * 60 * 60 * 24 * 7);
         const info = "";
 
+        const [matchingDonationPDA, _bump] =
+          await anchor.web3.PublicKey.findProgramAddress(
+            [encode("matching_donation"), grantPDA.toBuffer()],
+            program.programId
+            );
+        
         await program.methods
-            .createGrant(info, targetLamports, dueDate)
-            .accounts({
-                grant: grantPDA,
-                programInfo: programInfoPDA,
-                author: author.publicKey,
-            })
-            .signers([author])
-            .rpc();
+          .createGrant(info, targetLamports, dueDate)
+          .accounts({
+            grant: grantPDA,
+            programInfo: programInfoPDA,
+            author: author.publicKey,
+            matchingDonation: matchingDonationPDA,
+          })
+          .signers([author])
+          .rpc();
 
         return program.account.grant.fetch(grantPDA);
     } 
