@@ -266,7 +266,7 @@ export const GrantCreationView: FC = ({ }) => {
                     </button>
                   </div>
                   <div className="bg-white p-1 flex border border-gray-200 svelte-1l8159u rounded-b-md text-black">
-                    <Input hide={hideTextArea} value={grant.description} handleChange={handleChange} />
+                    <Input hide={hideTextArea} value={grant.description} handleChange={handleChange} readOnly={false} />
                   </div>
                 </div>
               </div>
@@ -389,9 +389,42 @@ export const GrantCreationView: FC = ({ }) => {
               </div>
               <div className="flex flex-col md:flex-row">
                 <div className="w-full mx-2 flex-1 svelte-1l8159u">
-                  <div className="font-bold h-6 mt-3 text-white text-s leading-8 uppercase"> Description*</div>
-                  <div className="bg-white my-2 p-1 flex border border-gray-200 rounded svelte-1l8159u">
-                    <input value={grant.description} readOnly={true} name="description" className="p-1 px-2 appearance-none outline-none w-full text-gray-800" onChange={handleChange} /> </div>
+                  <div className="font-bold h-6 mt-3 text-black text-s leading-8 uppercase">
+                    {" "}
+                    Description*
+                  </div>
+                  <div className="bg-gray-50 border border-b-0 border-gray-300 top-0 mt-2 left-0 right-0 block rounded-t-md">
+                    <button
+                      type="button"
+                      style={{
+                        color: descriptionTab.writeTabColor,
+                        backgroundColor: descriptionTab.writeTabBgColor,
+                      }}
+                      className={`py-2 px-4 inline-block font-semibold rounded`}
+                      onClick={() => {
+                        selectTab(DescriptionTab.Write);
+                      }}
+                    >
+                      {" "}
+                      Write
+                    </button>
+                    <button
+                      type="button"
+                      style={{
+                        color: descriptionTab.previewTabColor,
+                        backgroundColor: descriptionTab.previewTabBgColor,
+                      }}
+                      className={`py-2 px-4 inline-block font-semibold rounded`}
+                      onClick={() => {
+                        selectTab(DescriptionTab.Preview);
+                      }}
+                    >
+                      Preview
+                    </button>
+                  </div>
+                  <div className="bg-white p-1 flex border border-gray-200 svelte-1l8159u rounded-b-md text-black">
+                    <Input hide={hideTextArea} value={grant.description} handleChange={handleChange} readOnly={true} />
+                  </div>
                 </div>
               </div>
               <div className="flex flex-col md:flex-row">

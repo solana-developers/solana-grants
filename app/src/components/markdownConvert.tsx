@@ -6,6 +6,7 @@ type InputProps = {
     hide?: boolean;
     value: string;
     handleChange: (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
+    readOnly: boolean;
 }
 type InputState = {
     value: string
@@ -27,6 +28,7 @@ export class Input extends React.Component<InputProps, InputState> {
                         <textarea rows={10}
                                   className="p-1 px-2 form-control appearance-none outline-none w-full "
                                   name="description"
+                                  readOnly={this.props.readOnly}
                                   value={this.props.value} onChange={this.props.handleChange}/>
                     </div>
                     <Previewer value={this.props.value} hide={this.props.hide}/>
