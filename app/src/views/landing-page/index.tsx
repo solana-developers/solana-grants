@@ -26,15 +26,14 @@ export const LandingPageView: FC = ({ }) => {
         </div>
         <div className='flex items-center w-[400px] h-[350px]'>
           <div className='flex flex-col items-center m-8 md:items-start md:m-5'>
-            <div className='my-5 mt-8'>
-              <b className='text-4xl normal-case'>Grants Copy</b>
-            </div>
-            <div>
-              <p className='text-lg text-center normal-case md:text-left'>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-                eiusmod tempor incididunt ut labore et dolore magna aliqua.
+            <p className='my-5 mt-8 text-6xl font-bold text-right normal-case'>
+              The place to fund in the open
+            </p>
+            
+              <p className='text-lg text-left normal-case '>
+                Open source software is awesome for the users, funding it makes it awesome for the maintainers too. The foundations are putting money in the pit, help distributing it by donating to grants.
               </p>
-            </div>
+            
             <div className='flex justify-center mt-8'>
               <button className="bg-green-400 hover:bg-emerald-500 py-2 px-9 text-black text-sm rounded-full mr-4">
                 EXPLORE

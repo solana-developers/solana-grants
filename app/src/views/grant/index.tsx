@@ -4,6 +4,8 @@ import { Path } from "progressbar.js";
 import CountUp from "react-countup";
 import fetchGithubUserDataFromUserId from "utils/fetchGithubUserDataFromUserId";
 import Error from "next/error";
+import { CopyToClipboard } from "react-copy-to-clipboard";
+import { RiCheckboxMultipleBlankLine, RiCheckboxMultipleFill } from "react-icons/ri";
 
 export interface Props {
   // *** = should come from the db
@@ -70,9 +72,11 @@ export const GrantView: FC<Props> = (props) => {
     return <Error statusCode={props.message === "Not Found" ? 404 : 500} title={props.message} />
   }
 
+  const [copied, setCopied] = useState(false);
+  
   return (
-    <div className='flex flex-row flex-wrap space-y-10 max-w-6xl mx-auto p-4'>
-      <div className='prose md:prose-lg w-full text-center mx-auto gap-4 mb-4'>
+    <div className='flex flex-row flex-wrap max-w-6xl p-4 mx-auto space-y-10'>
+      <div className='w-full gap-4 mx-auto mb-4 prose text-center md:prose-lg'>
         <h1 className=''>{props.title}</h1>
         <p className='mx-auto md:text-xl'>{props.about}</p>
       </div>
@@ -86,8 +90,8 @@ export const GrantView: FC<Props> = (props) => {
         </object>
       </div>
 
-      <div className=' sm:px-4 w-sm md:w-1/3 mx-auto '>
-        <div className='flex flex-row h-48 mx-auto gap-4 md:h-80 '>
+      <div className='mx-auto sm:px-4 w-sm md:w-1/3'>
+        <div className='flex flex-row h-48 gap-4 mx-auto md:h-80 '>
           <svg
             className='md:hidden lg:block stroke-slate-800 stroke-[20px] md:stroke-[12px] h-full w-1/2 pl-4 pb-4'
             viewBox='-10 10 40 180'
@@ -143,7 +147,7 @@ export const GrantView: FC<Props> = (props) => {
         <button className='btn btn-success w-full mx-auto gap-2 m-2' disabled={!props.allowDonation}>
           <svg
             xmlns='http://www.w3.org/2000/svg'
-            className='h-6 w-6'
+            className='w-6 h-6'
             fill='none'
             viewBox='0 0 24 24'
             stroke='currentColor'
@@ -159,35 +163,35 @@ export const GrantView: FC<Props> = (props) => {
         </button>
         {!props.allowDonation && <p className="text-sm">{props.reasonForNotAllowingDonation}</p>}
       </div>
-      <main role='main' className='sm:w-2/3 flex-grow sm:pt-4 md:px-6'>
-        <article className='prose prose-sm md:prose-base max-w-none lg:pr-16 mx-auto'>
+      <main role='main' className='flex-grow sm:w-2/3 sm:pt-4 md:px-6'>
+        <article className='mx-auto prose-sm prose md:prose-base max-w-none lg:pr-16'>
           <Markdown>{props.description}</Markdown>
         </article>
       </main>
-      <div className='max-w-sm mx-auto sm:w-1/3 flex-shrink flex-grow-0 px-2'>
-        <div className='flex sm:flex-col pt-4 px-2'>
-          <div className=' py-4 px-3 space-y-4 p-4'>
-            <div className='grid grid-cols-6 items-center'>
+      <div className='flex-grow-0 flex-shrink max-w-sm px-2 mx-auto sm:w-1/3'>
+        <div className='flex px-2 pt-4 sm:flex-col'>
+          <div className='p-4 px-3 py-4 space-y-4 '>
+            <div className='grid items-center grid-cols-6'>
               <img
-                className='justify-self-center w-6 h-6'
+                className='w-6 h-6 justify-self-center'
                 src='/images/github.png'
                 alt='www logo'
               />
               <a
-                className='link link-secondary link-hover text-current col-span-5'
+                className='col-span-5 text-current link link-secondary link-hover'
                 href={"https://" + props.ghRepo}
               >
                 {props.ghRepo}
               </a>
             </div>
-            <div className='grid grid-cols-6 items-center pb-4 mb-4 border-b border-slate-800'>
+            <div className='grid items-center grid-cols-6 pb-4 mb-4 border-b border-slate-800'>
               <img
-                className='justify-self-center w-6 h-6'
+                className='w-6 h-6 justify-self-center'
                 src='/images/website.png'
                 alt='www logo'
               />
               <a
-                className='link link-secondary link-hover text-current col-span-5'
+                className='col-span-5 text-current link link-secondary link-hover'
                 href={"https://" + props.website}
               >
                 {props.website}
@@ -219,19 +223,30 @@ export const GrantView: FC<Props> = (props) => {
                 </li>
 
                 <li className='grid grid-cols-6 items-center gap-3'>
-                  <img
-                    className='rounded-full justify-self-center w-6 h-6'
-                    src='/images/website.png'
-                    alt='www logo'
-                  />
+                  <CopyToClipboard
+                    className='col-span-3 btn btn-ghost btn-sm'
+                    text={props.author.walletAddress}
+                    onCopy={() => setCopied(true)}
+                  >
+                    <div>
+
+                    <span className='w-3/4 lowercase truncate '>
+                      {props.author.walletAddress}
+                    </span>
+                    {copied 
+                      ? <RiCheckboxMultipleFill className='w-1/4 text-xl text-emerald-400' />
+                      : <RiCheckboxMultipleBlankLine className='w-1/4 text-xl' />
+                    }
+                    </div>
+                  </CopyToClipboard>
                   <a
-                    className='link link-hover text-solana-purple col-span-5 truncate'
+                    className='col-span-3 truncate group btn btn-secondary btn-sm'
                     href={
                       "https://explorer.solana.com/address/" +
                       props.author.walletAddress
                     }
                   >
-                    {props.author.walletAddress}
+                    <span className='text-slate-600'>Support author</span>
                   </a>
                 </li>
               </ul>
