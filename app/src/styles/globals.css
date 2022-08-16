@@ -184,6 +184,10 @@ a {
     height: 32px;
   }
 }
+.menu li>:where(a), .menu li>:where(button), .menu li>:where(span) {
+  padding: 0.75rem 1.25rem;
+  color: white;
+}
 @media screen and (max-width: 768px) {
   .creategrant{
   width: 23rem;

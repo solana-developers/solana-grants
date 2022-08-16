@@ -1,5 +1,8 @@
+import { FC , useState } from "react";
 import { contrastColor } from "contrast-color";
-import { FC } from "react";
+import sendSol from '../utils/sendSol';
+import { useWallet } from "@solana/wallet-adapter-react";
+import { notify } from '../utils/notifications';
 
 export interface ExploreCardProps {
   image: string;
@@ -29,14 +32,36 @@ export const ExploreCard: FC<ExploreCardProps> = ({
   numContributors,
 }) => {
   const roundedAmtRaised = Math.round(amtRaised);
-  const textColor = contrastColor({
-    bgColor,
-    fgLightColor: "text-slate-200",
-    fgDarkColor: "text-slate-800",
-  });
+  const textColor = contrastColor({ bgColor, fgLightColor: "text-slate-200", fgDarkColor: "text-slate-800", });
+
+  const wallet = useWallet();
+
+  const [isSending, setIsSending] = useState(false);
+  const [amountDonated, setAmountDonated] = useState(0);
+
+  async function send(){
+
+    if(!wallet || !wallet.connected){
+      notify({ type: "error", message: "error", description: "You must be connected to a wallet to send funds" });
+      return;
+    }
+    if(amountDonated <= 0){
+      notify({ type: "error", message: "error", description: "Enter a valid amount" });
+      return;
+    }
+    setIsSending(true);
+    const response = await sendSol(wallet, author, amountDonated);
+    if (response.err){
+      notify({ type: "error", message: "error", description: "" });
+    }
+    else{
+      notify({ type: "success", message: "Success", description: "Successfully Donated" });
+    }
+    setIsSending(false);
+  }
   return (
     <>
-      <div className='shadow-xl card w-96 bg-base-100'>
+      <div className='card w-[23rem] h-[36rem] bg-base-100 shadow-xl'>
         <a href={projectLink}>
           <figure className='relative'>
             <div className='absolute flex w-full h-full transition-opacity opacity-0 bg-slate-700 hover:opacity-90'>
@@ -67,22 +92,34 @@ export const ExploreCard: FC<ExploreCardProps> = ({
             {summary}
           </p>
           <div className='card-actions'>
-            <p
-              className={
-                "font-mono mx-auto text-sm text-right text-opacity-90 " +
-                textColor
-              }
-            >
-              <p
-                className={
-                  "text-xl text-left font-semibold color-green " + textColor
-                }
-              >
-                ${roundedAmtRaised}
-              </p>
+            <p className={'font-mono text-sm m-1 text-right text-opacity-90 ' + textColor}>
+              <p className={'text-xl text-left font-semibold color-green ' + textColor}>${roundedAmtRaised}</p>
               Raised from <strong>{numContributors}</strong> supporters
             </p>
-            <button className='m-auto btn btn-primary'>Donate</button>
+            <div className="dropdown dropdown-right dropdown-down">
+              <label  className="btn m-1">Donate</label>
+              <ul  className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52">
+                <li><label htmlFor="my-modal" className="btn modal-button">Donate Directly</label></li>
+
+                <li><a>Matching</a></li>
+              </ul>
+            </div>
+            <input type="checkbox" id="my-modal" className="modal-toggle" />
+                <div className="modal">
+                  <div className="modal-box">
+                    <h3 className="font-bold text-white	m-[0.8rem] text-lg">Enter the amount to donate</h3>
+
+                    <input type="number" placeholder="Type here" className="input w-full max-w-xs  text-white border-zinc-50" onChange={
+                      (e) =>{
+                        setAmountDonated(parseFloat(e.target.value));
+                      }
+                    } />
+                    <div className="modal-action">
+                      <label htmlFor="my-modal" className="btn" onClick={send}>Submit</label>
+                      <label htmlFor="my-modal" className="btn">Cancel</label>
+                    </div>
+                  </div>
+                </div>
           </div>
         </div>
       </div>
