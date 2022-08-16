@@ -37,7 +37,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   // const grant = await res.json()
   const grantViewProps: GrantViewProps = {
     grantNum: 1,
-    title: "Miner Project",
+    title: "Miner Project Grant",
     author: {
       name: "Miners Collective",
       ghUser: "miners-collective",
