@@ -1,9 +1,16 @@
 import React, {Component} from 'react';
 import {marked} from 'marked';
 
+
+type InputProps = {
+    hide?: boolean;
+}
+type InputState = {
+    value: string
+}
 /********* Input component **********
  ************************************/
-export class Input extends Component {
+export class Input extends React.Component<InputProps, InputState> {
 
     constructor(props) {
         super(props);
@@ -38,7 +45,7 @@ export class Input extends Component {
 
 /**********Previewer Component ************
  *****************************************/
-export class Previewer extends React.Component {
+export class Previewer extends React.Component<{ hide, value }, {  }> {
 
     createMarkup() {
         return {
