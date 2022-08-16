@@ -188,11 +188,12 @@ export const GrantView: FC<Props> = (props) => {
               <li className='grid items-center grid-cols-6 gap-3'>
                 <CopyToClipboard
                   className='col-span-3 btn btn-ghost btn-sm'
+                  text={props.author.walletAddress}
                   onCopy={() => setCopied(true)}
                 >
                   <div>
 
-                  <span className='w-3/4 truncate '>
+                  <span className='w-3/4 lowercase truncate '>
                     {props.author.walletAddress}
                   </span>
                   {copied 
