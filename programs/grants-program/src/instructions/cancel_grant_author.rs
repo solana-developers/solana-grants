@@ -16,5 +16,7 @@ pub struct CancelGrantAuthor<'info> {
 }
 
 pub fn cancel_grant_author(ctx: Context<CancelGrantAuthor>) -> Result<()> {
-    ctx.accounts.grant.cancel_grant()
+    ctx.accounts.grant.cancel_grant();
+
+    Ok(())
 }
