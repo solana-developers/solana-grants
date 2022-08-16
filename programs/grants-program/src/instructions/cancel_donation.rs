@@ -1,6 +1,9 @@
 use anchor_lang::prelude::*;
 
-use crate::{state::{Donation, ProgramInfo, DonationState, GrantState, Grant}, errors::{DonationError, GrantError}};
+use crate::{
+    errors::{DonationError, GrantError},
+    state::{Donation, DonationState, FundingState, Grant, ProgramInfo},
+};
 
 #[derive(Accounts)]
 pub struct CancelDonation<'info> {
@@ -14,7 +17,7 @@ pub struct CancelDonation<'info> {
         has_one = payer,
         has_one = grant,
     )]
-    /// CHECK: We don't check for the seeds because they can be normal donations 
+    /// CHECK: We don't check for the seeds because they can be normal donations
     ///        or a matching donation, which have different seed formats.
     donation: Account<'info, Donation>,
 
@@ -33,7 +36,6 @@ pub struct CancelDonation<'info> {
 
 /// Refunds the money from the grant to the payer
 pub fn cancel_donation(ctx: Context<CancelDonation>) -> Result<()> {
-
     // check if it is cancellable
     match ctx.accounts.donation.state {
         DonationState::Funded => Ok(()),
@@ -41,16 +43,19 @@ pub fn cancel_donation(ctx: Context<CancelDonation>) -> Result<()> {
     }?;
 
     // check that the grant is on a cancelled state
-    match ctx.accounts.grant.state {
-        GrantState::Cancelled => Ok(()),
-        GrantState::Active => err!(GrantError::GrantStillActive),
-        GrantState::Released => err!(GrantError::ReleasedGrant),
+    match ctx.accounts.grant.funding_state {
+        FundingState::Cancelled => Ok(()),
+        FundingState::Active => err!(GrantError::GrantStillActive),
+        FundingState::Released => err!(GrantError::ReleasedGrant),
     }?;
 
     // transfer lamports from the grant to the payer
     let lamports = ctx.accounts.donation.amount();
-    **ctx.accounts.grant
-        .to_account_info().try_borrow_mut_lamports()? -= lamports;
+    **ctx
+        .accounts
+        .grant
+        .to_account_info()
+        .try_borrow_mut_lamports()? -= lamports;
     **ctx.accounts.payer.try_borrow_mut_lamports()? += lamports;
 
     // update donation state

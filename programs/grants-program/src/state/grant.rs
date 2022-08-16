@@ -1,5 +1,5 @@
-use anchor_lang::prelude::*;
 use crate::errors::GrantError;
+use anchor_lang::prelude::*;
 
 use super::Donation;
 
@@ -8,21 +8,20 @@ use super::Donation;
 #[account]
 #[derive(Default)]
 pub struct Grant {
-    pub bump: u8,                   // 1
-    pub author: Pubkey,             // 32
-    info: String,                   // 4 + (4 * 45) Added 4 at the beginning since we need to provide string length prefix
-    pub lamports_raised: u64,       // 16
-    pub total_donors: u32,          // 8
-    target_lamports: u64,           // 16
-    due_date: i64,                  // 16 (UnixTimestamp)
-    pub state: GrantState,          // 1
-    pub is_matching_eligible: bool, // 1
-    pub grant_num: u32,             // 8
-    pub is_cancelled: bool,         // 1
+    pub bump: u8,                    // 1
+    pub author: Pubkey,              // 32
+    info: String,                    // 4 + (4 * 45) Added 4 at the beginning since we need to provide string length prefix
+    pub lamports_raised: u64,        // 16
+    pub total_donors: u32,           // 8
+    target_lamports: u64,            // 16
+    due_date: i64,                   // 16 (UnixTimestamp)
+    pub funding_state: FundingState, // 1
+    pub is_matching_eligible: bool,  // 1
+    pub grant_num: u32,              // 8
 }
 
 impl Grant {
-    pub const MAXIMUM_SPACE: usize = 1+ 32 + (4 + (4 * 45)) + 16 + 8 + 16 + 16 + 1 + 1 + 8;
+    pub const MAXIMUM_SPACE: usize = 1 + 32 + (4 + (4 * 45)) + 16 + 8 + 16 + 16 + 1 + 1 + 8;
 
     pub fn new(
         bump: u8,
@@ -54,28 +53,35 @@ impl Grant {
     pub fn cancel_grant(&mut self) -> Result<()> {
         self.is_active()?;
 
-        self.state = GrantState::Cancelled;
+        self.funding_state = FundingState::Cancelled;
 
         Ok(())
     }
 
+    /// Checks if the grant is available for funding
     pub fn is_active(&self) -> Result<()> {
-        match self.state {
-            GrantState::Active => Ok(()),
-            GrantState::Released => err!(GrantError::ReleasedGrant),
-            GrantState::Cancelled => err!(GrantError::CancelledGrant),
+        let now = Clock::get()?.unix_timestamp;
+        msg!("now: {}", now);
+        msg!("due_date: {}", self.due_date);
+        if now > self.due_date {
+            return err!(GrantError::DueDateInPast)
+        }
+        match self.funding_state {
+            FundingState::Active => Ok(()),
+            FundingState::Released => err!(GrantError::ReleasedGrant),
+            FundingState::Cancelled => err!(GrantError::CancelledGrant),
         }
     }
 }
 
 #[derive(AnchorSerialize, AnchorDeserialize, Clone, PartialEq, Eq)]
-pub enum GrantState {
+pub enum FundingState {
     Active,
     Released,
     Cancelled,
 }
-impl Default for GrantState {
+impl Default for FundingState {
     fn default() -> Self {
-        GrantState::Active
+        FundingState::Active
     }
 }

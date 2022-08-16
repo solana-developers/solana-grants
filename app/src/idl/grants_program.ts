@@ -194,7 +194,10 @@ export type GrantsProgram = {
         {
           "name": "donation",
           "isMut": true,
-          "isSigner": false
+          "isSigner": false,
+          "docs": [
+            "or a matching donation, which have different seed formats."
+          ]
         },
         {
           "name": "payer",
@@ -212,7 +215,7 @@ export type GrantsProgram = {
     {
       "name": "initializeProgramInfo",
       "docs": [
-        "Initializes the program info data, which determines the admin."
+        "Initializes the program info data, which sets the admin."
       ],
       "accounts": [
         {
@@ -373,9 +376,9 @@ export type GrantsProgram = {
             "type": "i64"
           },
           {
-            "name": "state",
+            "name": "fundingState",
             "type": {
-              "defined": "GrantState"
+              "defined": "FundingState"
             }
           },
           {
@@ -472,7 +475,7 @@ export type GrantsProgram = {
       }
     },
     {
-      "name": "GrantState",
+      "name": "FundingState",
       "type": {
         "kind": "enum",
         "variants": [
@@ -704,7 +707,10 @@ export const IDL: GrantsProgram = {
         {
           "name": "donation",
           "isMut": true,
-          "isSigner": false
+          "isSigner": false,
+          "docs": [
+            "or a matching donation, which have different seed formats."
+          ]
         },
         {
           "name": "payer",
@@ -722,7 +728,7 @@ export const IDL: GrantsProgram = {
     {
       "name": "initializeProgramInfo",
       "docs": [
-        "Initializes the program info data, which determines the admin."
+        "Initializes the program info data, which sets the admin."
       ],
       "accounts": [
         {
@@ -883,9 +889,9 @@ export const IDL: GrantsProgram = {
             "type": "i64"
           },
           {
-            "name": "state",
+            "name": "fundingState",
             "type": {
-              "defined": "GrantState"
+              "defined": "FundingState"
             }
           },
           {
@@ -982,7 +988,7 @@ export const IDL: GrantsProgram = {
       }
     },
     {
-      "name": "GrantState",
+      "name": "FundingState",
       "type": {
         "kind": "enum",
         "variants": [

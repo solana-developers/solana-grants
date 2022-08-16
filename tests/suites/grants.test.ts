@@ -82,7 +82,7 @@ export default function suite() {
         expect(grant.lamportsRaised.toNumber()).to.eql(0);
         expect(grant.totalDonors).to.eql(0);
         assert(grant.targetLamports.eq(targetLamports));
-        expect(grant.state).to.eql({ active: {} });
+        expect(grant.fundingState).to.eql({ active: {} });
         expect(grant.info).to.eql("")
     })
 
@@ -113,7 +113,7 @@ export default function suite() {
 
         const grant = await program.account.grant.fetch(grantPDA)
 
-        expect(grant.state).to.eql({ cancelled: {} })
+        expect(grant.fundingState).to.eql({ cancelled: {} })
     })
 
     it("author can cancel the grant", async () => {
@@ -130,7 +130,7 @@ export default function suite() {
 
         const grant = await program.account.grant.fetch(grantPDA)
 
-        expect(grant.state).to.eql({ cancelled: {} })
+        expect(grant.fundingState).to.eql({ cancelled: {} })
     })
 
     it("admin can make grant eligible matching", async () => {
