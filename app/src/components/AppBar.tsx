@@ -21,9 +21,6 @@ export const AppBar: FC = props => {
           <ul className="menu menu-horizontal p-0">
             <li><Link href='/explorer'><a>Explore</a></Link></li>
             <li><a>Menu 2</a></li>
-            <li><a>Menu 3</a></li>
-            <li><a>Menu 4</a></li>
-            <li><a>Menu 5</a></li>
           </ul>
         </div>
 
@@ -100,9 +97,6 @@ export const AppBar: FC = props => {
             <ul className="menu p-0 flex items-center">
               <li><a>Menu 1</a></li>
               <li><a>Menu 2</a></li>
-              <li><a>Menu 3</a></li>
-              <li><a>Menu 4</a></li>
-              <li><a>Menu 5</a></li>
             </ul>
             <div className='flex justify-center'>
               <WalletMultiButton />
