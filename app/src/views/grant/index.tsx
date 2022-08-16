@@ -6,10 +6,15 @@ import fetchGithubUserDataFromUserId from "utils/fetchGithubUserDataFromUserId";
 import Error from "next/error";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import { RiCheckboxMultipleBlankLine, RiCheckboxMultipleFill } from "react-icons/ri";
+import { SignMessage } from "../../components/SignMessage";
+import { SendTransaction } from "../../components/SendTransaction";
+import DonateSol from "../../components/DonateSol";
+import { PublicKey } from "@solana/web3.js";
 
 export interface Props {
   // *** = should come from the db
   grantNum: number; // anchor
+  grantPDA: PublicKey;
   title: string; // ***
   author: {
     name: string; // from ghApi
@@ -34,6 +39,7 @@ export interface Props {
 }
 
 export const GrantView: FC<Props> = (props) => {
+  const [preview, setPreview] = useState(false);
   const animationDuration = 3; // secs
   const roundedAmtRaised = Math.round(props.amountRaised);
   const [loadingCreatorDetailsFromGithub, setLoadingCreatorDetailsFromGithub] = useState(true);
@@ -93,16 +99,16 @@ export const GrantView: FC<Props> = (props) => {
       <div className='mx-auto sm:px-4 w-sm md:w-1/3'>
         <div className='flex flex-row h-48 gap-4 mx-auto md:h-80 '>
           <svg
-            className='md:hidden lg:block stroke-slate-800 stroke-[20px] md:stroke-[12px] h-full w-1/2 pl-4 pb-4'
-            viewBox='-10 10 40 180'
-            fill='none'
-            xmlns='http://www.w3.org/2000/svg'
+            className="md:hidden lg:block stroke-slate-800 stroke-[20px] md:stroke-[12px] h-full w-1/2 pl-4 pb-4"
+            viewBox="-10 10 40 180"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
           >
-            <path d='M8.50006 194C14.5001 181.5 22.9001 145.2 8.50006 100C-5.89994 54.8 2.50006 19.5 8.50006 1' />
+            <path d="M8.50006 194C14.5001 181.5 22.9001 145.2 8.50006 100C-5.89994 54.8 2.50006 19.5 8.50006 1" />
             <path
-              id='progress-bar'
-              d='M8.50006 194C14.5001 181.5 22.9001 145.2 8.50006 100C-5.89994 54.8 2.50006 19.5 8.50006 1'
-              stroke='#14F195'
+              id="progress-bar"
+              d="M8.50006 194C14.5001 181.5 22.9001 145.2 8.50006 100C-5.89994 54.8 2.50006 19.5 8.50006 1"
+              stroke="#14F195"
             />
           </svg>
           <div id='stats' className='flex flex-wrap content-between pb-4'>
@@ -111,7 +117,7 @@ export const GrantView: FC<Props> = (props) => {
                 <CountUp
                   end={roundedAmtRaised}
                   duration={animationDuration}
-                  separator=','
+                  separator=","
                   useEasing={true}
                   onStart={() => handleCounterStart(animationDuration * 1000)}
                 />
@@ -119,28 +125,28 @@ export const GrantView: FC<Props> = (props) => {
               </p>
               <p className='text-base'>out of {props.amountGoal} SOL</p>
             </div>
-            <div className='w-1/2 md:w-full'>
-              <h1 className='text-5xl'>
+            <div className="w-1/2 md:w-full">
+              <h1 className="text-5xl">
                 <CountUp
                   end={props.numContributors}
                   duration={animationDuration}
-                  separator=','
+                  separator=","
                   useEasing={true}
                 />
               </h1>
-              <p className='text-base'>supporters</p>
+              <p className="text-base">supporters</p>
             </div>
-            <div className='w-1/2 md:w-full'>
-              <h1 className='text-5xl'>
+            <div className="w-1/2 md:w-full">
+              <h1 className="text-5xl">
                 <CountUp
                   start={365}
                   end={daysToRelease}
                   duration={animationDuration}
-                  separator=','
+                  separator=","
                   useEasing={true}
                 />
               </h1>
-              <p className='text-base'>days to release</p>
+              <p className="text-base">days to release</p>
             </div>
           </div>
         </div>
@@ -153,10 +159,10 @@ export const GrantView: FC<Props> = (props) => {
             stroke='currentColor'
           >
             <path
-              strokeLinecap='round'
-              strokeLinejoin='round'
-              strokeWidth='2'
-              d='M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z'
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
             />
           </svg>
           Donate

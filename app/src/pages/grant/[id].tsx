@@ -1,7 +1,14 @@
 import getProvider from "instructions/api/getProvider";
 import getGrant from "instructions/getGrant";
 import getProgramInfo from "instructions/getProgramInfo";
-import type { GetStaticPaths, GetStaticProps, NextPage } from "next";
+import { Keypair } from "@solana/web3.js";
+import { loremIpsum } from "lorem-ipsum";
+import type {
+  GetStaticPaths,
+  GetStaticProps,
+  InferGetStaticPropsType,
+  NextPage,
+} from "next";
 import Head from "next/head";
 import { GrantView, Props as GrantViewProps } from "views/grant";
 import { PublicKey } from "@solana/web3.js";
@@ -10,12 +17,12 @@ import fetchDataFromArweave from "../../utils/fetchDataFromArweave";
 import { LAMPORTS_PER_SOL } from "@solana/web3.js";
 import { PhantomWalletAdapter } from '@solana/wallet-adapter-wallets';
 
-const GrantPage: NextPage<{grantViewProps: GrantViewProps}> = (props) => {
+const GrantPage: NextPage<{ grantViewProps: GrantViewProps }> = (props) => {
   return (
     <div>
       <Head>
         <title>{props.grantViewProps.title}</title>
-        <meta name='description' content='Grant details' />
+        <meta name="description" content="Grant details" />
       </Head>
       <GrantView {...props.grantViewProps} />
     </div>
@@ -128,7 +135,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   };
 
   // Pass grant data to the page via props
-  return { props: { grantViewProps } }
-}
+  return { props: { grantViewProps } };
+};
 
 export default GrantPage;

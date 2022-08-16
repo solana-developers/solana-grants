@@ -1,6 +1,6 @@
 import { AppProps } from "next/app";
 import { FC } from "react";
-import { SessionProvider } from "next-auth/react"
+import { SessionProvider } from "next-auth/react";
 import { ContextProvider } from "../contexts/ContextProvider";
 import { AppBar } from "../components/AppBar";
 import { Footer } from "../components/common/footer";
@@ -10,7 +10,7 @@ import Toast from "components/Toast";
 require("@solana/wallet-adapter-react-ui/styles.css");
 require("../styles/globals.css");
 
-const App: FC<AppProps> = ({Component, pageProps}) => {
+const App: FC<AppProps> = ({ Component, pageProps }) => {
   return (
     <>
       <SessionProvider session={pageProps.session}>

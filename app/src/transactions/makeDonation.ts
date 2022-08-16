@@ -1,9 +1,25 @@
 import * as anchor from "@project-serum/anchor";
-import { BN } from "@project-serum/anchor";
+import { BN, Program } from "@project-serum/anchor";
 import { encode } from "@project-serum/anchor/dist/cjs/utils/bytes/utf8";
 import { PublicKey } from "@solana/web3.js";
+import getProgram from "instructions/api/getProgram";
+import getProvider from "instructions/api/getProvider";
 import { toBytesInt32 } from "../utils/conversion";
-import { program } from "./index";
+// import { program } from "./index";
+import { AnchorWallet } from "@solana/wallet-adapter-react";
+import { GrantsProgram } from "../idl/grants_program";
+
+let program: Program<GrantsProgram> = undefined;
+
+export async function makeDonation2(
+  wallet: AnchorWallet,
+  grantPDA: PublicKey,
+  lamports: BN
+) {
+  const provider = getProvider(wallet);
+  program = getProgram(provider) as Program<GrantsProgram>;
+  return makeDonation(wallet.publicKey, grantPDA, lamports);
+}
 
 export async function makeDonation(
   donor: PublicKey,
@@ -21,12 +37,12 @@ export async function makeDonation(
       [encode("matching_donation"), grantPDA.toBuffer()],
       program.programId
     );
-  
+
   const [programInfoPDA, _bump] =
-      await anchor.web3.PublicKey.findProgramAddress(
-        [encode("program_info")],
-        program.programId
-      );
+    await anchor.web3.PublicKey.findProgramAddress(
+      [encode("program_info")],
+      program.programId
+    );
 
   // check if the account exists
   const donation = await program.account.donation.fetchNullable(donationPDA);
