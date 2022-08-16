@@ -11,6 +11,7 @@ import { getProgramInfoPDA } from "../../instructions/pda/getProgramInfoPDA";
 import { PublicKey } from "@solana/web3.js";
 import fetchDataFromArweave from "../../utils/fetchDataFromArweave";
 import fetchGithubUserDataFromUserId from "utils/fetchGithubUserDataFromUserId";
+import { useRouter } from "next/router";
 
 export const ExplorerView: FC = ({ }) => {
   const [projects, setProjects] = useState<ExploreCardProps[]>([]);
@@ -20,6 +21,7 @@ export const ExplorerView: FC = ({ }) => {
   const [loadingView, setLoadingView] = useState<-1 | 0 | 1>(1); // 1 -> show loading spinner, 0 -> show load more button, -1 -> show none
 
   const wallet = useWallet()
+  const router = useRouter();
 
   useEffect(() => {
     fetchGrants()
@@ -147,6 +149,10 @@ export const ExplorerView: FC = ({ }) => {
     }
   }
 
+  const navigateToCreateGrantPage = () => {
+    router.push("/create-grant");
+  }
+
   return (
     <>
       <div className='md:hero mx-auto p-4'>
@@ -165,9 +171,9 @@ export const ExplorerView: FC = ({ }) => {
               </p>
             </h4>
             <div className='text-center pt-5'>
-              <a href="#create-grant" className="bg-transparent hover:bg-slate-500 py-2 px-6 text-fuchsia-300 border border-fuchsia-300 text-sm rounded-full btn">
+              <button className="bg-transparent hover:bg-slate-500 py-2 px-6 text-fuchsia-300 border border-fuchsia-300 text-sm rounded-full btn"  onClick={navigateToCreateGrantPage}>
                 CREATE A GRANT
-              </a>
+              </button>
             </div>
           </div>
           <div className='pt-10 hidden lg:block'>
