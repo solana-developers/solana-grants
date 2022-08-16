@@ -1,3 +1,3 @@
 export { GrantCreationView } from './create-grant';
-export { ExplorerView } from "./explorer";
+export { ExplorerView } from "./explore";
 export { LandingPageView } from "./landing-page";

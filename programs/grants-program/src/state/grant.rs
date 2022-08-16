@@ -10,14 +10,15 @@ use super::Donation;
 pub struct Grant {
     pub bump: u8,                   // 1
     pub author: Pubkey,             // 32
-    info: String,                   // 4 + (4* 45)
+    info: String,                   // 4 + (4 * 45) Added 4 at the beginning since we need to provide string length prefix
     pub lamports_raised: u64,       // 16
     pub total_donors: u32,          // 8
     target_lamports: u64,           // 16
-    due_date: i64,        // 16 (UnixTimestamp)
+    due_date: i64,                  // 16 (UnixTimestamp)
     pub state: GrantState,          // 1
     pub is_matching_eligible: bool, // 1
     pub grant_num: u32,             // 8
+    pub is_cancelled: bool,         // 1
 }
 
 impl Grant {
@@ -52,7 +53,7 @@ impl Grant {
     /// Checks if the grant is active and cancells it
     pub fn cancel_grant(&mut self) -> Result<()> {
         self.is_active()?;
-        
+
         self.state = GrantState::Cancelled;
 
         Ok(())

@@ -8,8 +8,8 @@ import { DEVNET_API, processed } from "../../constants";
  *
  * @returns provider to the caller.
  */
-export default function getProvider(wallet: AnchorWallet | undefined) {
-    if (!wallet) {
+export default function getProvider(wallet: AnchorWallet | undefined, allowWithoutWalletConnection?: boolean) {
+    if (!allowWithoutWalletConnection && (!wallet || !wallet.publicKey)) {
         toastError("Wallet not connected!")
         return;
     }
