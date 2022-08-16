@@ -24,7 +24,7 @@ export const LandingPageView: FC = ({ }) => {
       <div>
         <div className='flex justify-center my-24'>
           <div className='flex justify-center hidden md:block w-[400px] h-[350px]'>
-            <img src='/images/bitcoin-man.png' />
+            <img src='/images/sol-man.png' />
           </div>
           <div className='flex items-center w-[400px] h-[350px]'>
             <div className='flex flex-col items-center md:items-start m-8 md:m-5'>

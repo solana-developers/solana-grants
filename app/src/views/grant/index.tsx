@@ -6,8 +6,6 @@ import fetchGithubUserDataFromUserId from "utils/fetchGithubUserDataFromUserId";
 import Error from "next/error";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import { RiCheckboxMultipleBlankLine, RiCheckboxMultipleFill } from "react-icons/ri";
-import { SignMessage } from "../../components/SignMessage";
-import { SendTransaction } from "../../components/SendTransaction";
 import DonateSol from "../../components/DonateSol";
 import { PublicKey } from "@solana/web3.js";
 
@@ -150,13 +148,19 @@ export const GrantView: FC<Props> = (props) => {
             </div>
           </div>
         </div>
-        <button className='btn btn-success w-full mx-auto gap-2 m-2' disabled={!props.allowDonation}>
+        <a
+          href="#donate"
+          className="btn btn-success w-full mx-auto gap-2 m-2"
+          onClick={() => {
+            setPreview(true);
+          }}
+        >
           <svg
-            xmlns='http://www.w3.org/2000/svg'
-            className='w-6 h-6'
-            fill='none'
-            viewBox='0 0 24 24'
-            stroke='currentColor'
+            xmlns="http://www.w3.org/2000/svg"
+            className="h-6 w-6"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
           >
             <path
               strokeLinecap="round"
@@ -166,7 +170,10 @@ export const GrantView: FC<Props> = (props) => {
             />
           </svg>
           Donate
-        </button>
+        </a>
+        {preview && (
+          <DonateSol setpreview={setPreview} grantPDA={props.grantPDA} />
+        )}
         {!props.allowDonation && <p className="text-sm">{props.reasonForNotAllowingDonation}</p>}
       </div>
       <main role='main' className='flex-grow sm:w-2/3 sm:pt-4 md:px-6'>

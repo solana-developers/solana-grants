@@ -10,7 +10,7 @@ export default async function getGrant(provider: Provider, grantNumber: number) 
 
       const grant = await program.account.grant.fetch(grantPDA);
 
-      return { err: false, data: grant }
+      return { err: false, data: grant, grantPDA }
     } catch (error) {
       console.log(error);
       return { err: true, message: error.message }
