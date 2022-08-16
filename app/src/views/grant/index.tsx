@@ -28,7 +28,7 @@ export interface Props {
 }
 
 export const GrantView: FC<Props> = (props) => {
-  const [preview, setpreview] = useState(false);
+  const [preview, setPreview] = useState(false);
   const animationDuration = 3; // secs
   const roundedAmtRaised = Math.round(props.amountRaised);
 
@@ -119,7 +119,7 @@ export const GrantView: FC<Props> = (props) => {
           href="#donate"
           className="btn btn-success w-full mx-auto gap-2 m-2"
           onClick={() => {
-            setpreview(true);
+            setPreview(true);
           }}
         >
           <svg
@@ -138,7 +138,7 @@ export const GrantView: FC<Props> = (props) => {
           </svg>
           Donate
         </a>
-        {preview && <DonateSol setpreview={setpreview} />}
+        {preview && <DonateSol setpreview={setPreview} />}
       </div>
       <main role="main" className="sm:w-2/3 flex-grow sm:pt-4 md:px-6">
         <article className="prose prose-sm md:prose-base max-w-none lg:pr-16 mx-auto">
