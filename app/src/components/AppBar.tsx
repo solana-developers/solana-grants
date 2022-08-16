@@ -21,7 +21,7 @@ export const AppBar: FC = props => {
                 <div className="navbar-end">
                     <div className="hidden lg:flex">
                         <ul className="menu menu-horizontal p-0">
-                            <li><Link href='/explorer'><a>Explore</a></Link></li>
+                            <li><Link href='/explore'><a>Explore</a></Link></li>
                             <li><Link href='/create-grant'>Create Grant</Link></li>
                         </ul>
                     </div>
@@ -86,7 +86,7 @@ export const AppBar: FC = props => {
                 <div className="lg:hidden bg-black">
                     <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
                         <ul className="menu p-0 flex items-center">
-                            <li><Link href='/explorer'><a>Explore</a></Link></li>
+                            <li><Link href='/explore'><a>Explore</a></Link></li>
                             <li><Link href='/create-grant'>Create Grant</Link></li>
                         </ul>
                     </div>
