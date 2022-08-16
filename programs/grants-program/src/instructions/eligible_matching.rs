@@ -1,38 +1,31 @@
+use crate::state::{Grant, ProgramInfo};
 use anchor_lang::prelude::*;
-use crate::errors::GrantErrors;
-use crate::state::{Grant, GrantsProgramInfo};
 
-/**
- * EligibleMatching
- *
- * This instruction let only admin make a grant matching eligible.
- */
+/// This instruction lets an admin make a grant eligible for matching.
 #[derive(Accounts)]
 pub struct EligibleMatching<'info> {
-    #[account(mut)]
     admin: Signer<'info>,
 
     #[account(
-    mut,
-    seeds = [b"grant", grant.grant_num.to_be_bytes().as_ref()],
-    bump,
+        mut,
+        seeds = [b"grant", grant.grant_num.to_be_bytes().as_ref()],
+        bump = grant.bump,
     )]
     grant: Account<'info, Grant>,
 
-    #[account(mut, seeds = [b"program_info"], bump = program_info.bump(), has_one = admin)]
-    program_info: Account<'info, GrantsProgramInfo>,
-
-    system_program: Program<'info, System>,
+    #[account(
+        seeds = [ProgramInfo::SEED.as_bytes().as_ref()], 
+        bump = program_info.bump, 
+        has_one = admin
+    )]
+    program_info: Account<'info, ProgramInfo>,
 }
 
 pub fn eligible_matching(ctx: Context<EligibleMatching>) -> Result<()> {
-    // checking if grant is inactive
-    if ctx.accounts.grant.is_active == false {
-        return Err(GrantErrors::AlreadyInActive.into());
-    }
+    ctx.accounts.grant.is_active()?;
 
     // making grant matching eligible
-    ctx.accounts.grant.eligible_grant();
+    ctx.accounts.grant.is_matching_eligible = true;
 
     Ok(())
 }

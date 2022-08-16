@@ -4,7 +4,7 @@ import sendSol from '../utils/sendSol';
 import { useWallet } from "@solana/wallet-adapter-react";
 import { notify } from '../utils/notifications';
 
-export interface ExplorerCardProps {
+export interface ExploreCardProps {
   image: string;
   bgColor: string;
   title: string;
@@ -20,7 +20,7 @@ export interface ExplorerCardProps {
  * A card to show a summary of a project in the explorer view.
  * @param bgColor is expected to be taken from the image, ideally provided by the backend
  */
-export const ExplorerCard: FC<ExplorerCardProps> = ({
+export const ExploreCard: FC<ExploreCardProps> = ({
   image,
   bgColor,
   title,
@@ -64,8 +64,8 @@ export const ExplorerCard: FC<ExplorerCardProps> = ({
       <div className='card w-[23rem] h-[36rem] bg-base-100 shadow-xl'>
         <a href={projectLink}>
           <figure className='relative'>
-            <div className='w-full h-full bg-slate-700 absolute transition-opacity opacity-0 hover:opacity-90 flex'>
-              <button className='btn btn-secondary m-auto'>Learn More</button>
+            <div className='absolute flex w-full h-full transition-opacity opacity-0 bg-slate-700 hover:opacity-90'>
+              <button className='m-auto btn btn-secondary'>Learn More</button>
             </div>
             <img className='w-full' src={image} alt='Project image' />
           </figure>
@@ -75,17 +75,20 @@ export const ExplorerCard: FC<ExplorerCardProps> = ({
           style={{ background: bgColor }}
         >
           <a href={projectLink}>
-            <h2 id='title' className='card-title mb-1 font-mono'>
+            <h2 id='title' className='mb-1 font-mono card-title'>
               {title}
             </h2>
           </a>
-          <p id='author' className='text-xs mb-3 font-mono'>
+          <p id='author' className='mb-3 font-mono text-xs'>
             By{" "}
             <a className='underline underline-offset-4' href={authorLink}>
               {author}
             </a>
           </p>
-          <p id='description' className={'line-clamp-3 text-opacity-90 ' + textColor}>
+          <p
+            id='summary'
+            className={"line-clamp-3 text-opacity-90 " + textColor}
+          >
             {summary}
           </p>
           <div className='card-actions'>
@@ -94,9 +97,9 @@ export const ExplorerCard: FC<ExplorerCardProps> = ({
               Raised from <strong>{numContributors}</strong> supporters
             </p>
             <div className="dropdown dropdown-right dropdown-down">
-              <label tabindex="0" className="btn m-1">Donate</label>
-              <ul tabindex="0" className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52">
-                <li><label for="my-modal" className="btn modal-button">Donate Directly</label></li>
+              <label  className="btn m-1">Donate</label>
+              <ul  className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52">
+                <li><label htmlFor="my-modal" className="btn modal-button">Donate Directly</label></li>
 
                 <li><a>Matching</a></li>
               </ul>
@@ -112,8 +115,8 @@ export const ExplorerCard: FC<ExplorerCardProps> = ({
                       }
                     } />
                     <div className="modal-action">
-                      <label for="my-modal" class="btn" onClick={send}>Submit</label>
-                      <label for="my-modal" class="btn">Cancel</label>
+                      <label htmlFor="my-modal" className="btn" onClick={send}>Submit</label>
+                      <label htmlFor="my-modal" className="btn">Cancel</label>
                     </div>
                   </div>
                 </div>
@@ -125,7 +128,7 @@ export const ExplorerCard: FC<ExplorerCardProps> = ({
 };
 
 export const _exampleCard = (
-  <ExplorerCard
+  <ExploreCard
     image='https://api.lorem.space/image/shoes?w=400&h=225'
     bgColor='#001020'
     title='Minter Project'

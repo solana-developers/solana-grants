@@ -1,50 +1,80 @@
 use anchor_lang::prelude::*;
+use crate::errors::GrantError;
+
+use super::Donation;
 
 /// This account holds the information for a grant account
 
 #[account]
 #[derive(Default)]
 pub struct Grant {
-    pub author: Pubkey,        // 32
-    escrow_count: u32,         // 8
-    info: String,              // 4 + (4 * 45) Added 4 at the beginning since we need to provide string length prefix
-    lamports_raised: u64,      // 16
-    total_donors: u32,         // 8
-    target_lamports: u64,      // 16
-    due_date: u64,             // 16
-    pub is_active: bool,       // 1
-    matching_eligible: bool,   // 1
-    pub grant_num: u32,        // 8
+    pub bump: u8,                   // 1
+    pub author: Pubkey,             // 32
+    info: String,                   // 4 + (4* 45)
+    pub lamports_raised: u64,       // 16
+    pub total_donors: u32,          // 8
+    target_lamports: u64,           // 16
+    due_date: i64,        // 16 (UnixTimestamp)
+    pub state: GrantState,          // 1
+    pub is_matching_eligible: bool, // 1
+    pub grant_num: u32,             // 8
 }
 
 impl Grant {
-    pub const MAXIMUM_SPACE: usize = 32 + 8 + (4 + (4 * 45)) + 16 + 8 + 16 + 16 + 1 + 1 + 8;
+    pub const MAXIMUM_SPACE: usize = 1+ 32 + (4 + (4 * 45)) + 16 + 8 + 16 + 16 + 1 + 1 + 8;
 
-    pub fn new(author: Pubkey, info: String, target_lamports: u64, due_date: u64, grant_num: u32) -> Self {
+    pub fn new(
+        bump: u8,
+        author: Pubkey,
+        info: String,
+        target_lamports: u64,
+        due_date: i64,
+        grant_num: u32,
+    ) -> Self {
         Grant {
+            bump,
             author,
             info,
             target_lamports,
             due_date,
             grant_num,
-            is_active: true,
             ..Default::default() // rest of the fields are initialized to default values
         }
     }
 
     /// Updates the grant's total `amount_raised`, increments the `total_donors`
-    /// by one, and adds the payment to the `payments` structure.
-    pub fn update_with_payment(&mut self) {
-
+    /// by one
+    pub fn update_with_new_donation(&mut self, donation: &Donation) {
+        self.lamports_raised += donation.amount();
         self.total_donors += 1;
-        self.escrow_count += 1;
     }
 
-    pub fn cancel_grant(&mut self) {
-        self.is_active = false;
+    /// Checks if the grant is active and cancells it
+    pub fn cancel_grant(&mut self) -> Result<()> {
+        self.is_active()?;
+        
+        self.state = GrantState::Cancelled;
+
+        Ok(())
     }
 
-    pub fn eligible_grant(&mut self) {
-        self.matching_eligible = true;
+    pub fn is_active(&self) -> Result<()> {
+        match self.state {
+            GrantState::Active => Ok(()),
+            GrantState::Released => err!(GrantError::ReleasedGrant),
+            GrantState::Cancelled => err!(GrantError::CancelledGrant),
+        }
+    }
+}
+
+#[derive(AnchorSerialize, AnchorDeserialize, Clone, PartialEq, Eq)]
+pub enum GrantState {
+    Active,
+    Released,
+    Cancelled,
+}
+impl Default for GrantState {
+    fn default() -> Self {
+        GrantState::Active
     }
 }

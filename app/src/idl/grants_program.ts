@@ -1,0 +1,929 @@
+export type GrantsProgram = {
+  "version": "0.1.0",
+  "name": "grants_program",
+  "instructions": [
+    {
+      "name": "createGrant",
+      "accounts": [
+        {
+          "name": "author",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "grant",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "matchingDonation",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "programInfo",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "info",
+          "type": "string"
+        },
+        {
+          "name": "targetLamports",
+          "type": "u64"
+        },
+        {
+          "name": "dueDate",
+          "type": "i64"
+        }
+      ]
+    },
+    {
+      "name": "createDonation",
+      "accounts": [
+        {
+          "name": "payer",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "grant",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "donation",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "donationIndex",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "matchingDonation",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "programInfo",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "lamports",
+          "type": "u64"
+        }
+      ]
+    },
+    {
+      "name": "incrementDonation",
+      "accounts": [
+        {
+          "name": "donation",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "payer",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "matchingDonation",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "programInfo",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "grant",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "lamports",
+          "type": "u64"
+        }
+      ]
+    },
+    {
+      "name": "releaseGrant",
+      "accounts": [
+        {
+          "name": "admin",
+          "isMut": false,
+          "isSigner": true
+        },
+        {
+          "name": "programInfo",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "grant",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "author",
+          "isMut": true,
+          "isSigner": false
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "cancelDonation",
+      "accounts": [
+        {
+          "name": "admin",
+          "isMut": false,
+          "isSigner": true
+        },
+        {
+          "name": "programInfo",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "donation",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "payer",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "grant",
+          "isMut": true,
+          "isSigner": false
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "initializeProgramInfo",
+      "accounts": [
+        {
+          "name": "admin",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "programInfo",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "cancelGrantAdmin",
+      "accounts": [
+        {
+          "name": "admin",
+          "isMut": false,
+          "isSigner": true
+        },
+        {
+          "name": "grant",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "programInfo",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "cancelGrantAuthor",
+      "accounts": [
+        {
+          "name": "author",
+          "isMut": false,
+          "isSigner": true
+        },
+        {
+          "name": "grant",
+          "isMut": true,
+          "isSigner": false
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "eligibleMatching",
+      "accounts": [
+        {
+          "name": "admin",
+          "isMut": false,
+          "isSigner": true
+        },
+        {
+          "name": "grant",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "programInfo",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": []
+    }
+  ],
+  "accounts": [
+    {
+      "name": "donation",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "payer",
+            "type": "publicKey"
+          },
+          {
+            "name": "grant",
+            "type": "publicKey"
+          },
+          {
+            "name": "amount",
+            "type": "u64"
+          },
+          {
+            "name": "state",
+            "type": {
+              "defined": "DonationState"
+            }
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "grant",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "bump",
+            "type": "u8"
+          },
+          {
+            "name": "author",
+            "type": "publicKey"
+          },
+          {
+            "name": "info",
+            "type": "string"
+          },
+          {
+            "name": "lamportsRaised",
+            "type": "u64"
+          },
+          {
+            "name": "totalDonors",
+            "type": "u32"
+          },
+          {
+            "name": "targetLamports",
+            "type": "u64"
+          },
+          {
+            "name": "dueDate",
+            "type": "i64"
+          },
+          {
+            "name": "state",
+            "type": {
+              "defined": "GrantState"
+            }
+          },
+          {
+            "name": "isMatchingEligible",
+            "type": "bool"
+          },
+          {
+            "name": "grantNum",
+            "type": "u32"
+          }
+        ]
+      }
+    },
+    {
+      "name": "link",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "bump",
+            "type": "u8"
+          },
+          {
+            "name": "address",
+            "type": "publicKey"
+          }
+        ]
+      }
+    },
+    {
+      "name": "programInfo",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "bump",
+            "type": "u8"
+          },
+          {
+            "name": "grantsCount",
+            "type": "u32"
+          },
+          {
+            "name": "admin",
+            "type": "publicKey"
+          }
+        ]
+      }
+    }
+  ],
+  "types": [
+    {
+      "name": "GrantError",
+      "type": {
+        "kind": "enum",
+        "variants": [
+          {
+            "name": "InfoTooLong"
+          },
+          {
+            "name": "ReleasedGrant"
+          },
+          {
+            "name": "CancelledGrant"
+          },
+          {
+            "name": "GrantStillActive"
+          },
+          {
+            "name": "DueDateInPast"
+          }
+        ]
+      }
+    },
+    {
+      "name": "DonationState",
+      "type": {
+        "kind": "enum",
+        "variants": [
+          {
+            "name": "Funded"
+          },
+          {
+            "name": "Cancelled"
+          }
+        ]
+      }
+    },
+    {
+      "name": "GrantState",
+      "type": {
+        "kind": "enum",
+        "variants": [
+          {
+            "name": "Active"
+          },
+          {
+            "name": "Released"
+          },
+          {
+            "name": "Cancelled"
+          }
+        ]
+      }
+    }
+  ],
+  "errors": [
+    {
+      "code": 6000,
+      "name": "CancelledDonation",
+      "msg": "This donation has already refunded the payer"
+    },
+    {
+      "code": 6001,
+      "name": "NotMatchingEligible",
+      "msg": "The grant related to this donation is not eligible for matching"
+    },
+    {
+      "code": 6002,
+      "name": "InsufficientFunds",
+      "msg": "The matching account does not have to sufficient funds to match the donation"
+    }
+  ]
+};
+
+export const IDL: GrantsProgram = {
+  "version": "0.1.0",
+  "name": "grants_program",
+  "instructions": [
+    {
+      "name": "createGrant",
+      "accounts": [
+        {
+          "name": "author",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "grant",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "matchingDonation",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "programInfo",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "info",
+          "type": "string"
+        },
+        {
+          "name": "targetLamports",
+          "type": "u64"
+        },
+        {
+          "name": "dueDate",
+          "type": "i64"
+        }
+      ]
+    },
+    {
+      "name": "createDonation",
+      "accounts": [
+        {
+          "name": "payer",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "grant",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "donation",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "donationIndex",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "matchingDonation",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "programInfo",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "lamports",
+          "type": "u64"
+        }
+      ]
+    },
+    {
+      "name": "incrementDonation",
+      "accounts": [
+        {
+          "name": "donation",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "payer",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "matchingDonation",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "programInfo",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "grant",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "lamports",
+          "type": "u64"
+        }
+      ]
+    },
+    {
+      "name": "releaseGrant",
+      "accounts": [
+        {
+          "name": "admin",
+          "isMut": false,
+          "isSigner": true
+        },
+        {
+          "name": "programInfo",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "grant",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "author",
+          "isMut": true,
+          "isSigner": false
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "cancelDonation",
+      "accounts": [
+        {
+          "name": "admin",
+          "isMut": false,
+          "isSigner": true
+        },
+        {
+          "name": "programInfo",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "donation",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "payer",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "grant",
+          "isMut": true,
+          "isSigner": false
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "initializeProgramInfo",
+      "accounts": [
+        {
+          "name": "admin",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "programInfo",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "cancelGrantAdmin",
+      "accounts": [
+        {
+          "name": "admin",
+          "isMut": false,
+          "isSigner": true
+        },
+        {
+          "name": "grant",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "programInfo",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "cancelGrantAuthor",
+      "accounts": [
+        {
+          "name": "author",
+          "isMut": false,
+          "isSigner": true
+        },
+        {
+          "name": "grant",
+          "isMut": true,
+          "isSigner": false
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "eligibleMatching",
+      "accounts": [
+        {
+          "name": "admin",
+          "isMut": false,
+          "isSigner": true
+        },
+        {
+          "name": "grant",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "programInfo",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": []
+    }
+  ],
+  "accounts": [
+    {
+      "name": "donation",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "payer",
+            "type": "publicKey"
+          },
+          {
+            "name": "grant",
+            "type": "publicKey"
+          },
+          {
+            "name": "amount",
+            "type": "u64"
+          },
+          {
+            "name": "state",
+            "type": {
+              "defined": "DonationState"
+            }
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "grant",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "bump",
+            "type": "u8"
+          },
+          {
+            "name": "author",
+            "type": "publicKey"
+          },
+          {
+            "name": "info",
+            "type": "string"
+          },
+          {
+            "name": "lamportsRaised",
+            "type": "u64"
+          },
+          {
+            "name": "totalDonors",
+            "type": "u32"
+          },
+          {
+            "name": "targetLamports",
+            "type": "u64"
+          },
+          {
+            "name": "dueDate",
+            "type": "i64"
+          },
+          {
+            "name": "state",
+            "type": {
+              "defined": "GrantState"
+            }
+          },
+          {
+            "name": "isMatchingEligible",
+            "type": "bool"
+          },
+          {
+            "name": "grantNum",
+            "type": "u32"
+          }
+        ]
+      }
+    },
+    {
+      "name": "link",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "bump",
+            "type": "u8"
+          },
+          {
+            "name": "address",
+            "type": "publicKey"
+          }
+        ]
+      }
+    },
+    {
+      "name": "programInfo",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "bump",
+            "type": "u8"
+          },
+          {
+            "name": "grantsCount",
+            "type": "u32"
+          },
+          {
+            "name": "admin",
+            "type": "publicKey"
+          }
+        ]
+      }
+    }
+  ],
+  "types": [
+    {
+      "name": "GrantError",
+      "type": {
+        "kind": "enum",
+        "variants": [
+          {
+            "name": "InfoTooLong"
+          },
+          {
+            "name": "ReleasedGrant"
+          },
+          {
+            "name": "CancelledGrant"
+          },
+          {
+            "name": "GrantStillActive"
+          },
+          {
+            "name": "DueDateInPast"
+          }
+        ]
+      }
+    },
+    {
+      "name": "DonationState",
+      "type": {
+        "kind": "enum",
+        "variants": [
+          {
+            "name": "Funded"
+          },
+          {
+            "name": "Cancelled"
+          }
+        ]
+      }
+    },
+    {
+      "name": "GrantState",
+      "type": {
+        "kind": "enum",
+        "variants": [
+          {
+            "name": "Active"
+          },
+          {
+            "name": "Released"
+          },
+          {
+            "name": "Cancelled"
+          }
+        ]
+      }
+    }
+  ],
+  "errors": [
+    {
+      "code": 6000,
+      "name": "CancelledDonation",
+      "msg": "This donation has already refunded the payer"
+    },
+    {
+      "code": 6001,
+      "name": "NotMatchingEligible",
+      "msg": "The grant related to this donation is not eligible for matching"
+    },
+    {
+      "code": 6002,
+      "name": "InsufficientFunds",
+      "msg": "The matching account does not have to sufficient funds to match the donation"
+    }
+  ]
+};

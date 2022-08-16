@@ -1,5 +1,9 @@
+mod donation;
 mod grant;
-mod grant_program_info;
+mod link;
+mod program_info;
 
+pub use donation::*;
 pub use grant::*;
-pub use grant_program_info::*;
+pub use link::*;
+pub use program_info::*;
