@@ -1,15 +1,11 @@
 import * as anchor from "@project-serum/anchor";
 import { encode } from "@project-serum/anchor/dist/cjs/utils/bytes/utf8";
 import {
-  Keypair,
   PublicKey,
   Transaction,
-  TransactionInstruction,
 } from "@solana/web3.js";
 import { program } from "./index";
 import { toBytesInt32 } from "../utils/conversion";
-import donations from '../../../tests/suites/donations.test';
-import { matchedDonation } from '../../../tests/grants-program';
 
 /**
  * Cancels a grant and refunds the money to each of its donors
