@@ -17,10 +17,10 @@ export const AppBar: FC = props => {
           </a>
         </Link>
         
-        <div className="hidden navbar-center lg:flex">
-          <ul className="p-0 menu menu-horizontal">
-            <li><Link href='/explore'><a>Explore</a></Link></li>
-            <li><a>Menu 2</a></li>
+        <div className="navbar-center hidden lg:flex">
+          <ul className="menu menu-horizontal p-0">
+            <li><Link href='/explorer'>Explore</Link></li>
+            <li><Link href='/create-grant'>Create Grant</Link></li>
             <li><a>Menu 3</a></li>
             <li><a>Menu 4</a></li>
             <li><a>Menu 5</a></li>
@@ -97,9 +97,9 @@ export const AppBar: FC = props => {
       {isOpen && (
         <div className="bg-black lg:hidden">
           <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-            <ul className="flex items-center p-0 menu">
-              <li><a>Menu 1</a></li>
-              <li><a>Menu 2</a></li>
+            <ul className="menu p-0 flex items-center">
+              <li><Link href='/explorer'>Explore</Link></li>
+              <li><Link href='/create-grant'>Create Grant</Link></li>
               <li><a>Menu 3</a></li>
               <li><a>Menu 4</a></li>
               <li><a>Menu 5</a></li>

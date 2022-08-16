@@ -4,7 +4,6 @@ import Head from "next/head";
 import { LandingPageView } from "../views";
 
 const LandingPage: NextPage = (props) => {
-  const[ preview, setpreview] = useState(false);
   return (
     <div>
       <Head>

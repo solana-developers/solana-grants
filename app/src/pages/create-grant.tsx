@@ -1,6 +1,6 @@
 import type { NextPage } from "next";
 import Head from "next/head";
-import { GrantCreationFlowView } from "views";
+import { GrantCreationView } from "views";
 
 const GrantCreationFlow: NextPage = (props) => {
     return (
@@ -9,7 +9,7 @@ const GrantCreationFlow: NextPage = (props) => {
                 <title>Grants Explorer</title>
                 <meta name='description' content='Grants Explorer' />
             </Head>
-            <GrantCreationFlowView />
+            <GrantCreationView />
         </div>
     );
 };

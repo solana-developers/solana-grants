@@ -1,9 +1,13 @@
-import Link from "next/link";
-import { FC, useState } from "react";
-import CreateGrant from "../../components/CreateGrant";
+import { FC ,useState } from 'react';
+import { useRouter } from "next/router";
 
-export const LandingPageView: FC = ({}) => {
-  const [preview, setpreview] = useState(false);
+export const LandingPageView: FC = ({ }) => {
+  const router = useRouter();
+
+  const navigateToCreateGrantPage = () => {
+    router.push("/create-grant");
+  }
+
   const slide = ({ forward }) => {
     const scroller = document.querySelector(".carousel-container");
     const itemWidth = document.querySelector(".slide-content").clientWidth;
@@ -32,21 +36,12 @@ export const LandingPageView: FC = ({}) => {
               </p>
             </div>
             <div className='flex justify-center mt-8'>
-              <Link href='/explore'>
-                <button className='py-2 mr-4 text-sm text-black bg-green-400 rounded-full hover:bg-emerald-500 px-9'>
-                  EXPLORE
-                </button>
-              </Link>
-              <a
-                href='#create-grant'
-                className='px-6 py-2 text-sm bg-transparent border rounded-full hover:bg-slate-500 text-fuchsia-300 border-fuchsia-300 btn'
-                onClick={() => {
-                  setpreview(true);
-                }}
-              >
+              <button className="bg-green-400 hover:bg-emerald-500 py-2 px-9 text-black text-sm rounded-full mr-4">
+                EXPLORE
+              </button>
+              <button className="bg-transparent hover:bg-slate-500 py-2 px-6 text-fuchsia-300 border border-fuchsia-300 text-sm rounded-full btn"  onClick={navigateToCreateGrantPage}>
                 CREATE A GRANT
-              </a>
-              {preview && <CreateGrant setpreview={setpreview} />}
+              </button>
             </div>
           </div>
         </div>
