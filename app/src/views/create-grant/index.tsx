@@ -232,7 +232,7 @@ export const GrantCreationView: FC = ({ }) => {
               </div>
               <div className="flex flex-col md:flex-row">
                 <div className="w-full mx-2 flex-1 svelte-1l8159u">
-                  <div className="font-bold h-6 mt-3 text-black text-s leading-8 uppercase">
+                  <div className="font-bold h-6 mt-3 text-white text-s leading-8 uppercase">
                     {" "}
                     Description*
                   </div>
@@ -389,7 +389,7 @@ export const GrantCreationView: FC = ({ }) => {
               </div>
               <div className="flex flex-col md:flex-row">
                 <div className="w-full mx-2 flex-1 svelte-1l8159u">
-                  <div className="font-bold h-6 mt-3 text-black text-s leading-8 uppercase">
+                  <div className="font-bold h-6 mt-3 text-white text-s leading-8 uppercase">
                     {" "}
                     Description*
                   </div>
