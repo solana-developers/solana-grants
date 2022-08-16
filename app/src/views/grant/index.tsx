@@ -41,6 +41,7 @@ export const GrantView: FC<Props> = (props) => {
   const animationDuration = 3; // secs
   const roundedAmtRaised = Math.round(props.amountRaised);
   const [loadingCreatorDetailsFromGithub, setLoadingCreatorDetailsFromGithub] = useState(true);
+  const [copied, setCopied] = useState(false);
 
   const handleCounterStart = (duration: number) => {
     let bar = new Path("#progress-bar", {
@@ -75,8 +76,6 @@ export const GrantView: FC<Props> = (props) => {
   if (props.err) {
     return <Error statusCode={props.message === "Not Found" ? 404 : 500} title={props.message} />
   }
-
-  const [copied, setCopied] = useState(false);
   
   return (
     <div className='flex flex-row flex-wrap max-w-6xl p-4 mx-auto space-y-10'>
