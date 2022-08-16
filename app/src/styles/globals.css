@@ -184,3 +184,15 @@ a {
     height: 32px;
   }
 }
+@media screen and (max-width: 768px) {
+  .creategrant{
+  width: 23rem;
+  left:2%;
+  }  
+  .grantborder{
+  width: 0;
+  }
+  .grantheading{
+  font-size: 0;
+  }
+}
