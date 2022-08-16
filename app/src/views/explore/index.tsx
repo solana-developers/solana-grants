@@ -1,17 +1,11 @@
 import { FC, useEffect, useState } from "react";
 import personImage from "../../../public/images/person-opens-the-safe-with-the-money.png";
+import CreateGrant from "../../components/CreateGrant";
 import { ExploreCard, ExploreCardProps } from "../../components/ExploreCard";
-import { useRouter } from "next/router";
 
-export const ExplorerView: FC = ({ }) => {
+export const ExploreView: FC = ({ }) => {
   const [projects, setProjects] = useState<ExploreCardProps[]>([]);
-
-  const router = useRouter();
-
-  const navigateToCreateGrantPage = () => {
-    router.push("/create-grant");
-  }
-
+  const [preview, setpreview] = useState(false);
   useEffect(() => {
     // TODO: fetch projects from the API
     let exampleProject = {
@@ -54,10 +48,11 @@ export const ExplorerView: FC = ({ }) => {
                 aliqua.
               </p>
             </h4>
-            <div className='text-center pt-5'>
-              <button className="bg-transparent hover:bg-slate-500 py-2 px-6 text-fuchsia-300 border border-fuchsia-300 text-sm rounded-full btn"  onClick={navigateToCreateGrantPage}>
+            <div className='pt-5 text-center'>
+              <a href="#create-grant" className="px-6 py-2 text-sm bg-transparent border rounded-full hover:bg-slate-500 text-fuchsia-300 border-fuchsia-300 btn"  onClick={()=>{ setpreview(true) }}>
                 CREATE A GRANT
-              </button>
+              </a>
+              { preview && <CreateGrant setpreview={setpreview} />}
             </div>
           </div>
           <div className='hidden pt-10 lg:block'>

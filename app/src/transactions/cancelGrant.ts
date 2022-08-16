@@ -1,10 +1,8 @@
 import * as anchor from "@project-serum/anchor";
 import { encode } from "@project-serum/anchor/dist/cjs/utils/bytes/utf8";
 import {
-  Keypair,
   PublicKey,
   Transaction,
-  TransactionInstruction,
 } from "@solana/web3.js";
 import { program } from "./index";
 import { toBytesInt32 } from "../utils/conversion";
@@ -50,6 +48,26 @@ export async function refundDonations(grantPDA: PublicKey, admin: PublicKey, pro
 
   const grant = await program.account.grant.fetch(grantPDA);
 
+  // refund the matcher donation
+  const [matchingDonationPDA,] = await anchor.web3.PublicKey.findProgramAddress(
+    [encode("matching_donation"), grantPDA.toBuffer()],
+    program.programId
+  );
+  const matchingDonation = await program.account.donation.fetch(matchingDonationPDA);
+  const cancelDonationIx = await program.methods
+    .cancelDonation()
+    .accounts({
+      admin: admin,
+      programInfo: programInfoPDA,
+      donation: matchingDonationPDA,
+      payer: matchingDonation.payer,
+      grant: grantPDA,
+    })
+    .instruction();
+  
+  tx.add(cancelDonationIx);
+  
+  // refund the donor donations
   for (let i = 0; i < grant.totalDonors; i++) {
     const donationPDA = await findDonationPDA(grantPDA, i);
     const donation = await program.account.donation.fetch(donationPDA);
