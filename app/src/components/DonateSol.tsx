@@ -1,10 +1,18 @@
+import { BN } from "@project-serum/anchor";
+import { Connection, LAMPORTS_PER_SOL } from "@solana/web3.js";
+import { processed, DEVNET_API } from "../constants";
 import React, { useState } from "react";
+import { makeDonation } from "transactions";
 import { notify } from "../utils/notifications";
 import { DonationChart } from "./DonationChart";
 import Modal from "./Modal";
+import { useWallet } from "@solana/wallet-adapter-react";
 
-export default function DonateSol({ setpreview }) {
+export default function DonateSol({ setpreview, grantPDA }) {
   const [donation, setDonation] = useState(0);
+
+  const wallet = useWallet();
+  const connection = new Connection(DEVNET_API, processed);
 
   const handleSubmit = async () => {
     if (!donation || donation <= 0) {
@@ -14,6 +22,12 @@ export default function DonateSol({ setpreview }) {
         description: "Please enter a valid amount",
       });
     }
+    const tx = await makeDonation(
+      wallet?.publicKey,
+      grantPDA,
+      new BN(donation / LAMPORTS_PER_SOL)
+    );
+    const sig = await wallet.sendTransaction(tx, connection);
   };
 
   return (

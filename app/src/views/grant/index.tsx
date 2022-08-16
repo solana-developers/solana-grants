@@ -5,10 +5,12 @@ import DonateSol from "../../components/DonateSol";
 import Markdown from "marked-react";
 import { Path } from "progressbar.js";
 import CountUp from "react-countup";
+import { PublicKey } from "@solana/web3.js";
 
 export interface Props {
   // *** = should come from the db
   grantNum: number; // anchor
+  grantPDA: PublicKey;
   title: string; // ***
   author: {
     name: string; // anchor or ***
@@ -138,7 +140,9 @@ export const GrantView: FC<Props> = (props) => {
           </svg>
           Donate
         </a>
-        {preview && <DonateSol setpreview={setPreview} />}
+        {preview && (
+          <DonateSol setpreview={setPreview} grantPDA={props.grantPDA} />
+        )}
       </div>
       <main role="main" className="sm:w-2/3 flex-grow sm:pt-4 md:px-6">
         <article className="prose prose-sm md:prose-base max-w-none lg:pr-16 mx-auto">

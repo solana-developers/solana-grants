@@ -1,14 +1,20 @@
+import { Keypair } from "@solana/web3.js";
 import { loremIpsum } from "lorem-ipsum";
-import type { GetStaticPaths, GetStaticProps, InferGetStaticPropsType, NextPage } from "next";
+import type {
+  GetStaticPaths,
+  GetStaticProps,
+  InferGetStaticPropsType,
+  NextPage,
+} from "next";
 import Head from "next/head";
 import { GrantView, Props as GrantViewProps } from "views/grant";
 
-const GrantPage: NextPage<{grantViewProps: GrantViewProps}> = (props) => {
+const GrantPage: NextPage<{ grantViewProps: GrantViewProps }> = (props) => {
   return (
     <div>
       <Head>
         <title>{props.grantViewProps.title}</title>
-        <meta name='description' content='Grant details' />
+        <meta name="description" content="Grant details" />
       </Head>
       <GrantView {...props.grantViewProps} />
     </div>
@@ -16,19 +22,19 @@ const GrantPage: NextPage<{grantViewProps: GrantViewProps}> = (props) => {
 };
 
 export const getStaticPaths: GetStaticPaths = async () => {
-// TODO: fetch them from the API
+  // TODO: fetch them from the API
   const grants = [
     {
       id: 1,
     },
   ];
-  
+
   const paths = grants.map((grant) => ({
     params: { id: grant.id.toString() },
   }));
 
   return { paths, fallback: false };
-}
+};
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
   // TODO: fetch from the API
@@ -37,11 +43,13 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   // const grant = await res.json()
   const grantViewProps: GrantViewProps = {
     grantNum: 1,
+    grantPDA: Keypair.generate().publicKey,
     title: "Miner Project",
     author: {
       name: "Miners Collective",
       ghUser: "miners-collective",
-      ghAvatar: "https://avatars.githubusercontent.com/u/62079184?s=400&u=9939b9ad01eff085a4cd473cc27afff5662a247e&v=4",
+      ghAvatar:
+        "https://avatars.githubusercontent.com/u/62079184?s=400&u=9939b9ad01eff085a4cd473cc27afff5662a247e&v=4",
       walletAddress: "bvzr23a5sd1315s13d5f13c5sa1sd5fasfsa651scxz",
     },
     about: loremIpsum({ count: 30, units: "words" }),
@@ -75,7 +83,7 @@ ${loremIpsum({ count: 50, units: "words" })}`,
   };
 
   // Pass grant data to the page via props
-  return { props: { grantViewProps } }
-}
+  return { props: { grantViewProps } };
+};
 
 export default GrantPage;
