@@ -188,12 +188,12 @@ export const ExplorerView: FC = ({ }) => {
           ))}
         </div>
       </div>
-      <div className="flex justify-center mb-4">
+      <div className="flex justify-center mb-10">
         {loadingView == -1 ? (
           <div className="my-10">
             {projects.length == 0
               ? <div className="text-xl font-bold">No grants available</div>
-              : <div className="text-xl font-bold">That{"\&apos"}s all folks</div>
+              : <div className="text-xl font-bold">That{"'"}s all folks</div>
             }
           </div>
         ) : (
