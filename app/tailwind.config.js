@@ -33,6 +33,7 @@ module.exports = {
         "solana-purple": "#9945FF",
         "safety-orange": "#FF6F00",
         thistle: "#E1BEE7",
+        'blue-magenta': '#2514ED',      /* Create grant flow primary color */
       },
     },
   },
@@ -79,10 +80,10 @@ module.exports = {
           "base-content":
             "#f9fafb" /* Foreground content color to use on base color */,
 
-          info: "#2094f3" /* Info */,
-          success: "#009485" /* Success */,
-          warning: "#ff9900" /* Warning */,
-          error: "#ff5724" /* Error */,
+          'info': '#2094f3',              /* Info */
+          'success': '#009485',           /* Success */
+          'warning': '#ff9900',           /* Warning */
+          'error': '#ff5724',             /* Error */
         },
       },
       // backup themes:
