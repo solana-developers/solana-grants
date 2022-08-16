@@ -1,5 +1,4 @@
-import getProvider from 'instructions/api/getProvider';
-import { FC ,useState } from 'react';
+import { FC } from 'react';
 import { useRouter } from "next/router";
 import GrantStats from "../../components/grant_stats";
 import {useWallet} from "@solana/wallet-adapter-react";
@@ -20,9 +19,6 @@ export const LandingPageView: FC = ({ }) => {
       scroller.scrollBy({ left: -itemWidth, top: 0, behavior: "smooth" });
     }
   };
-
-  const wallet = useWallet();
-  const provider = getProvider(wallet)
 
   return (
       <div>
@@ -67,7 +63,7 @@ export const LandingPageView: FC = ({ }) => {
                   <img src="/images/man-climbs-blockchain-tree.png" className='h-full' />
                 </div>
               </div>
-              <GrantStats provider={provider}/>
+              <GrantStats />
             </div>
             <button className="bg-purple-700 hover:bg-purple-900 pt-1 pb-2 px-3 rounded-md text-lg" onClick={() => slide({ forward: true })}>❯</button>
           </div>

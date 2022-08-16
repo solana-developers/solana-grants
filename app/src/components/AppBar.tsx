@@ -70,6 +70,14 @@ export const AppBar: FC = props => {
               </button>
           </div>
 
+          <div className="navbar-end hidden lg:flex">
+              <div className='mr-4'>
+                  <ProfileMenu/>
+              </div>
+          </div>
+          <div className="lg:hidden">
+            <ProfileMenu/>
+          </div>
 
           {isOpen && (
             <div className="lg:hidden bg-black">

@@ -3,10 +3,6 @@ import {Provider} from "@project-serum/anchor";
 import CountUp from 'react-countup';
 import VisibilitySensor from 'react-visibility-sensor';
 
-type GrantStatsProps = {
-    provider: Provider
-}
-
 let grantStats = [
     {
         id: '1',
@@ -27,7 +23,7 @@ let grantStats = [
     }
 ];
 
-const GrantStats = (grantStatsProps: GrantStatsProps) => {
+const GrantStats = () => {
 
     return (
         <>
