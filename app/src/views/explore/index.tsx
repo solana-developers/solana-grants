@@ -1,17 +1,11 @@
 import { FC, useEffect, useState } from "react";
 import personImage from "../../../public/images/person-opens-the-safe-with-the-money.png";
-import { ExplorerCard, ExplorerCardProps } from "../../components/ExplorerCard";
-import { useRouter } from "next/router";
+import { ExploreCard, ExploreCardProps } from "../../components/ExploreCard";
+import CreateGrant from "../../pages/create-grant";
 
-export const ExplorerView: FC = ({ }) => {
-  const [projects, setProjects] = useState<ExplorerCardProps[]>([]);
-
-  const router = useRouter();
-
-  const navigateToCreateGrantPage = () => {
-    router.push("/create-grant");
-  }
-
+export const ExploreView: FC = ({ }) => {
+  const [projects, setProjects] = useState<ExploreCardProps[]>([]);
+  const [preview, setpreview] = useState(false);
   useEffect(() => {
     // TODO: fetch projects from the API
     let exampleProject = {
@@ -22,7 +16,7 @@ export const ExplorerView: FC = ({ }) => {
       authorLink: "https://minter.sol",
       summary:
         "Make minting process easier with this framework and then do a lot of subsequent lines until we reach more than 3 lines to test for line clamping",
-      projectLink: "https://solanagrants.com/minter-project",
+      projectLink: "/grant/1",
       amtRaised: 3012.892,
       numContributors: 76,
     };
@@ -39,36 +33,37 @@ export const ExplorerView: FC = ({ }) => {
 
   return (
     <>
-      <div className='md:hero mx-auto p-4'>
-        <div className='hero-content flex-col lg:flex-row gap-20 mb-40'>
+      <div className='p-4 mx-auto md:hero'>
+        <div className='flex-col gap-20 mb-40 hero-content lg:flex-row'>
           <div className='flex flex-col lg:items-start'>
-            <h1 className='text-center lg:text-left text-5xl mt-20 font-bold text-white bg-clip-text'>
+            <h1 className='mt-20 text-5xl font-bold text-center text-white lg:text-left bg-clip-text'>
               Fund Public Goods
               <br />
               Help grow Solana!{" "}
             </h1>
-            <h4 className='md:w-full text-center lg:text-left text-xl text-white my-5'>
+            <h4 className='my-5 text-xl text-center text-white md:w-full lg:text-left'>
               <p>
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
                 <br /> eiusmod tempor incididunt ut labore et dolore magna
                 aliqua.
               </p>
             </h4>
-            <div className='text-center pt-5'>
-              <button className="bg-transparent hover:bg-slate-500 py-2 px-6 text-fuchsia-300 border border-fuchsia-300 text-sm rounded-full btn"  onClick={navigateToCreateGrantPage}>
+            <div className='pt-5 text-center'>
+              <a href="#create-grant" className="px-6 py-2 text-sm bg-transparent border rounded-full hover:bg-slate-500 text-fuchsia-300 border-fuchsia-300 btn"  onClick={()=>{ setpreview(true) }}>
                 CREATE A GRANT
-              </button>
+              </a>
+              { preview && <CreateGrant setpreview={setpreview} />}
             </div>
           </div>
-          <div className='pt-10 hidden lg:block'>
+          <div className='hidden pt-10 lg:block'>
             <img src={personImage.src} width='420px' />
           </div>
         </div>
       </div>
-      <div className='mx-auto px-2 lg:container'>
+      <div className='px-2 mx-auto lg:container'>
         <div className='flex flex-wrap justify-center gap-8'>
-          {projects.map((props) => (
-            <ExplorerCard {...props} />
+          {projects.map((props, idx) => (
+            <ExploreCard key={idx} {...props} />
           ))}
         </div>
       </div>
