@@ -4,6 +4,8 @@ import {marked} from 'marked';
 
 type InputProps = {
     hide?: boolean;
+    value: string;
+    handleChange: (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
 }
 type InputState = {
     value: string
@@ -14,16 +16,6 @@ export class Input extends React.Component<InputProps, InputState> {
 
     constructor(props) {
         super(props);
-        this.state = {
-            value: '## Inspiration\n\n'
-        };
-        this.handleChange = this.handleChange.bind(this);
-    }
-
-    handleChange(e) {
-        this.setState({
-            value: e.target.value
-        });
     }
 
     render() {
@@ -34,9 +26,10 @@ export class Input extends React.Component<InputProps, InputState> {
                     <div className={`col-md-6 col-xs-12 ${this.props.hide ? 'hidden' : ''}`}>
                         <textarea rows={10}
                                   className="p-1 px-2 form-control appearance-none outline-none w-full "
-                                  value={this.state.value} onChange={this.handleChange}/>
+                                  name="description"
+                                  value={this.props.value} onChange={this.props.handleChange}/>
                     </div>
-                    <Previewer value={this.state.value} hide={this.props.hide}/>
+                    <Previewer value={this.props.value} hide={this.props.hide}/>
                 </div>
             </div>
         );

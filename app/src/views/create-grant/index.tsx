@@ -10,6 +10,7 @@ import TransactionSeries from '../../components/TransactionSeries';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/router'
 import { toastError, toastSuccess } from '../../components/Toast';
+import { Input } from "../../components/markdownConvert";
 
 export const GrantCreationView: FC = ({ }) => {
   const [active, setactive] = useState(1);
@@ -17,12 +18,53 @@ export const GrantCreationView: FC = ({ }) => {
     title: "",
     imageLink: "",
     about: "",
-    description: "",
+    description: "## Inspiration\n\n",
     projectGithubLink: "",
     dueDate: "",
     targetAmount: "",
     projectWebsite: ""
   });
+
+  enum DescriptionTab {
+    Write = "Write",
+    Preview = "Preview",
+  }
+
+  const [hideTextArea, setHideTextArea] = useState(false);
+
+  const tabColors = {
+    selectedTabColor: "#2514ED",
+    selectedTabBgColor: "#e5e7eb",
+    deselectedTabColor: "#9ca3af",
+    deselectedTabBgColor: "#f9fafb",
+  };
+
+  const [descriptionTab, setDescriptionTab] = useState({
+    writeTabColor: tabColors.selectedTabColor,
+    writeTabBgColor: tabColors.selectedTabBgColor,
+    previewTabColor: tabColors.deselectedTabColor,
+    previewTabBgColor: tabColors.deselectedTabBgColor,
+  });
+
+  const selectTab = (descriptionTab: DescriptionTab) => {
+    if (descriptionTab === DescriptionTab.Write) {
+      setDescriptionTab({
+        writeTabColor: tabColors.selectedTabColor,
+        writeTabBgColor: tabColors.selectedTabBgColor,
+        previewTabColor: tabColors.deselectedTabColor,
+        previewTabBgColor: tabColors.deselectedTabBgColor,
+      });
+      setHideTextArea(false);
+    } else {
+      setDescriptionTab({
+        writeTabColor: tabColors.deselectedTabColor,
+        writeTabBgColor: tabColors.deselectedTabBgColor,
+        previewTabColor: tabColors.selectedTabColor,
+        previewTabBgColor: tabColors.selectedTabBgColor,
+      });
+      setHideTextArea(true);
+    }
+  };
 
   const [transactionsList, setTransactionsList] = useState<Array<TransactionDetail>>([
     {
@@ -43,7 +85,7 @@ export const GrantCreationView: FC = ({ }) => {
   const githubAuthSession = useSession();
   const router = useRouter();
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = event.target;
     setGrant({ ...grant, [name]: value });
   }
@@ -190,9 +232,42 @@ export const GrantCreationView: FC = ({ }) => {
               </div>
               <div className="flex flex-col md:flex-row">
                 <div className="w-full mx-2 flex-1 svelte-1l8159u">
-                  <div className="font-bold h-6 mt-3 text-white text-s leading-8 uppercase"> Description*</div>
-                  <div className="bg-white my-2 p-1 flex border border-gray-200 rounded svelte-1l8159u">
-                    <input placeholder="Grant Description.." name="description" className="p-1 px-2 appearance-none outline-none w-full text-gray-800" onChange={handleChange} /> </div>
+                  <div className="font-bold h-6 mt-3 text-black text-s leading-8 uppercase">
+                    {" "}
+                    Description*
+                  </div>
+                  <div className="bg-gray-50 border border-b-0 border-gray-300 top-0 mt-2 left-0 right-0 block rounded-t-md">
+                    <button
+                      type="button"
+                      style={{
+                        color: descriptionTab.writeTabColor,
+                        backgroundColor: descriptionTab.writeTabBgColor,
+                      }}
+                      className={`py-2 px-4 inline-block font-semibold rounded`}
+                      onClick={() => {
+                        selectTab(DescriptionTab.Write);
+                      }}
+                    >
+                      {" "}
+                      Write
+                    </button>
+                    <button
+                      type="button"
+                      style={{
+                        color: descriptionTab.previewTabColor,
+                        backgroundColor: descriptionTab.previewTabBgColor,
+                      }}
+                      className={`py-2 px-4 inline-block font-semibold rounded`}
+                      onClick={() => {
+                        selectTab(DescriptionTab.Preview);
+                      }}
+                    >
+                      Preview
+                    </button>
+                  </div>
+                  <div className="bg-white p-1 flex border border-gray-200 svelte-1l8159u rounded-b-md text-black">
+                    <Input hide={hideTextArea} value={grant.description} handleChange={handleChange} />
+                  </div>
                 </div>
               </div>
               <div className="flex flex-col md:flex-row">
