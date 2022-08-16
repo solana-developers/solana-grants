@@ -20,7 +20,7 @@ export const AppBar: FC = props => {
         
         <div className="navbar-center hidden lg:flex">
           <ul className="menu menu-horizontal p-0">
-            <li><Link href='/explorer'><a>Explore</a></Link></li>
+            <li><Link href='/explore'><a>Explore</a></Link></li>
             <li><Link href='/create-grant'>Create Grant</Link></li>
           </ul>
         </div>
