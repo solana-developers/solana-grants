@@ -24,6 +24,7 @@ const App: FC<AppProps> = ({Component, pageProps}) => {
               </div>
             </div>
             <div className='z-10'>
+              {/* @ts-ignore */}
               <Component {...pageProps} />
               <Footer/>
             </div>
