@@ -52,7 +52,7 @@ export const ExploreView: FC = ({ }) => {
               <a href="#create-grant" className="px-6 py-2 text-sm bg-transparent border rounded-full hover:bg-slate-500 text-fuchsia-300 border-fuchsia-300 btn"  onClick={()=>{ setpreview(true) }}>
                 CREATE A GRANT
               </a>
-              { preview && <CreateGrant setpreview={setpreview} />}
+              { preview && <CreateGrant />}
             </div>
           </div>
           <div className='hidden pt-10 lg:block'>
