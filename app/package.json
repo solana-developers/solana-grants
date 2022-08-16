@@ -39,6 +39,7 @@
     "react-icons": "^4.4.0",
     "react-router-dom": "^6.3.0",
     "react-toastify": "^9.0.8",
+    "react-visibility-sensor": "^5.1.1",
     "zustand": "^3.6.9"
   },
   "devDependencies": {
