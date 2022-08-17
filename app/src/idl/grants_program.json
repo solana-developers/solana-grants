@@ -17,12 +17,12 @@
           "isSigner": true
         },
         {
-          "name": "grant",
+          "name": "admin",
           "isMut": true,
-          "isSigner": false
+          "isSigner": true
         },
         {
-          "name": "matchingDonation",
+          "name": "grant",
           "isMut": true,
           "isSigner": false
         },
@@ -79,16 +79,6 @@
           "isSigner": false
         },
         {
-          "name": "matchingDonation",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "programInfo",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
           "name": "systemProgram",
           "isMut": false,
           "isSigner": false
@@ -116,16 +106,6 @@
           "name": "payer",
           "isMut": true,
           "isSigner": true
-        },
-        {
-          "name": "matchingDonation",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "programInfo",
-          "isMut": true,
-          "isSigner": false
         },
         {
           "name": "grant",
@@ -194,10 +174,7 @@
         {
           "name": "donation",
           "isMut": true,
-          "isSigner": false,
-          "docs": [
-            "or a matching donation, which have different seed formats."
-          ]
+          "isSigner": false
         },
         {
           "name": "payer",
@@ -215,7 +192,7 @@
     {
       "name": "initializeProgramInfo",
       "docs": [
-        "Initializes the program info data, which sets the admin."
+        "Initializes the program info data, which determines the admin."
       ],
       "accounts": [
         {
@@ -376,9 +353,9 @@
             "type": "i64"
           },
           {
-            "name": "fundingState",
+            "name": "state",
             "type": {
-              "defined": "FundingState"
+              "defined": "GrantState"
             }
           },
           {
@@ -475,7 +452,7 @@
       }
     },
     {
-      "name": "FundingState",
+      "name": "GrantState",
       "type": {
         "kind": "enum",
         "variants": [
@@ -497,16 +474,6 @@
       "code": 6000,
       "name": "CancelledDonation",
       "msg": "This donation has already refunded the payer"
-    },
-    {
-      "code": 6001,
-      "name": "NotMatchingEligible",
-      "msg": "The grant related to this donation is not eligible for matching"
-    },
-    {
-      "code": 6002,
-      "name": "InsufficientFunds",
-      "msg": "The matching account does not have to sufficient funds to match the donation"
     }
   ],
   "metadata": {
