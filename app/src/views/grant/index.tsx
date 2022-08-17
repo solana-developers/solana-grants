@@ -12,7 +12,7 @@ import { PublicKey } from "@solana/web3.js";
 export interface Props {
   // *** = should come from the db
   grantNum: number; // anchor
-  grantPDA: PublicKey;
+  grantPDA: string;
   title: string; // ***
   author: {
     name: string; // from ghApi
@@ -52,7 +52,7 @@ export const GrantView: FC<Props> = (props) => {
     const percentage = props.amountRaised / props.amountGoal;
     bar.animate(percentage);
   };
-  // console.log(props);
+  console.log(props);
 
   const oneDay = 24 * 60 * 60 * 1000; // hours*minutes*seconds*milliseconds
   const daysToRelease = Math.round(
@@ -83,10 +83,10 @@ export const GrantView: FC<Props> = (props) => {
         <h1 className=''>{props.title}</h1>
         <p className='mx-auto md:text-xl'>{props.about}</p>
       </div>
-      <div className='relative pb-2/3 w-full md:pb-1/3 md:w-2/3'>
-        <object className='absolute h-full object-cover' data={props.image} type="image/png">
+      <div className='relative w-full pb-2/3 md:pb-1/3 md:w-2/3'>
+        <object className='absolute object-cover h-full' data={props.image} type="image/png">
           <img
-            className='h-full object-cover'
+            className='object-cover h-full'
             src={"/images/default-grant-image.png"}
             alt='grant background'
           />
@@ -149,14 +149,14 @@ export const GrantView: FC<Props> = (props) => {
         </div>
         <a
           href="#donate"
-          className="btn btn-success w-full mx-auto gap-2 m-2"
+          className="w-full gap-2 m-2 mx-auto btn btn-success"
           onClick={() => {
             setPreview(true);
           }}
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            className="h-6 w-6"
+            className="w-6 h-6"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
@@ -171,7 +171,7 @@ export const GrantView: FC<Props> = (props) => {
           Donate
         </a>
         {preview && (
-          <DonateSol setpreview={setPreview} grantPDA={props.grantPDA} />
+          <DonateSol setpreview={setPreview} grantPDA={new PublicKey(props.grantPDA)} />
         )}
         {!props.allowDonation && <p className="text-sm">{props.reasonForNotAllowingDonation}</p>}
       </div>
@@ -211,10 +211,10 @@ export const GrantView: FC<Props> = (props) => {
             </div>
             <p className='text-sm text-slate-400'>Created by:</p>
             {loadingCreatorDetailsFromGithub ? (
-              <div className='w-7 h-7 rounded-full animate-spin loading-spinner-gradients'></div>
+              <div className='rounded-full w-7 h-7 animate-spin loading-spinner-gradients'></div>
             ) : (
               <ul className='space-y-3'>
-                <li className='grid  grid-cols-6 items-center gap-3'>
+                <li className='grid items-center grid-cols-6 gap-3'>
                   {props.author.name ? (
                     <>
                       <img
@@ -223,7 +223,7 @@ export const GrantView: FC<Props> = (props) => {
                         alt='github avatar'
                       />
                       <a
-                        className='link link-secondary link-hover col-span-5 '
+                        className='col-span-5 link link-secondary link-hover '
                         href={"https://github.com/" + props.author.ghUser}
                       >
                         {props.author.name}
@@ -234,7 +234,7 @@ export const GrantView: FC<Props> = (props) => {
                   )}
                 </li>
 
-                <li className='grid grid-cols-6 items-center gap-3'>
+                <li className='grid items-center grid-cols-6 gap-3'>
                   <CopyToClipboard
                     className='col-span-3 btn btn-ghost btn-sm'
                     text={props.author.walletAddress}

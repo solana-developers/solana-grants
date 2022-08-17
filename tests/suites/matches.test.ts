@@ -1,5 +1,4 @@
 import * as anchor from "@project-serum/anchor";
-import * as borsh from "borsh";
 import { AnchorError, BN, Program, Provider } from "@project-serum/anchor";
 import { encode } from "@project-serum/anchor/dist/cjs/utils/bytes/utf8";
 import {
@@ -93,7 +92,7 @@ export default function () {
       const lamports = new BN(2.1 * LAMPORTS_PER_SOL);
 
       // Act
-      let transaction = await makeDonation(donor.publicKey, grantPDA, lamports);
+      let transaction = await makeDonation(program, donor.publicKey, grantPDA, lamports);
       try {
         await provider.sendAndConfirm(transaction, [donor]);
         // Assert
@@ -134,7 +133,7 @@ export default function () {
       const lamports = new BN(2.1 * LAMPORTS_PER_SOL);
 
       // Act
-      let transaction = await makeDonation(donor.publicKey, grantPDA, lamports);
+      let transaction = await makeDonation(program, donor.publicKey, grantPDA, lamports);
       const tx = await provider.sendAndConfirm(transaction, [donor]);
 
       // Assert
@@ -159,6 +158,7 @@ export default function () {
       const lamports = new BN(2.1 * LAMPORTS_PER_SOL);
 
       let transaction1 = await makeDonation(
+        program, 
         donor.publicKey,
         grantPDA,
         lamports
@@ -166,7 +166,7 @@ export default function () {
       await provider.sendAndConfirm(transaction1, [donor]);
 
       // Act
-      let transaction2 = await makeDonation(
+      let transaction2 = await makeDonation(program, 
         donor.publicKey,
         grantPDA,
         lamports
@@ -200,7 +200,7 @@ export default function () {
       );
 
       // Act
-      let transaction = await makeDonation(donor.publicKey, grantPDA, lamports);
+      let transaction = await makeDonation(program, donor.publicKey, grantPDA, lamports);
       try {
         await provider.sendAndConfirm(transaction, [donor]);
         // Assert

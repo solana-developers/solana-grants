@@ -3,7 +3,7 @@ import {PublicKey} from "@solana/web3.js";
 export interface GrantModel {
     author?: PublicKey,
     escrowCount?: number,
-    info?: String,
+    info?: string,
     lamportsRaised?: number,
     totalDonors?: number,
     targetLamports?: number,

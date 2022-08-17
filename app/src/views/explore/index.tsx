@@ -85,9 +85,9 @@ export const ExplorerView: FC = ({ }) => {
             return false;
           }
   
-          if (!grant.matchingEligible) {
-            return false;
-          }
+          // if (!grant.matchingEligible) {
+          //   return false;
+          // }
   
           if (grant.fundingState?.cancelled) {
             return false;
@@ -155,33 +155,33 @@ export const ExplorerView: FC = ({ }) => {
 
   return (
     <>
-      <div className='md:hero mx-auto p-4'>
-        <div className='hero-content flex-col lg:flex-row gap-20 mb-40'>
+      <div className='p-4 mx-auto md:hero'>
+        <div className='flex-col gap-20 mb-40 hero-content lg:flex-row'>
           <div className='flex flex-col lg:items-start'>
-            <h1 className='text-center lg:text-left text-5xl mt-20 font-bold text-white bg-clip-text'>
+            <h1 className='mt-20 text-5xl font-bold text-center text-white lg:text-left bg-clip-text'>
               Fund Public Goods
               <br />
               Help grow Solana!{" "}
             </h1>
-            <h4 className='md:w-full text-center lg:text-left text-xl text-white my-5'>
+            <h4 className='my-5 text-xl text-center text-white md:w-full lg:text-left'>
               <p>
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
                 <br /> eiusmod tempor incididunt ut labore et dolore magna
                 aliqua.
               </p>
             </h4>
-            <div className='text-center pt-5'>
-              <button className="bg-transparent hover:bg-slate-500 py-2 px-6 text-fuchsia-300 border border-fuchsia-300 text-sm rounded-full btn"  onClick={navigateToCreateGrantPage}>
+            <div className='pt-5 text-center'>
+              <button className="px-6 py-2 text-sm bg-transparent border rounded-full hover:bg-slate-500 text-fuchsia-300 border-fuchsia-300 btn"  onClick={navigateToCreateGrantPage}>
                 CREATE A GRANT
               </button>
             </div>
           </div>
-          <div className='pt-10 hidden lg:block'>
+          <div className='hidden pt-10 lg:block'>
             <img src={personImage.src} width='420px' />
           </div>
         </div>
       </div>
-      <div className='mx-auto px-2 lg:container'>
+      <div className='px-2 mx-auto lg:container'>
         <div className='flex flex-wrap justify-center gap-8'>
           {projects.map((props, idx) => (
             <ExploreCard {...props} key={idx} idx={idx} />
@@ -199,7 +199,7 @@ export const ExplorerView: FC = ({ }) => {
         ) : (
           <>
             {loadingView == 0 ? (
-              <button className="bg-cyan-300 hover:bg-blue-700 text-black hover:text-white font-bold py-2 px-4 rounded" onClick={fetchGrants}>
+              <button className="px-4 py-2 font-bold text-black rounded bg-cyan-300 hover:bg-blue-700 hover:text-white" onClick={fetchGrants}>
                 Load More
               </button>
             ) : (

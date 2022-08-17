@@ -1,7 +1,7 @@
 import { AnchorProvider } from "@project-serum/anchor";
 import { AnchorWallet } from "@solana/wallet-adapter-react";
 import { Connection } from "@solana/web3.js";
-import { toastError } from "components/Toast";
+import { toastError } from "../../components/Toast";
 import { DEVNET_API, processed } from "../../constants";
 
 /**

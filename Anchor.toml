@@ -2,13 +2,16 @@
 seeds = false
 
 [programs.localnet]
-grants_program = "4rYKkNGRQSe2hJEQGgmiEAcg4KQzP8h8QfwTmmgChAmZ"
+grants_program = "4w5Rs87CqkVLYBEY2C7oVY8so1ECPNn7KWRbEdrfek2t"
+
+[programs.devnet]
+grants_program = "4w5Rs87CqkVLYBEY2C7oVY8so1ECPNn7KWRbEdrfek2t"
 
 [registry]
 url = "https://anchor.projectserum.com"
 
 [provider]
-cluster = "localnet"
+cluster = "devnet"
 wallet = "/home/luis/.config/solana/id.json"
 
 [scripts]

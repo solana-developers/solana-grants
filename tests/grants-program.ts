@@ -11,7 +11,7 @@ import {
 import { expect } from "chai";
 import { describe } from "mocha";
 import { toBytesInt32 } from "../app/src/utils/conversion";
-import { GrantsProgram } from "../target/types/grants_program";
+import { GrantsProgram } from "../app/src/idl/grants_program";
 import donations from "./suites/donations.test";
 import grants from "./suites/grants.test";
 import matches from "./suites/matches.test";

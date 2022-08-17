@@ -8,7 +8,7 @@ import {
   SendTransactionError,
 } from "@solana/web3.js";
 import { assert, expect } from "chai";
-import { GrantsProgram } from "../../target/types/grants_program";
+import { GrantsProgram } from "../../app/src/idl/grants_program";
 import { makeDonation, cancelGrant } from "../../app/src/transactions";
 import { toBytesInt32 } from "../../app/src/utils/conversion";
 import { matchedDonation } from "../grants-program";
@@ -546,7 +546,7 @@ export default function donations() {
       const lamports = new BN(2.1 * LAMPORTS_PER_SOL);
 
       // Act
-      let transaction = await makeDonation(donor.publicKey, grantPDA, lamports);
+      let transaction = await makeDonation(program, donor.publicKey, grantPDA, lamports);
       const _txSignature = await provider.sendAndConfirm(transaction, [donor]);
 
       // Assert
@@ -566,12 +566,12 @@ export default function donations() {
       const donor = await generateFundedKeypair();
       const lamports = new BN(2.1 * LAMPORTS_PER_SOL);
 
-      let transaction = await makeDonation(donor.publicKey, grantPDA, lamports);
+      let transaction = await makeDonation(program, donor.publicKey, grantPDA, lamports);
       let _txSignature = await provider.sendAndConfirm(transaction, [donor]);
 
       // Act
       // make second donation
-      transaction = await makeDonation(donor.publicKey, grantPDA, lamports);
+      transaction = await makeDonation(program, donor.publicKey, grantPDA, lamports);
       _txSignature = await provider.sendAndConfirm(transaction, [donor]);
 
       // Assert
@@ -617,7 +617,7 @@ export default function donations() {
       );
 
       // Act
-      let tx = await cancelGrant(grantPDA, admin.publicKey);
+      let tx = await cancelGrant(program, grantPDA, admin.publicKey);
       try {
         await provider.sendAndConfirm(tx, [admin]);
       } catch (e) {

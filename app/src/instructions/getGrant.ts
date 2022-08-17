@@ -1,4 +1,4 @@
-import { Provider } from "@project-serum/anchor";
+import { Program, Provider } from "@project-serum/anchor";
 import getProgram from "./api/getProgram";
 import getGrantPDA from "./pda/getGrantPDA";
 

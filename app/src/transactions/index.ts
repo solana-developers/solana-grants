@@ -5,4 +5,4 @@
 // export const program = anchor.workspace.GrantsProgram as Program<GrantsProgram>;
 
 export { makeDonation } from "./makeDonation";
-// export { cancelGrant, refundDonations } from "./cancelGrant";
+export { cancelGrant, refundDonations } from "./cancelGrant";

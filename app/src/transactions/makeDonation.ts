@@ -2,30 +2,28 @@ import * as anchor from "@project-serum/anchor";
 import { BN, Program } from "@project-serum/anchor";
 import { encode } from "@project-serum/anchor/dist/cjs/utils/bytes/utf8";
 import { PublicKey } from "@solana/web3.js";
-import getProgram from "instructions/api/getProgram";
-import getProvider from "instructions/api/getProvider";
 import { toBytesInt32 } from "../utils/conversion";
-// import { program } from "./index";
-import { AnchorWallet } from "@solana/wallet-adapter-react";
 import { GrantsProgram } from "../idl/grants_program";
 
-let program: Program<GrantsProgram> = undefined;
+// let program: Program<GrantsProgram> = undefined;
 
-export async function makeDonation2(
-  wallet: AnchorWallet,
-  grantPDA: PublicKey,
-  lamports: BN
-) {
-  const provider = getProvider(wallet);
-  program = getProgram(provider) as Program<GrantsProgram>;
-  return makeDonation(wallet.publicKey, grantPDA, lamports);
-}
+// export async function makeDonation2(
+//   wallet: AnchorWallet,
+//   grantPDA: PublicKey,
+//   lamports: BN
+// ) {
+//   const provider = getProvider(wallet);
+//   program = getProgram(provider) as Program<GrantsProgram>;
+//   return makeDonation(wallet.publicKey, grantPDA, lamports);
+// }
 
 export async function makeDonation(
+  program: Program<GrantsProgram>,
   donor: PublicKey,
   grantPDA: PublicKey,
   lamports: BN
 ): Promise<anchor.web3.Transaction> {
+  
   // find the donation PDA
   const [donationPDA, _bump0] = await anchor.web3.PublicKey.findProgramAddress(
     [encode("donation"), grantPDA.toBuffer(), donor.toBuffer()],
