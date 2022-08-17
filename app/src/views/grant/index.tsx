@@ -42,6 +42,7 @@ export const GrantView: FC<Props> = (props) => {
   const roundedAmtRaised = Math.round(props.amountRaised);
   const [loadingCreatorDetailsFromGithub, setLoadingCreatorDetailsFromGithub] = useState(true);
   const [copied, setCopied] = useState(false);
+  const [image, setImage] = useState(props.image);
 
   const handleCounterStart = (duration: number) => {
     let bar = new Path("#progress-bar", {
@@ -84,13 +85,14 @@ export const GrantView: FC<Props> = (props) => {
         <p className='mx-auto md:text-xl'>{props.about}</p>
       </div>
       <div className='relative w-full pb-2/3 md:pb-1/3 md:w-2/3'>
-        <object className='absolute object-cover h-full' data={props.image} type="image/png">
-          <img
-            className='object-cover h-full'
-            src={"/images/default-grant-image.png"}
-            alt='grant background'
-          />
-        </object>
+        <img
+          className='absolute object-cover h-full'
+          onError={() => {
+            setImage("/images/default-grant-image.png")
+          }}
+          src={image}
+          alt='grant background'
+        />
       </div>
 
       <div className='mx-auto sm:px-4 w-sm md:w-1/3'>
