@@ -113,7 +113,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
 
   const grantViewProps: GrantViewProps = {
     grantNum: parseInt(params.id as string),
-    grantPDA: grantInfo.data.grantPDA,
+    grantPDA: null,
     title: grant.title,
     author: {
       name: "", // will be populated on frontend
