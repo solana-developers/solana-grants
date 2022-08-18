@@ -91,11 +91,11 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
       "The target amount has already been achieved";
   }
 
-  // if (!grant.isMatchingEligible) {
-  //   allowDonation = false;
-  //   reasonForNotAllowingDonation =
-  //     "This grant is not currently ready to accept donations. Please check again later";
-  // }
+  if (!grant.isMatchingEligible) {
+    allowDonation = false;
+    reasonForNotAllowingDonation =
+      "This grant is not currently ready to accept donations. Please check again later";
+  }
 
   if (grant.fundingState === { cancelled: {} }) {
     allowDonation = false;

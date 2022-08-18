@@ -53,10 +53,10 @@ export const ExplorerView: FC = ({ }) => {
         if (endIndex > programInfo.current.grantsCount - 1) {
           endIndex = programInfo.current.grantsCount - 1;
         }
-        console.log(programInfo.current.grantsCount, totalGrantsFetched.current);
+        // console.log(programInfo.current.grantsCount, totalGrantsFetched.current);
   
         const grants = await getGrants(provider, startIndex, endIndex);
-        console.log(grants);
+        // console.log(grants);
         if (grants.err) {
           setLoadingView(0);
           return notify({ type: 'error', message: 'error', description: 'Something went wrong! please try again later' });
@@ -85,9 +85,9 @@ export const ExplorerView: FC = ({ }) => {
             return false;
           }
   
-          // if (!grant.matchingEligible) {
-          //   return false;
-          // }
+          if (!grant.matchingEligible) {
+            return false;
+          }
   
           if (grant.fundingState?.cancelled) {
             return false;
