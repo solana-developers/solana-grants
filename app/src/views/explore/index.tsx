@@ -4,7 +4,6 @@ import { ExploreCard, ExploreCardProps } from "../../components/ExploreCard";
 import getGrants from "instructions/getGrants";
 import { useWallet } from '@solana/wallet-adapter-react';
 import getProvider from 'instructions/api/getProvider';
-import { notify } from "../../utils/notifications";
 import { BN } from "@project-serum/anchor";
 import getProgram from "../../instructions/api/getProgram";
 import { getProgramInfoPDA } from "../../instructions/pda/getProgramInfoPDA";
@@ -12,6 +11,7 @@ import { PublicKey } from "@solana/web3.js";
 import fetchDataFromArweave from "../../utils/fetchDataFromArweave";
 import fetchGithubUserDataFromUserId from "utils/fetchGithubUserDataFromUserId";
 import { useRouter } from "next/router";
+import { toastError } from "components/Toast";
 
 export const ExplorerView: FC = ({ }) => {
   const [projects, setProjects] = useState<ExploreCardProps[]>([]);
@@ -39,7 +39,8 @@ export const ExplorerView: FC = ({ }) => {
         // console.log(programInfoFetched)
         if (!programInfoFetched) {
           setLoadingView(0);
-          return notify({ type: 'error', message: 'error', description: 'Something went wrong! please try again later' });
+          toastError('Something went wrong! please try again later');
+          return;
         }
         programInfo.current = programInfoFetched;
       }
@@ -59,7 +60,8 @@ export const ExplorerView: FC = ({ }) => {
         // console.log(grants);
         if (grants.err) {
           setLoadingView(0);
-          return notify({ type: 'error', message: 'error', description: 'Something went wrong! please try again later' });
+          toastError('Something went wrong! please try again later');
+          return;
         }
   
         grantsData = grants.data;
@@ -145,7 +147,8 @@ export const ExplorerView: FC = ({ }) => {
     } catch (error) {
       console.log(error);
       setLoadingView(0);
-      return notify({ type: 'error', message: 'error', description: 'Something went wrong! please try again later' });
+      toastError('Something went wrong! please try again later');
+      return;
     }
   }
 
