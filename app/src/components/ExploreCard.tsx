@@ -1,7 +1,9 @@
+import { useState } from "react";
 import { contrastColor } from "contrast-color";
 import { BN } from "@project-serum/anchor";
 import { LAMPORTS_PER_SOL } from "@solana/web3.js";
 import { useRouter } from "next/router";
+import { DEFAULT_GRANT_HEADER_IMAGE } from "../constants";
 
 export interface ExploreCardProps {
   imageLink: string;
@@ -42,6 +44,7 @@ export const ExploreCard = ({
   const roundedAmtRaised = Math.round(lamportsRaised as number / LAMPORTS_PER_SOL);
   const textColor = contrastColor({ bgColor: "yellow", fgLightColor: "text-slate-200", fgDarkColor: "text-slate-800", });
   const router = useRouter();
+  const [image, setImage] = useState(imageLink);
 
   const goToGrantDetailView = () => {
     router.push(`/grant/${idx}`);
@@ -55,7 +58,9 @@ export const ExploreCard = ({
             <div className='absolute flex w-full h-full transition-opacity opacity-0 bg-slate-700 hover:opacity-90'>
               <button className='m-auto btn btn-secondary' onClick={goToGrantDetailView}>Learn More</button>
             </div>
-            <img className='w-full' src={imageLink} alt='Project image' />
+            <img className='w-full' onError={() => {
+              setImage(DEFAULT_GRANT_HEADER_IMAGE)
+            }} src={image} alt='Project image' />
           </figure>
         </a>
         <div

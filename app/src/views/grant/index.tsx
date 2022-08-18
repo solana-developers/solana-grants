@@ -8,6 +8,7 @@ import { CopyToClipboard } from "react-copy-to-clipboard";
 import { RiCheckboxMultipleBlankLine, RiCheckboxMultipleFill } from "react-icons/ri";
 import DonateSol from "../../components/DonateSol";
 import { PublicKey } from "@solana/web3.js";
+import { DEFAULT_GRANT_HEADER_IMAGE } from "../../constants";
 
 export interface Props {
   // *** = should come from the db
@@ -88,7 +89,7 @@ export const GrantView: FC<Props> = (props) => {
         <img
           className='absolute object-cover h-full'
           onError={() => {
-            setImage("/images/default-grant-image.png")
+            setImage(DEFAULT_GRANT_HEADER_IMAGE)
           }}
           src={image}
           alt='grant background'
