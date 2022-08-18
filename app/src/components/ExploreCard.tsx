@@ -49,7 +49,7 @@ export const ExploreCard = ({
 
   return (
     <>
-      <div className='card w-96 bg-base-100 shadow-xl'>
+      <div className='shadow-xl card w-96 bg-base-100'>
         <a href={githubProjectLink}>
           <figure className='relative'>
             <div className='absolute flex w-full h-full transition-opacity opacity-0 bg-slate-700 hover:opacity-90'>
@@ -63,18 +63,18 @@ export const ExploreCard = ({
           style={{ background: "yellow" }}
         >
           <a href={githubProjectLink}>
-            <h2 id='title' className='card-title mb-1 font-mono'>
+            <h2 id='title' className='mb-1 font-mono card-title'>
               {title}
             </h2>
           </a>
-          <p id='author' className='mb-3 font-mono text-xs flex'>
+          <p id='author' className='flex mb-3 font-mono text-xs'>
             By{" "}
             {author ? (
-              <a className='underline underline-offset-4 ml-2' href={authorLink}>
+              <a className='ml-2 underline underline-offset-4' href={authorLink}>
                 {author}
               </a>
             ) : (
-              <div className='w-3 h-3 rounded-full animate-spin loading-spinner-gradients ml-2'></div>
+              <div className='w-3 h-3 ml-2 rounded-full animate-spin loading-spinner-gradients'></div>
             )}
           </p>
           <p id='description' className={'line-clamp-3 text-opacity-90 ' + textColor}>

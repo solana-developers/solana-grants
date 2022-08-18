@@ -77,8 +77,8 @@ export const ExplorerView: FC = ({ }) => {
             return false;
           }
   
-          if (grant.lamportsRaised instanceof BN && grant.targetLamports instanceof BN) {
-            grant.lamportsRaised = grant.lamportsRaised.toNumber();
+          if (grant.targetLamports instanceof BN) {
+            // grant.lamportsRaised = grant.lamportsRaised.toNumber();
             grant.targetLamports = grant.targetLamports.toNumber();
           }
           if (grant.lamportsRaised >= grant.targetLamports) {
@@ -96,7 +96,7 @@ export const ExplorerView: FC = ({ }) => {
           if (grant.author instanceof PublicKey) {
             grant.author = grant.author.toString();
           }
-
+          console.log(grant);
           return true;
         });
   
@@ -117,9 +117,12 @@ export const ExplorerView: FC = ({ }) => {
 
       const currentProjects = [...projects];
 
+      console.log(grantsData)
+      console.log(currentProjects)
       // we setProjects data and render it before creator details are fetched from github to reduce the waiting time of the user
       // since its better to load and display some content for the user early (Lazy rendering), than to load and display all content together but late
-      setProjects([...currentProjects, ...grantsData]);
+      /* @ts-ignore */
+      // setProjects([...currentProjects, ...grantsData]);
 
       if (programInfo.current.grantsCount === totalGrantsFetched.current) {
         setLoadingView(-1);
@@ -141,6 +144,7 @@ export const ExplorerView: FC = ({ }) => {
       }));
 
       // since we have now loaded the creator details from github, we rerender by setting projects again
+      console.log(grantsData)
       setProjects([...currentProjects, ...grantsData]);
     } catch (error) {
       console.log(error);
@@ -184,7 +188,7 @@ export const ExplorerView: FC = ({ }) => {
       <div className='px-2 mx-auto lg:container'>
         <div className='flex flex-wrap justify-center gap-8'>
           {projects.map((props, idx) => (
-            <ExploreCard {...props} key={idx} idx={idx} />
+            <ExploreCard {...props} key={idx} idx={props.idx}/>
           ))}
         </div>
       </div>

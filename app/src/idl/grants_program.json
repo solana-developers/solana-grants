@@ -346,10 +346,6 @@
             "type": "string"
           },
           {
-            "name": "lamportsRaised",
-            "type": "u64"
-          },
-          {
             "name": "totalDonors",
             "type": "u32"
           },
@@ -496,6 +492,6 @@
     }
   ],
   "metadata": {
-    "address": "4w5Rs87CqkVLYBEY2C7oVY8so1ECPNn7KWRbEdrfek2t"
+    "address": "8Gz5WWV7T2w8gBBVa4bcsmXqGETjhoBwKN5gLhgXkAQf"
   }
 }

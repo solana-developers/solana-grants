@@ -108,8 +108,8 @@ pub fn create_donation(ctx: Context<CreateDonation>, lamports: u64) -> Result<()
 
     // update grant data
     ctx.accounts
-        .grant
-        .update_with_new_donation(&donation);
+        .grant.total_donors += 1;
+
 
     // make matching donation
     let matching = donation.matching_amount();

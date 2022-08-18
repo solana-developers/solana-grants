@@ -1,7 +1,7 @@
 import * as anchor from "@project-serum/anchor";
 import {AnchorError, BN, Program} from "@project-serum/anchor";
 import {GrantsProgram} from "../../target/types/grants_program";
-import {Transaction, SystemProgram, LAMPORTS_PER_SOL, PublicKey, Keypair, SendTransactionError} from "@solana/web3.js";
+import {LAMPORTS_PER_SOL, PublicKey, Keypair} from "@solana/web3.js";
 import {encode} from "@project-serum/anchor/dist/cjs/utils/bytes/utf8";
 import {assert, expect} from "chai";
 import { toBytesInt32 } from "../../app/src/utils/conversion";
@@ -30,13 +30,11 @@ export default function suite() {
     beforeEach(async () => {
         const programInfo = await program.account.programInfo.fetch(programInfoPDA)
 
-        const [newGrantPDA, grant_bump] = await anchor.web3.PublicKey.findProgramAddress(
-            [
-                encode("grant"),
-                toBytesInt32(programInfo.grantsCount),
-            ],
+        const [newGrantPDA, _bump] =
+          await anchor.web3.PublicKey.findProgramAddress(
+            [encode("grant"), toBytesInt32(programInfo.grantsCount)],
             program.programId
-        );
+          );
 
         grantPDA = newGrantPDA;
 
@@ -79,7 +77,6 @@ export default function suite() {
         // TODO: Check for due date
         // expect(grant.dueDate).to.eql(dueDate);
         expect(grant.author).to.eql(author.publicKey);
-        expect(grant.lamportsRaised.toNumber()).to.eql(0);
         expect(grant.totalDonors).to.eql(0);
         assert(grant.targetLamports.eq(targetLamports));
         expect(grant.fundingState).to.eql({ active: {} });

@@ -39,7 +39,7 @@ export interface Props {
 export const GrantView: FC<Props> = (props) => {
   const [preview, setPreview] = useState(false);
   const animationDuration = 3; // secs
-  const roundedAmtRaised = Math.round(props.amountRaised);
+  const [raisedSol, setRaisedSol] = useState(props.amountRaised)
   const [loadingCreatorDetailsFromGithub, setLoadingCreatorDetailsFromGithub] = useState(true);
   const [copied, setCopied] = useState(false);
 
@@ -49,7 +49,7 @@ export const GrantView: FC<Props> = (props) => {
       duration,
     });
     bar.set(0);
-    const percentage = props.amountRaised / props.amountGoal;
+    const percentage = raisedSol / props.amountGoal;
     bar.animate(percentage);
   };
   console.log(props);
@@ -112,7 +112,7 @@ export const GrantView: FC<Props> = (props) => {
             <div className='w-full'>
               <p id='amount-raised' className='text-5xl'>
                 <CountUp
-                  end={roundedAmtRaised}
+                  end={raisedSol}
                   duration={animationDuration}
                   separator=","
                   useEasing={true}
@@ -171,7 +171,7 @@ export const GrantView: FC<Props> = (props) => {
           Donate
         </a>
         {preview && (
-          <DonateSol setpreview={setPreview} grantPDA={new PublicKey(props.grantPDA)} />
+          <DonateSol setpreview={setPreview} grantPDA={new PublicKey(props.grantPDA) } setRaisedSol={setRaisedSol} />
         )}
         {!props.allowDonation && <p className="text-sm">{props.reasonForNotAllowingDonation}</p>}
       </div>
@@ -242,7 +242,7 @@ export const GrantView: FC<Props> = (props) => {
                   >
                     <div>
 
-                    <span className='w-3/4 lowercase truncate '>
+                    <span className='w-3/4 truncate '>
                       {props.author.walletAddress}
                     </span>
                     {copied 

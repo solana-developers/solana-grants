@@ -1,4 +1,4 @@
-use anchor_lang::prelude::*;
+use anchor_lang::{prelude::*, solana_program::sysvar::rent};
 
 use crate::{state::{ProgramInfo, Grant, FundingState}, errors::GrantError};
 
@@ -34,11 +34,14 @@ pub fn release_grant(ctx: Context<ReleaseGrant>) -> Result<()> {
             FundingState::Cancelled => err!(GrantError::CancelledGrant),
     }?;
 
-    // transfer lamports from grant to creator
-    **ctx.accounts.grant
-        .to_account_info().try_borrow_mut_lamports()? -= ctx.accounts.grant.lamports_raised;
+    // transfer lamports from grant to creator, keep enough for rent
+    let balance = ctx.accounts.grant
+        .to_account_info().try_borrow_lamports()?.clone() - Rent::get()?.minimum_balance( 8 + Grant::MAXIMUM_SPACE);
 
-    **ctx.accounts.author.try_borrow_mut_lamports()? += ctx.accounts.grant.lamports_raised;
+    **ctx.accounts.grant
+        .to_account_info().try_borrow_mut_lamports()? -= balance;
+
+    **ctx.accounts.author.try_borrow_mut_lamports()? += balance;
 
     // update grant state
     ctx.accounts.grant.funding_state = FundingState::Released;

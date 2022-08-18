@@ -8,7 +8,7 @@ pub mod state;
 mod instructions;
 mod errors;
 
-declare_id!("4w5Rs87CqkVLYBEY2C7oVY8so1ECPNn7KWRbEdrfek2t");
+declare_id!("8Gz5WWV7T2w8gBBVa4bcsmXqGETjhoBwKN5gLhgXkAQf");
 
 /// Main program entrypoint
 #[program]

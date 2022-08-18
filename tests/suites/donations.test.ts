@@ -8,7 +8,9 @@ import {
   SendTransactionError,
 } from "@solana/web3.js";
 import { assert, expect } from "chai";
+import { processed } from "../../app/src/constants";
 import { GrantsProgram } from "../../app/src/idl/grants_program";
+import getProgram from "../../app/src/instructions/api/getProgram";
 import { makeDonation, cancelGrant } from "../../app/src/transactions";
 import { toBytesInt32 } from "../../app/src/utils/conversion";
 import { matchedDonation } from "../grants-program";
@@ -140,14 +142,13 @@ export default function donations() {
 
   it("releases the grant funds to the author", async () => {
     // Arrange
-    const donor = await generateFundedKeypair();
-    const lamports = new BN(0.7 * LAMPORTS_PER_SOL);
-    const _donationPDA = await createDonation(grantPDA, donor, lamports);
-
     const initialGrantBalance = await provider.connection.getBalance(grantPDA);
     const initialAuthorBalance = await provider.connection.getBalance(
       author.publicKey
     );
+    const donor = await generateFundedKeypair();
+    const lamports = new BN(0.7 * LAMPORTS_PER_SOL);
+    await createDonation(grantPDA, donor, lamports);
 
     // Act
     await program.methods
@@ -168,10 +169,13 @@ export default function donations() {
     );
     const grant = await program.account.grant.fetch(grantPDA);
 
-    assert(grant.lamportsRaised.eq(lamports));
     expect(grant.fundingState).to.eql({ released: {} });
-    expect(grantBalance).to.eql(initialGrantBalance - lamports.toNumber());
-    expect(authorBalance).to.eql(initialAuthorBalance + lamports.toNumber());
+    expect(grantBalance).to.eql(initialGrantBalance);
+    expect(authorBalance).to.eql(
+      initialAuthorBalance +
+        lamports.toNumber() +
+        matchedDonation(lamports.toNumber())
+    );
   });
 
   it("fails when trying to release same grant", async () => {
@@ -449,7 +453,19 @@ export default function donations() {
 
   it("fails when donating to an expired grant", async () => {
     // Arrange
-    grantPDA = await createGrantWithDueDate(author, Math.floor(Date.now() / 1000) + 1);
+    grantPDA = await createGrantWithDueDate(
+      author,
+      Math.floor(Date.now() / 1000) + 1
+    );
+    await program.methods
+      .eligibleMatching()
+      .accounts({
+        admin: admin.publicKey,
+        programInfo: programInfoPDA,
+        grant: grantPDA,
+      })
+      .signers([admin])
+      .rpc();
     const donor = await generateFundedKeypair();
     const lamports = new BN(2.1 * LAMPORTS_PER_SOL);
     await new Promise((resolve) => setTimeout(resolve, 2000));
@@ -545,9 +561,21 @@ export default function donations() {
       const donor = await generateFundedKeypair();
       const lamports = new BN(2.1 * LAMPORTS_PER_SOL);
 
+      const provider = new anchor.AnchorProvider(
+        program.provider.connection,
+        new anchor.Wallet(donor),
+        { preflightCommitment: processed }
+      );
+      const program_ = getProgram(provider);
+
       // Act
-      let transaction = await makeDonation(program, donor.publicKey, grantPDA, lamports);
-      const _txSignature = await provider.sendAndConfirm(transaction, [donor]);
+      let sig = await makeDonation(
+        program_,
+        donor.publicKey,
+        grantPDA,
+        lamports
+      );
+      // const _txSignature = await provider.sendAndConfirm(transaction, [donor]);
 
       // Assert
       const [donationPDA, _] = await anchor.web3.PublicKey.findProgramAddress(
@@ -566,13 +594,29 @@ export default function donations() {
       const donor = await generateFundedKeypair();
       const lamports = new BN(2.1 * LAMPORTS_PER_SOL);
 
-      let transaction = await makeDonation(program, donor.publicKey, grantPDA, lamports);
-      let _txSignature = await provider.sendAndConfirm(transaction, [donor]);
+      const provider = new anchor.AnchorProvider(
+        program.provider.connection,
+        new anchor.Wallet(donor),
+        { preflightCommitment: processed }
+      );
+      const program_ = getProgram(provider);
+      let transaction = await makeDonation(
+        program_,
+        donor.publicKey,
+        grantPDA,
+        lamports
+      );
+      // let _txSignature = await provider.sendAndConfirm(transaction, [donor]);
 
       // Act
       // make second donation
-      transaction = await makeDonation(program, donor.publicKey, grantPDA, lamports);
-      _txSignature = await provider.sendAndConfirm(transaction, [donor]);
+      transaction = await makeDonation(
+        program_,
+        donor.publicKey,
+        grantPDA,
+        lamports
+      );
+      // _txSignature = await provider.sendAndConfirm(transaction, [donor]);
 
       // Assert
       // fetch the donation
