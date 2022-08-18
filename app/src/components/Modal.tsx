@@ -1,7 +1,7 @@
 import React from "react";
 
 type ModalProps = {
-  setpreview: (preview: boolean) => {};
+  setpreview: (preview: boolean) => void;
   classNameForModalBoxStyling?: string;
   showCloseButton: boolean;
   children: any;
@@ -20,13 +20,12 @@ export default function Modal({
       <div className="modal " id={id}>
         <div className={`modal-box ${classNameForModalBoxStyling || ""}`}>
           {showCloseButton && (
-            <a
-              href="#"
+            <button
               className="btn btn-sm btn-circle absolute right-2 top-2"
               onClick={() => setpreview(false)}
             >
               ✕
-            </a>
+            </button>
           )}
           {children}
         </div>

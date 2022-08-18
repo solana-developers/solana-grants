@@ -13,17 +13,16 @@ import { toastError, toastSuccess } from "./Toast";
 
 export default function DonateSol({ setpreview, grantPDA, setRaisedSol }) {
   const [donation, setDonation] = useState(0);
+  const [loading, setLoading] = useState(false);
 
   const wallet = useWallet();
 
   const handleSubmit = async () => {
     if (!donation || donation <= 0) {
-      return notify({
-        type: "error",
-        message: "error",
-        description: "Please enter a valid amount",
-      });
+        return toastError("Please enter a valid amount");
     }
+    setLoading(true);
+
     const provider = getProvider(wallet);
     const program = getProgram(provider);
 
@@ -45,12 +44,12 @@ export default function DonateSol({ setpreview, grantPDA, setRaisedSol }) {
         console.log(e);
         const err: AnchorError = e;
         toastError(err.error.errorMessage);
-        return;
+      } else { 
+        toastError("Something went wrong! Please try again later");
       }
-      toastError("Something went wrong! Please try again later");
-      return;
     }
-    
+    setLoading(false);
+    setpreview(false);
   };
 
   return (
@@ -124,13 +123,17 @@ export default function DonateSol({ setpreview, grantPDA, setRaisedSol }) {
             <br />
             <DonationChart matchRatio={(x) => x} donation={donation} />
 
-            <div className='flex justify-center modal-action'>
-              <button
-                className='btn bg-[#14F195] decoration-[#000] rounded-[20px] w-[210px] h-[38px]'
-                onClick={handleSubmit}
-              >
-                <h1 className='grantbuttonname'>Donate</h1>
-              </button>
+            <div className="flex justify-center modal-action">
+              {loading ? (
+                <div className='w-3 h-3 ml-2 rounded-full animate-spin loading-spinner-gradients'></div>
+              ) : (
+                <button
+                  className="btn bg-[#14F195] decoration-[#000] rounded-[20px] w-[210px] h-[38px]"
+                  onClick={handleSubmit}
+                >
+                  <h1 className="grantbuttonname">Donate</h1>
+                </button>
+              )}
             </div>
           </div>
         </div>
