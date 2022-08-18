@@ -7,8 +7,12 @@ import Error from "next/error";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import { RiCheckboxMultipleBlankLine, RiCheckboxMultipleFill } from "react-icons/ri";
 import DonateSol from "../../components/DonateSol";
+import Modal from "../../components/Modal";
 import { PublicKey } from "@solana/web3.js";
 import { DEFAULT_GRANT_HEADER_IMAGE } from "../../constants";
+import { useWallet } from "@solana/wallet-adapter-react";
+import { toastError, toastSuccess } from "components/Toast";
+import sendSol from "utils/sendSol";
 
 export interface Props {
   // *** = should come from the db
@@ -44,6 +48,10 @@ export const GrantView: FC<Props> = (props) => {
   const [loadingCreatorDetailsFromGithub, setLoadingCreatorDetailsFromGithub] = useState(true);
   const [copied, setCopied] = useState(false);
   const [image, setImage] = useState(props.image);
+  const [supportAuthorModalOpen, setSupportAuthorModalOpen] = useState(false);
+  const [amountToBeDonated, setAmountToBeDonated] = useState("");
+  const [supportAuthorTransactionInProgress, setSupportAuthorTransactionInProgress] = useState(false);
+  const wallet = useWallet();
 
   const handleCounterStart = (duration: number) => {
     let bar = new Path("#progress-bar", {
@@ -74,6 +82,37 @@ export const GrantView: FC<Props> = (props) => {
   useEffect(() => {
     fetchCreatorDetailsFromGithubApi()
   }, []);
+
+  const toggleSupportAuthorModal = (preview: boolean) => {
+    setSupportAuthorModalOpen(preview);
+  }
+
+  const supportAuthor = async () => {
+    setSupportAuthorTransactionInProgress(true);
+    
+    if (!wallet || !wallet.connected) {
+      toastError("You must be connected to a wallet to send funds");
+      setSupportAuthorTransactionInProgress(false);
+      return;
+    }
+
+    if (parseFloat(amountToBeDonated) <= 0) {
+      toastError("Enter a valid amount");
+      setSupportAuthorTransactionInProgress(false);
+      return;
+    }
+    
+    const response = await sendSol(wallet, props.author.walletAddress, parseFloat(amountToBeDonated));
+    if (response.err){
+      toastError("Something went wrong! Please try again later");
+    }
+    else {
+      toastSuccess("Successfully Supported the author");
+    }
+    
+    setSupportAuthorModalOpen(false);
+    setSupportAuthorTransactionInProgress(false);
+  }
 
   if (props.err) {
     return <Error statusCode={props.message === "Not Found" ? 404 : 500} title={props.message} />
@@ -261,7 +300,7 @@ export const GrantView: FC<Props> = (props) => {
                       props.author.walletAddress
                     }
                   >
-                    <span className='text-slate-600'>Support author</span>
+                    <a href="#support-author" className='text-slate-600' onClick={() => setSupportAuthorModalOpen(true)}>Support author</a>
                   </a>
                 </li>
               </ul>
@@ -269,6 +308,26 @@ export const GrantView: FC<Props> = (props) => {
           </div>
         </div>
       </div>
+      {supportAuthorModalOpen && (
+        <Modal id="support-author" showCloseButton={true} setpreview={toggleSupportAuthorModal}>
+          <h3 className="font-bold text-white	m-[0.8rem] text-lg">Enter the amount to donate in SOL</h3>
+          <input
+            type="number"
+            min="0"
+            className="input w-full max-w-xs  text-white border-zinc-50"
+            onChange={(e) => {
+              setAmountToBeDonated(e.target.value);
+            }}
+          />
+          <div className="modal-action">
+            {supportAuthorTransactionInProgress ? (
+              <div className='w-6 h-6 rounded-full animate-spin loading-spinner-gradients ml-2'></div>
+            ) : (
+              <button className="btn" onClick={supportAuthor}>Submit</button>
+            )}
+          </div>
+        </Modal>
+      )}
     </div>
   );
 };
