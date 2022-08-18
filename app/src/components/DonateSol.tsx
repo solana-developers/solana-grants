@@ -9,30 +9,35 @@ import Modal from "./Modal";
 import { useWallet } from "@solana/wallet-adapter-react";
 import getProvider from '../instructions/api/getProvider';
 import getProgram from "instructions/api/getProgram";
+import { toastError } from "./Toast";
 
 export default function DonateSol({ setpreview, grantPDA }) {
   const [donation, setDonation] = useState(0);
+  const [loading, setLoading] = useState(false);
 
   const wallet = useWallet();
   const connection = new Connection(DEVNET_API, processed);
 
   const handleSubmit = async () => {
-    if (!donation || donation <= 0) {
-      return notify({
-        type: "error",
-        message: "error",
-        description: "Please enter a valid amount",
-      });
+    try {
+      if (!donation || donation <= 0) {
+        return toastError("Please enter a valid amount");
+      }
+      setLoading(true);
+      const provider = getProvider(wallet);
+      const program = getProgram(provider);
+      const tx = await makeDonation(
+        program,
+        wallet?.publicKey,
+        grantPDA,
+        new BN(donation / LAMPORTS_PER_SOL)
+      );
+      const sig = await wallet.sendTransaction(tx, connection);  
+    } catch (error) {
+      toastError("Something went wrong! Please try again later");
     }
-    const provider = getProvider(wallet);
-    const program = getProgram(provider);
-    const tx = await makeDonation(
-      program,
-      wallet?.publicKey,
-      grantPDA,
-      new BN(donation / LAMPORTS_PER_SOL)
-    );
-    const sig = await wallet.sendTransaction(tx, connection);
+    setLoading(false);
+    setpreview(false);
   };
 
   return (
@@ -83,7 +88,7 @@ export default function DonateSol({ setpreview, grantPDA }) {
                 <label htmlFor="you-donate">You donate:</label>
                 <input
                   className="w-24 input input-sm"
-                  placeholder="1"
+                  value={donation}
                   type="number"
                   min={0}
                   name="you-donate"
@@ -107,12 +112,16 @@ export default function DonateSol({ setpreview, grantPDA }) {
             <DonationChart matchRatio={(x) => x} donation={donation} />
 
             <div className="flex justify-center modal-action">
-              <button
-                className="btn bg-[#14F195] decoration-[#000] rounded-[20px] w-[210px] h-[38px]"
-                onClick={handleSubmit}
-              >
-                <h1 className="grantbuttonname">Donate</h1>
-              </button>
+              {loading ? (
+                <div className='w-3 h-3 rounded-full animate-spin loading-spinner-gradients ml-2'></div>
+              ) : (
+                <button
+                  className="btn bg-[#14F195] decoration-[#000] rounded-[20px] w-[210px] h-[38px]"
+                  onClick={handleSubmit}
+                >
+                  <h1 className="grantbuttonname">Donate</h1>
+                </button>
+              )}
             </div>
           </div>
         </div>

@@ -10,6 +10,10 @@ export const LandingPageView: FC = ({ }) => {
     router.push("/create-grant");
   }
 
+  const navigateToExplorePage = () => {
+    router.push("/explore");
+  }
+
   const slide = ({ forward }) => {
     const scroller = document.querySelector(".carousel-container");
     const itemWidth = document.querySelector(".slide-content").clientWidth;
@@ -35,7 +39,7 @@ export const LandingPageView: FC = ({ }) => {
                 <p className="normal-case text-lg text-center md:text-left">Open source software is awesome for the users, funding it makes it awesome for the maintainers too. The foundations are putting money in the pit, help distributing it by donating to grants.</p>
               </div>
               <div className='flex justify-center mt-8'>
-                <button className="bg-green-400 hover:bg-emerald-500 py-2 px-9 text-black text-sm rounded-full mr-4">
+                <button className="bg-green-400 hover:bg-emerald-500 py-2 px-9 text-black text-sm rounded-full mr-4" onClick={navigateToExplorePage}>
                   EXPLORE
                 </button>
                 <button className="bg-transparent hover:bg-slate-500 py-2 px-6 text-fuchsia-300 border border-fuchsia-300 text-sm rounded-full btn"  onClick={navigateToCreateGrantPage}>
