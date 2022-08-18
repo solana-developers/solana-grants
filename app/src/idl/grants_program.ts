@@ -360,10 +360,6 @@ export type GrantsProgram = {
             "type": "string"
           },
           {
-            "name": "lamportsRaised",
-            "type": "u64"
-          },
-          {
             "name": "totalDonors",
             "type": "u32"
           },
@@ -871,10 +867,6 @@ export const IDL: GrantsProgram = {
           {
             "name": "info",
             "type": "string"
-          },
-          {
-            "name": "lamportsRaised",
-            "type": "u64"
           },
           {
             "name": "totalDonors",

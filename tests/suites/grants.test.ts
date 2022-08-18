@@ -79,7 +79,6 @@ export default function suite() {
         // TODO: Check for due date
         // expect(grant.dueDate).to.eql(dueDate);
         expect(grant.author).to.eql(author.publicKey);
-        expect(grant.lamportsRaised.toNumber()).to.eql(0);
         expect(grant.totalDonors).to.eql(0);
         assert(grant.targetLamports.eq(targetLamports));
         expect(grant.fundingState).to.eql({ active: {} });

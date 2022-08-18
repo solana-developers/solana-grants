@@ -39,7 +39,7 @@ export interface Props {
 export const GrantView: FC<Props> = (props) => {
   const [preview, setPreview] = useState(false);
   const animationDuration = 3; // secs
-  const roundedAmtRaised = Math.round(props.amountRaised);
+  const roundedAmtRaised = props.amountRaised// Math.round(props.amountRaised);
   const [loadingCreatorDetailsFromGithub, setLoadingCreatorDetailsFromGithub] = useState(true);
   const [copied, setCopied] = useState(false);
 
@@ -242,7 +242,7 @@ export const GrantView: FC<Props> = (props) => {
                   >
                     <div>
 
-                    <span className='w-3/4 lowercase truncate '>
+                    <span className='w-3/4 truncate '>
                       {props.author.walletAddress}
                     </span>
                     {copied 

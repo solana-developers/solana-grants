@@ -1,4 +1,4 @@
-import { Program, Provider } from "@project-serum/anchor";
+import { Program, Provider, web3 } from "@project-serum/anchor";
 import getProgram from "./api/getProgram";
 import getGrantPDA from "./pda/getGrantPDA";
 
@@ -10,7 +10,13 @@ export default async function getGrant(provider: Provider, grantNumber: number) 
 
       const grant = await program.account.grant.fetch(grantPDA);
 
-      return { err: false, data: grant, grantPDA }
+      console.log(grant);
+
+      const balance = await provider.connection.getBalance(grantPDA);
+
+      console.log(balance); 
+      
+      return { err: false, data: grant, grantPDA, lamportsRaised: balance }
     } catch (error) {
       console.log(error);
       return { err: true, message: error.message }

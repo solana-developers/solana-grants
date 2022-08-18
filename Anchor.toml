@@ -2,10 +2,10 @@
 seeds = false
 
 [programs.localnet]
-grants_program = "4w5Rs87CqkVLYBEY2C7oVY8so1ECPNn7KWRbEdrfek2t"
+grants_program = "8Gz5WWV7T2w8gBBVa4bcsmXqGETjhoBwKN5gLhgXkAQf"
 
 [programs.devnet]
-grants_program = "4w5Rs87CqkVLYBEY2C7oVY8so1ECPNn7KWRbEdrfek2t"
+grants_program = "8Gz5WWV7T2w8gBBVa4bcsmXqGETjhoBwKN5gLhgXkAQf"
 
 [registry]
 url = "https://anchor.projectserum.com"

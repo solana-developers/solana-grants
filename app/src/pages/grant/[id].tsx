@@ -61,14 +61,14 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
       return { props: { grantViewProps: { err: true, message: "Not Found" } } };
     }
     return {
-      props: { grantViewProps: { err: true, message: "Something went wrong" } },
+      props: { grantViewProps: { err: true, message: "Something went wrong with this" } },
     };
   }
 
   const grant = grantInfo.data;
   if (!grant) {
     return {
-      props: { grantViewProps: { err: true, message: "Something went wrong" } },
+      props: { grantViewProps: { err: true, message: "Something went wrong!" } },
     };
   }
 
@@ -81,11 +81,11 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     allowDonation = false;
     reasonForNotAllowingDonation = "The due date has passed";
   }
-  const lamportsRaised = grant.lamportsRaised.toNumber();
-
+  const lamportsRaised = grantInfo.lamportsRaised;
+  console.log(lamportsRaised);
   const targetLamports = grant.targetLamports.toNumber();
 
-  if (grant.lamportsRaised >= grant.targetLamports) {
+  if (lamportsRaised >= grant.targetLamports.toNumber()) {
     allowDonation = false;
     reasonForNotAllowingDonation =
       "The target amount has already been achieved";
@@ -105,16 +105,13 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   const walletAddress = grant.author.toString();
 
   const arweaveResponse = await fetchDataFromArweave(grant.info);
-  // console.log(arweaveResponse);
+
   if (arweaveResponse.err) {
     return {
-      props: { grantViewProps: { err: true, message: "Something went wrong" } },
+      props: { grantViewProps: { err: true, message: "Something went wrong :O" } },
     };
   }
   const dataFromArweave = arweaveResponse.data;
-  // Object.keys(dataFromArweave).map((key) => {
-  //   grant[key] = dataFromArweave[key];
-  // });
 
   const grantViewProps: GrantViewProps = {
     grantNum: parseInt(params.id as string),

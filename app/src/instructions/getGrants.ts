@@ -12,19 +12,19 @@ export default async function getGrants(provider: Provider, startIndex: number, 
 
       const program = getProgram(provider)
 
-      const indices = [];
+      const grantPDAs = [];
+      const grantBalances = [];
       for (let i = startIndex; i <= endIndex; i++) {
-        indices.push(i);
+        const pda = await getGrantPDA(program, i)
+        grantPDAs.push(pda);
+        grantBalances.push(await provider.connection.getBalance(pda));
       }
 
-      const grantPDAs = await Promise.all(indices.map(async (idx) => {
-        const grantPDA = await getGrantPDA(program, idx);
-        return grantPDA;
-      }));
+      let grants = await program.account.grant.fetchMultiple(grantPDAs);
 
-      const grants = await program.account.grant.fetchMultiple(grantPDAs);
+      grants.forEach((grant, i) => grant["lamportsRaised"] = grantBalances[i]);
 
-      return { err: false, data: grants }
+      return { err: false, data: grants}
     } catch (error) {
       console.log(error);
       return { err: true }

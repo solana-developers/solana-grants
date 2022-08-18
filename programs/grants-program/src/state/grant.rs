@@ -11,7 +11,6 @@ pub struct Grant {
     pub bump: u8,                    // 1
     pub author: Pubkey,              // 32
     info: String,                    // 4 + (4 * 45) Added 4 at the beginning since we need to provide string length prefix
-    pub lamports_raised: u64,        // 16
     pub total_donors: u32,           // 8
     target_lamports: u64,            // 16
     due_date: i64,                   // 16 (UnixTimestamp)
@@ -21,7 +20,7 @@ pub struct Grant {
 }
 
 impl Grant {
-    pub const MAXIMUM_SPACE: usize = 1 + 32 + (4 + (4 * 45)) + 16 + 8 + 16 + 16 + 1 + 1 + 8;
+    pub const MAXIMUM_SPACE: usize = 1 + 32 + (4 + (4 * 45)) + 8 + 16 + 16 + 1 + 1 + 8;
 
     pub fn new(
         bump: u8,
@@ -40,13 +39,6 @@ impl Grant {
             grant_num,
             ..Default::default() // rest of the fields are initialized to default values
         }
-    }
-
-    /// Updates the grant's total `amount_raised`, increments the `total_donors`
-    /// by one
-    pub fn update_with_new_donation(&mut self, donation: &Donation) {
-        self.lamports_raised += donation.amount();
-        self.total_donors += 1;
     }
 
     /// Checks if the grant is active and cancells it

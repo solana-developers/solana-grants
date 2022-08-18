@@ -22,7 +22,7 @@ export async function makeDonation(
   donor: PublicKey,
   grantPDA: PublicKey,
   lamports: BN
-): Promise<anchor.web3.Transaction> {
+): Promise<string>{
   
   // find the donation PDA
   const [donationPDA, _bump0] = await anchor.web3.PublicKey.findProgramAddress(
@@ -41,6 +41,8 @@ export async function makeDonation(
       [encode("program_info")],
       program.programId
     );
+  
+  console.log("programInfo: " + programInfoPDA.toString());
 
   // check if the account exists
   const donation = await program.account.donation.fetchNullable(donationPDA);
@@ -71,7 +73,7 @@ export async function makeDonation(
         matchingDonation: matchingDonationPDA,
         programInfo: programInfoPDA,
       })
-      .transaction();
+      .rpc();
   } else {
     // Increment the existing donation
     return program.methods
@@ -83,6 +85,6 @@ export async function makeDonation(
         matchingDonation: matchingDonationPDA,
         programInfo: programInfoPDA,
       })
-      .transaction();
+      .rpc();
   }
 }

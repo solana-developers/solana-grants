@@ -28,7 +28,7 @@ describe("grants-program", function () {
     this.provider = provider;
     this.program = program;
     this.programWallet = programWallet;
-    this.admin = await generateFundedKeypair();
+    this.admin = programWallet // await generateFundedKeypair();
     this.generateFundedKeypair = generateFundedKeypair;
     this.createGrant = createGrant; 
     this.createGrantWithDueDate = createGrantWithDueDate; 
@@ -36,12 +36,13 @@ describe("grants-program", function () {
     this.programInfoPDA = programInfoPDA;
   });
   
-  it("Initializes Grant Program Info!", async function () {
+  it.only("Initializes Grant Program Info!", async function () {
     // Only assert it because we need it to initialize during `before` hook
     // to be able to use `.only` on other specific tests.
+    console.log(programInfoPDA.toString());
     const programInfo = await program.account.programInfo.fetch(this.programInfoPDA);
-    expect(programInfo.admin).to.eql(this.admin.publicKey);
     expect(programInfo.grantsCount).to.eql(0);
+    expect(programInfo.admin.toString()).to.eql(this.admin.publicKey.toString());
   });
 
   describe("Grants", grants.bind(this)); // execute the grants suite
@@ -67,7 +68,7 @@ describe("grants-program", function () {
           admin: admin.publicKey,
           programInfo: newProgramInfoPDA,
         })
-        .signers([admin])
+        // .signers([admin])
         .rpc();
     }
     return newProgramInfoPDA;
