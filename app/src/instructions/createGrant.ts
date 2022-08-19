@@ -45,8 +45,6 @@ export default async function createGrant(
       })
       .rpc();
 
-    // console.log(await program.account.grant.fetch(grantPDA));
-
     return { err: false };
   } catch (error) {
     console.log(error);

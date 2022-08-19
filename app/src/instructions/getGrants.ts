@@ -1,7 +1,9 @@
-import { Provider } from "@project-serum/anchor";
+import { IdlTypes, Provider } from "@project-serum/anchor";
 import getProgram from "./api/getProgram";
 import getGrantPDA from "./pda/getGrantPDA";
 import { notify } from "../utils/notifications";
+import { GrantsProgram } from 'idl/grants_program';
+import { TypeDef } from "@project-serum/anchor/dist/cjs/program/namespace/types";
 
 export default async function getGrants(provider: Provider, startIndex: number, endIndex: number) {
     try {
@@ -10,7 +12,7 @@ export default async function getGrants(provider: Provider, startIndex: number, 
         return { err: true };
       }
 
-      const program = getProgram(provider)
+      const program = getProgram(provider);
 
       const grantPDAs = [];
       const grantBalances = [];
@@ -21,7 +23,6 @@ export default async function getGrants(provider: Provider, startIndex: number, 
       }
 
       let grants = await program.account.grant.fetchMultiple(grantPDAs);
-
       grants.forEach((grant, i) => grant["lamportsRaised"] = grantBalances[i]);
 
       return { err: false, data: grants}

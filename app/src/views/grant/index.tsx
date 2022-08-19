@@ -62,7 +62,6 @@ export const GrantView: FC<Props> = (props) => {
     const percentage = raisedSol / props.amountGoal;
     bar.animate(percentage);
   };
-  console.log(props);
 
   const oneDay = 24 * 60 * 60 * 1000; // hours*minutes*seconds*milliseconds
   const daysToRelease = Math.round(

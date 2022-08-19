@@ -36,7 +36,6 @@ export const ExplorerView: FC = ({ }) => {
         const program = getProgram(provider);
         const programInfoPDA = await getProgramInfoPDA(program);
         const programInfoFetched = await program.account.programInfo.fetch(programInfoPDA);
-        // console.log(programInfoFetched)
         if (!programInfoFetched) {
           setLoadingView(0);
           return notify({ type: 'error', message: 'error', description: 'Something went wrong! please try again later' });
@@ -46,79 +45,74 @@ export const ExplorerView: FC = ({ }) => {
   
       const numGrantsToFetchAtATime = 12;
       let grantsData = [];
-  
+      let cardProps: ExploreCardProps[];
+      
       while (programInfo.current.grantsCount > totalGrantsFetched.current && grantsData.length < numGrantsToFetchAtATime) {
         const startIndex = currentGrantIndex.current;
-        let endIndex = startIndex + numGrantsToFetchAtATime - grantsData.length - 1;
+        let endIndex =
+          startIndex + numGrantsToFetchAtATime - grantsData.length - 1;
         if (endIndex > programInfo.current.grantsCount - 1) {
           endIndex = programInfo.current.grantsCount - 1;
         }
-        console.log(programInfo.current.grantsCount, totalGrantsFetched.current);
-  
-        const grants = await getGrants(provider, startIndex, endIndex);
-        console.log(grants);
-        if (grants.err) {
-          setLoadingView(0);
-          return notify({ type: 'error', message: 'error', description: 'Something went wrong! please try again later' });
-        }
-  
-        grantsData = grants.data;
-        totalGrantsFetched.current += grants.data.length;
-  
-        grantsData = grantsData.filter((grant: ExploreCardProps) => {
-          if (!grant) {
-            return false;
-          }
-  
-          if (grant.dueDate instanceof BN) {
-            grant.dueDate = grant.dueDate.toNumber();
-          }
-          if (new Date().getTime() > grant.dueDate) {
-            return false;
-          }
-  
-          if (grant.targetLamports instanceof BN) {
-            // grant.lamportsRaised = grant.lamportsRaised.toNumber();
-            grant.targetLamports = grant.targetLamports.toNumber();
-          }
-          if (grant.lamportsRaised >= grant.targetLamports) {
-            return false;
-          }
-  
-          // if (!grant.matchingEligible) {
-          //   return false;
-          // }
-  
-          if (grant.fundingState?.cancelled) {
-            return false;
-          }
+        console.log(
+          programInfo.current.grantsCount,
+          totalGrantsFetched.current
+        );
 
-          if (grant.author instanceof PublicKey) {
-            grant.author = grant.author.toString();
-          }
-          console.log(grant);
-          return true;
+        const fetchedGrants = await getGrants(provider, startIndex, endIndex);
+        if (fetchedGrants.err) {
+          setLoadingView(0);
+          return notify({
+            type: "error",
+            message: "error",
+            description: "Something went wrong! please try again later",
+          });
+        }
+
+        grantsData = fetchedGrants.data;
+        totalGrantsFetched.current += fetchedGrants.data.length;
+
+        // filter valid grants
+        grantsData = grantsData.filter((grant) => {
+          return grant
+            && new Date().getTime() <= grant.dueDate.toNumber()
+            && grant.lamportsRaised < grant.targetLamports.toNumber()
+            && grant.fundingState.hasOwnProperty('active')
+            && grant.isMatchingEligible
         });
-  
+        
+        // transform to ExploreCardProps compatible types
+        grantsData = grantsData.map((grant) => {
+          const idx = grant.grantNum;
+
+          const author = grant.author.toString();
+
+          return {
+            ...grant,
+            idx,
+            author,
+          };
+        });
+
         currentGrantIndex.current += grantsData.length;
       }
 
       await Promise.all(grantsData.map(async (grant) => {
         const arweaveResponse = await fetchDataFromArweave(grant.info);
-        // console.log(arweaveResponse);
+
         if (arweaveResponse.err) {
           return;
         }
+
         const dataFromArweave = arweaveResponse.data;
-        Object.keys(dataFromArweave).map((key) => {
+
+        Object.keys(dataFromArweave).forEach((key) => {
           grant[key] = dataFromArweave[key];
         });
       }));
 
       const currentProjects = [...projects];
 
-      console.log(grantsData)
-      console.log(currentProjects)
       // we setProjects data and render it before creator details are fetched from github to reduce the waiting time of the user
       // since its better to load and display some content for the user early (Lazy rendering), than to load and display all content together but late
       /* @ts-ignore */
@@ -140,12 +134,13 @@ export const ExplorerView: FC = ({ }) => {
         }
         grant.author = githubUserDataResponse.data.name;
         grant.authorLink = `https://github.com/${githubUserDataResponse.data.login}`;
-        // console.log(grant);
       }));
 
+      // coerce into card props
+      cardProps = grantsData as ExploreCardProps[];
+
       // since we have now loaded the creator details from github, we rerender by setting projects again
-      console.log(grantsData)
-      setProjects([...currentProjects, ...grantsData]);
+      setProjects([...currentProjects, ...cardProps]);
     } catch (error) {
       console.log(error);
       setLoadingView(0);

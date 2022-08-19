@@ -20,7 +20,7 @@ const sendSol = async (wallet: WalletContextState, destPubKeyString: string, sol
     
         const provider = await GetProvider(wallet);
         const signature = await wallet.sendTransaction(transaction, provider.connection);
-        console.log(signature);
+        console.log("signature: " + signature);
         return {err: false};
     }
     catch(err){

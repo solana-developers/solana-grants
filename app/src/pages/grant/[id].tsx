@@ -53,9 +53,9 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
      needed for this operation, we just provide it since "new AnchorProvider()" expects a parameter type of AnchorWallet
   */
   const provider = getProvider(new PhantomWalletAdapter(), true);
-  console.log(params);
 
   const grantInfo = await getGrant(provider, parseInt(params.id as string));
+
   if (grantInfo.err) {
     if (grantInfo.message?.includes("Account does not exist")) {
       return { props: { grantViewProps: { err: true, message: "Not Found" } } };

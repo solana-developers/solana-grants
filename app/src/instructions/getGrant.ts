@@ -10,12 +10,8 @@ export default async function getGrant(provider: Provider, grantNumber: number) 
 
       const grant = await program.account.grant.fetch(grantPDA);
 
-      console.log(grant);
-
       const balance = await provider.connection.getBalance(grantPDA);
 
-      console.log(balance); 
-      
       return { err: false, data: grant, grantPDA, lamportsRaised: balance }
     } catch (error) {
       console.log(error);

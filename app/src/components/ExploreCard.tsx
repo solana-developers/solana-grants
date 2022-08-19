@@ -8,21 +8,12 @@ import { DEFAULT_GRANT_HEADER_IMAGE } from "../constants";
 export interface ExploreCardProps {
   imageLink: string;
   title: string;
-  author: BN | string;
+  author: string;
   authorLink: string;
-  description: string;
+  about: string;
   githubProjectLink: string;
   numDonors: number;
-  fundingState: {
-    cancelled?: Object
-    resolved?: Object
-    active?: Object
-  };
-  dueDate: BN | number;
-  matchingEligible: boolean;
-  isCancelled: boolean;
   lamportsRaised: BN | number;
-  targetLamports: BN | number;
   idx: number;
 }
 
@@ -35,13 +26,13 @@ export const ExploreCard = ({
   title,
   author,
   authorLink,
-  description,
+  about,
   githubProjectLink,
   numDonors,
   lamportsRaised,
   idx
 }: ExploreCardProps) => {
-  const roundedAmtRaised = Math.round(lamportsRaised as number / LAMPORTS_PER_SOL);
+  const roundedAmtRaised = (lamportsRaised as number / LAMPORTS_PER_SOL).toFixed(3);
   const textColor = contrastColor({ bgColor: "yellow", fgLightColor: "text-slate-200", fgDarkColor: "text-slate-800", });
   const router = useRouter();
   const [image, setImage] = useState(imageLink);
@@ -56,11 +47,21 @@ export const ExploreCard = ({
         <a href={githubProjectLink}>
           <figure className='relative'>
             <div className='absolute flex w-full h-full transition-opacity opacity-0 bg-slate-700 hover:opacity-90'>
-              <button className='m-auto btn btn-secondary' onClick={goToGrantDetailView}>Learn More</button>
+              <button
+                className='m-auto btn btn-secondary'
+                onClick={goToGrantDetailView}
+              >
+                Learn More
+              </button>
             </div>
-            <img className='w-full' onError={() => {
-              setImage(DEFAULT_GRANT_HEADER_IMAGE)
-            }} src={image} alt='Project image' />
+            <img
+              className='w-full'
+              onError={() => {
+                setImage(DEFAULT_GRANT_HEADER_IMAGE);
+              }}
+              src={image}
+              alt='Project image'
+            />
           </figure>
         </a>
         <div
@@ -75,19 +76,33 @@ export const ExploreCard = ({
           <p id='author' className='flex mb-3 font-mono text-xs'>
             By{" "}
             {author ? (
-              <a className='ml-2 underline underline-offset-4' href={authorLink}>
+              <a
+                className='ml-2 underline underline-offset-4'
+                href={authorLink}
+              >
                 {author}
               </a>
             ) : (
               <div className='w-3 h-3 ml-2 rounded-full animate-spin loading-spinner-gradients'></div>
             )}
           </p>
-          <p id='description' className={'line-clamp-3 text-opacity-90 ' + textColor}>
-            {description}
+          <p id='about' className={"line-clamp-3 text-opacity-90 " + textColor}>
+            {about}
           </p>
           <div className='card-actions'>
-            <p className={'font-mono mx-auto text-sm text-right text-opacity-90 '+textColor}>
-              <p className={'text-xl text-left font-semibold color-green '+textColor}>${roundedAmtRaised}</p>
+            <p
+              className={
+                "font-mono mx-auto text-sm text-right text-opacity-90 " +
+                textColor
+              }
+            >
+              <p
+                className={
+                  "text-xl text-left font-semibold color-green " + textColor
+                }
+              >
+                ◎{roundedAmtRaised} SOL
+              </p>
               Raised from <strong>{numDonors}</strong> supporters
             </p>
             <button className='m-auto btn btn-primary'>Donate</button>

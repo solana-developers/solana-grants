@@ -38,9 +38,7 @@ describe("grants-program", function () {
   
   it("Initializes Grant Program Info!", async function () {
     // Only assert it because we need it to initialize during `before` hook
-    // to be able to use `.only` on other specific tests.
-    console.log(programInfoPDA.toString());
-    const programInfo = await program.account.programInfo.fetch(this.programInfoPDA);
+    // to be able to use `.only` on other specific tests.    const programInfo = await program.account.programInfo.fetch(this.programInfoPDA);
     expect(programInfo.grantsCount).to.eql(0);
     expect(programInfo.admin.toString()).to.eql(this.admin.publicKey.toString());
   });
@@ -71,6 +69,9 @@ describe("grants-program", function () {
         .signers([admin])
         .rpc();
     }
+
+    console.log("programInfo address: " + programInfoPDA.toString());
+
     return newProgramInfoPDA;
   }
   async function generateFundedKeypair(): Promise<anchor.web3.Keypair> {
