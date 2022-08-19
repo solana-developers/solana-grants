@@ -1,18 +1,10 @@
-import { IdlTypes, Provider } from "@project-serum/anchor";
+import { Provider } from "@project-serum/anchor";
 import getProgram from "./api/getProgram";
 import getGrantPDA from "./pda/getGrantPDA";
-import { notify } from "../utils/notifications";
-import { GrantsProgram } from 'idl/grants_program';
-import { TypeDef } from "@project-serum/anchor/dist/cjs/program/namespace/types";
 
 export default async function getGrants(provider: Provider, startIndex: number, endIndex: number) {
     try {
-      if (!provider) {
-        notify({ type: "error", message: "error", description: "Wallet not connected!" });
-        return { err: true };
-      }
-
-      const program = getProgram(provider);
+      const program = getProgram(provider)
 
       const grantPDAs = [];
       const grantBalances = [];
