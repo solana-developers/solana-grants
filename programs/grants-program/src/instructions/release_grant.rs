@@ -1,6 +1,6 @@
-use anchor_lang::prelude::*;
+use anchor_lang::{prelude::*, solana_program::sysvar::rent};
 
-use crate::state::{ProgramInfo, Grant, GrantState};
+use crate::{state::{ProgramInfo, Grant, FundingState}, errors::GrantError};
 
 #[derive(Accounts)]
 pub struct ReleaseGrant<'info> {
@@ -28,16 +28,23 @@ pub struct ReleaseGrant<'info> {
 
 pub fn release_grant(ctx: Context<ReleaseGrant>) -> Result<()> {
     // Check that it is releasable
-    ctx.accounts.grant.is_active()?;
+    match ctx.accounts.grant.funding_state {
+            FundingState::Active => Ok(()),
+            FundingState::Released => err!(GrantError::ReleasedGrant),
+            FundingState::Cancelled => err!(GrantError::CancelledGrant),
+    }?;
 
-    // transfer lamports from grant to creator
+    // transfer lamports from grant to creator, keep enough for rent
+    let balance = ctx.accounts.grant
+        .to_account_info().try_borrow_lamports()?.clone() - Rent::get()?.minimum_balance( 8 + Grant::MAXIMUM_SPACE);
+
     **ctx.accounts.grant
-        .to_account_info().try_borrow_mut_lamports()? -= ctx.accounts.grant.lamports_raised;
+        .to_account_info().try_borrow_mut_lamports()? -= balance;
 
-    **ctx.accounts.author.try_borrow_mut_lamports()? += ctx.accounts.grant.lamports_raised;
+    **ctx.accounts.author.try_borrow_mut_lamports()? += balance;
 
     // update grant state
-    ctx.accounts.grant.state = GrantState::Released;
+    ctx.accounts.grant.funding_state = FundingState::Released;
 
     Ok(())
 }

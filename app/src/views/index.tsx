@@ -1,3 +1,3 @@
-export { GrantCreationFlowView } from './basics/grantFlow';
+export { GrantCreationView } from './create-grant';
+export { ExplorerView } from "./explore";
 export { LandingPageView } from "./landing-page";
-export { BasicsView } from "./basics";

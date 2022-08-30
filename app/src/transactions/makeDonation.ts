@@ -1,15 +1,17 @@
 import * as anchor from "@project-serum/anchor";
-import { BN } from "@project-serum/anchor";
+import { BN, Program } from "@project-serum/anchor";
 import { encode } from "@project-serum/anchor/dist/cjs/utils/bytes/utf8";
 import { PublicKey } from "@solana/web3.js";
 import { toBytesInt32 } from "../utils/conversion";
-import { program } from "./index";
+import { GrantsProgram } from "../idl/grants_program";
 
 export async function makeDonation(
+  program: Program<GrantsProgram>,
   donor: PublicKey,
   grantPDA: PublicKey,
   lamports: BN
-): Promise<anchor.web3.Transaction> {
+): Promise<string>{
+  
   // find the donation PDA
   const [donationPDA, _bump0] = await anchor.web3.PublicKey.findProgramAddress(
     [encode("donation"), grantPDA.toBuffer(), donor.toBuffer()],
@@ -21,12 +23,14 @@ export async function makeDonation(
       [encode("matching_donation"), grantPDA.toBuffer()],
       program.programId
     );
-  
+
   const [programInfoPDA, _bump] =
-      await anchor.web3.PublicKey.findProgramAddress(
-        [encode("program_info")],
-        program.programId
-      );
+    await anchor.web3.PublicKey.findProgramAddress(
+      [encode("program_info")],
+      program.programId
+    );
+  
+  console.log("programInfo: " + programInfoPDA.toString());
 
   // check if the account exists
   const donation = await program.account.donation.fetchNullable(donationPDA);
@@ -57,7 +61,7 @@ export async function makeDonation(
         matchingDonation: matchingDonationPDA,
         programInfo: programInfoPDA,
       })
-      .transaction();
+      .rpc();
   } else {
     // Increment the existing donation
     return program.methods
@@ -69,6 +73,6 @@ export async function makeDonation(
         matchingDonation: matchingDonationPDA,
         programInfo: programInfoPDA,
       })
-      .transaction();
+      .rpc();
   }
 }

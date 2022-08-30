@@ -1,9 +1,13 @@
 {
   "version": "0.1.0",
   "name": "grants_program",
+  "docs": ["Main program entrypoint"],
   "instructions": [
     {
       "name": "createGrant",
+      "docs": [
+        "Initializes a grant and updates the program info's grant count"
+      ],
       "accounts": [
         {
           "name": "author",
@@ -11,12 +15,12 @@
           "isSigner": true
         },
         {
-          "name": "admin",
+          "name": "grant",
           "isMut": true,
-          "isSigner": true
+          "isSigner": false
         },
         {
-          "name": "grant",
+          "name": "matchingDonation",
           "isMut": true,
           "isSigner": false
         },
@@ -48,6 +52,9 @@
     },
     {
       "name": "createDonation",
+      "docs": [
+        "Creates a donation which transfers money from the payer to the grant"
+      ],
       "accounts": [
         {
           "name": "payer",
@@ -70,6 +77,16 @@
           "isSigner": false
         },
         {
+          "name": "matchingDonation",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "programInfo",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
           "name": "systemProgram",
           "isMut": false,
           "isSigner": false
@@ -84,6 +101,9 @@
     },
     {
       "name": "incrementDonation",
+      "docs": [
+        "Increments the amount donated from a payer to a grant, effectively transferring it"
+      ],
       "accounts": [
         {
           "name": "donation",
@@ -94,6 +114,16 @@
           "name": "payer",
           "isMut": true,
           "isSigner": true
+        },
+        {
+          "name": "matchingDonation",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "programInfo",
+          "isMut": true,
+          "isSigner": false
         },
         {
           "name": "grant",
@@ -115,6 +145,9 @@
     },
     {
       "name": "releaseGrant",
+      "docs": [
+        "Releases the funds from the grant to the grant creator account"
+      ],
       "accounts": [
         {
           "name": "admin",
@@ -141,6 +174,10 @@
     },
     {
       "name": "cancelDonation",
+      "docs": [
+        "Cancels a specific donation and refunds the money to the donor,",
+        "this need authorization by an admin or DAO."
+      ],
       "accounts": [
         {
           "name": "admin",
@@ -155,7 +192,8 @@
         {
           "name": "donation",
           "isMut": true,
-          "isSigner": false
+          "isSigner": false,
+          "docs": ["or a matching donation, which have different seed formats."]
         },
         {
           "name": "payer",
@@ -172,6 +210,7 @@
     },
     {
       "name": "initializeProgramInfo",
+      "docs": ["Initializes the program info data, which sets the admin."],
       "accounts": [
         {
           "name": "admin",
@@ -193,6 +232,7 @@
     },
     {
       "name": "cancelGrantAdmin",
+      "docs": ["Lets an admin cancel a grant"],
       "accounts": [
         {
           "name": "admin",
@@ -214,6 +254,7 @@
     },
     {
       "name": "cancelGrantAuthor",
+      "docs": ["Lets an author cancel a grant"],
       "accounts": [
         {
           "name": "author",
@@ -230,6 +271,7 @@
     },
     {
       "name": "eligibleMatching",
+      "docs": ["Sets the matching eligibility to true"],
       "accounts": [
         {
           "name": "admin",
@@ -253,6 +295,10 @@
   "accounts": [
     {
       "name": "Donation",
+      "docs": [
+        "This account will keep track of the money given to a grant, which can be",
+        "either a user donation or a match. This will not hold the money."
+      ],
       "type": {
         "kind": "struct",
         "fields": [
@@ -283,6 +329,7 @@
     },
     {
       "name": "Grant",
+      "docs": ["This account holds the information for a grant account"],
       "type": {
         "kind": "struct",
         "fields": [
@@ -299,10 +346,6 @@
             "type": "string"
           },
           {
-            "name": "lamportsRaised",
-            "type": "u64"
-          },
-          {
             "name": "totalDonors",
             "type": "u32"
           },
@@ -315,9 +358,9 @@
             "type": "i64"
           },
           {
-            "name": "state",
+            "name": "fundingState",
             "type": {
-              "defined": "GrantState"
+              "defined": "FundingState"
             }
           },
           {
@@ -333,6 +376,10 @@
     },
     {
       "name": "Link",
+      "docs": [
+        "This is just a linking account intended to be used as a PDA for",
+        "when a different seed is needed to reach another account."
+      ],
       "type": {
         "kind": "struct",
         "fields": [
@@ -349,6 +396,9 @@
     },
     {
       "name": "ProgramInfo",
+      "docs": [
+        "This account holds the information of number of grants and admin"
+      ],
       "type": {
         "kind": "struct",
         "fields": [
@@ -407,7 +457,7 @@
       }
     },
     {
-      "name": "GrantState",
+      "name": "FundingState",
       "type": {
         "kind": "enum",
         "variants": [
@@ -429,9 +479,19 @@
       "code": 6000,
       "name": "CancelledDonation",
       "msg": "This donation has already refunded the payer"
+    },
+    {
+      "code": 6001,
+      "name": "NotMatchingEligible",
+      "msg": "The grant related to this donation is not eligible for matching"
+    },
+    {
+      "code": 6002,
+      "name": "InsufficientFunds",
+      "msg": "The matching account does not have to sufficient funds to match the donation"
     }
   ],
   "metadata": {
-    "address": "AE9VS9MXWqER7GXWVKprbgzcwgmpSNckUyJ5GzWWpRrD"
+    "address": "8Gz5WWV7T2w8gBBVa4bcsmXqGETjhoBwKN5gLhgXkAQf"
   }
 }

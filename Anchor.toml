@@ -2,14 +2,17 @@
 seeds = false
 
 [programs.localnet]
-grants_program = "4rYKkNGRQSe2hJEQGgmiEAcg4KQzP8h8QfwTmmgChAmZ"
+grants_program = "8Gz5WWV7T2w8gBBVa4bcsmXqGETjhoBwKN5gLhgXkAQf"
+
+[programs.devnet]
+grants_program = "8Gz5WWV7T2w8gBBVa4bcsmXqGETjhoBwKN5gLhgXkAQf"
 
 [registry]
 url = "https://anchor.projectserum.com"
 
 [provider]
-cluster = "localnet"
-wallet = "/home/unixcossio/.config/solana/id.json"
+cluster = "devnet"
+wallet = "/home/luis/.config/solana/id.json"
 
 [scripts]
 test = "yarn run ts-mocha -p ./tsconfig.json -t 1000000 tests/**/*.ts"

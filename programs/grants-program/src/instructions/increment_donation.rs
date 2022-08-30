@@ -48,7 +48,7 @@ pub struct IncrementDonation<'info> {
 /// 
 /// Returns true if the donation was matched, false otherwise.
 pub fn increment_donation(ctx: Context<IncrementDonation>, lamports: u64) -> Result<()> {
-    // check that the grant is still Active
+    // check that the grant is still available for funding
     ctx.accounts.grant.is_active()?;
 
     // transfer lamports from payer to grant

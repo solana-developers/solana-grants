@@ -1,6 +1,6 @@
 import type { NextPage } from "next";
 import Head from "next/head";
-import { ExploreView } from "views/explore";
+import { ExplorerView } from "views";
 
 const Explore: NextPage = (props) => {
   return (
@@ -9,7 +9,7 @@ const Explore: NextPage = (props) => {
         <title>Explore Grants</title>
         <meta name='description' content='Explore Grants' />
       </Head>
-      <ExploreView />
+      <ExplorerView />
     </div>
   );
 };

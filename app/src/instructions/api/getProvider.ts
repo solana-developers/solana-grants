@@ -1,17 +1,16 @@
 import { AnchorProvider } from "@project-serum/anchor";
 import { AnchorWallet } from "@solana/wallet-adapter-react";
 import { Connection } from "@solana/web3.js";
+import { toastError } from "../../components/Toast";
 import { DEVNET_API, processed } from "../../constants";
-import {notify} from "../../utils/notifications";
 
 /**
  *
  * @returns provider to the caller.
  */
-export default function getProvider(wallet: AnchorWallet | undefined) {
-    if (!wallet) {
-        console.log('error', 'Wallet not connected!');
-        notify({ type: 'error', message: 'error', description: 'Wallet not connected!' });
+export default function getProvider(wallet: AnchorWallet | undefined, allowWithoutWalletConnection?: boolean) {
+    if (!allowWithoutWalletConnection && (!wallet || !wallet.publicKey)) {
+        toastError("Wallet not connected!")
         return;
     }
 

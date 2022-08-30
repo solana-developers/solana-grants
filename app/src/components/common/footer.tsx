@@ -12,20 +12,16 @@ export const Footer: FC = () => {
   };
 
   return (
-    <div className="">
-      <footer className="text-center xl:h-[190px] relative lg:text-left">
-        {/* <div className="lg:overflow-hidden md:overflow-visible h-[260px] absolute right-0 bottom-0">
+        <footer className="relative w-full px-20 py-8 text-center lg:text-left overflow-clip md:text-left">
+        <div className="absolute right-0 -z-10">
           <svg
             width="1600"
             height="633"
-            viewBox="0 0 1600 633"
-            fill="none"
+            viewBox="0 0 1400 633"
             xmlns="http://www.w3.org/2000/svg"
           >
             <path
               opacity=".25"
-              fillRule="evenodd"
-              clipRule="evenodd"
               d="M220.205 297.019c-25.528 15.079-48.068 34.499-65.456 58.871-93.31 130.789-377.638 580.463 1.725 734.08 262.311 106.23 1105.006 237.64 1487.626-38.84 92.06-66.52 8.18-534.506-47.74-798.399-22.87-107.948-112.68-186.889-219.63-197.154L812.019 1.376C760.896-3.531 709.816 7.81 665.72 33.857L220.205 297.02Z"
               fill="url(#a)"
             />
@@ -43,11 +39,10 @@ export const Footer: FC = () => {
               </linearGradient>
             </defs>
           </svg>
-        </div> */}
-        <div className="mx-6 px-20 md:px-10 xl:px-15 text-center absolute top-0 md:text-left">
-          <div className="grid lg:grid-cols-5 mb-6 mt-6 place-items-center md:grid-cols-2 gap-4">
-            <div className="">
-              <h6 className="uppercase text-thistle font-montserrat font-bold mb-4 flex items-center justify-center md:justify-start">
+        </div>
+          <div className="flex flex-col items-center w-full gap-8 my-6 md:items-baseline md:flex-row justify-evenly">
+            <div className="flex-initial max-w-md">
+              <h6 className="flex items-center justify-center mb-4 font-bold uppercase text-thistle font-montserrat md:justify-start">
                 <div className="mr-2">
                   <svg
                     className="w-[80%] xl:w-[100%]"
@@ -80,93 +75,80 @@ export const Footer: FC = () => {
                     </defs>
                   </svg>
                 </div>
-                <p className="text-white font-bold cursor-default font-quantico text-xl xl:text-3xl ">
+                <p className="text-xl font-bold text-white cursor-default font-quantico xl:text-3xl ">
                   GRANTS
                 </p>
               </h6>
-              <p className="text-sm xl:text-base">
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit. -
-                Consequatur consequuntur dolorum error impedit ipsum porro qui -
-                ut. Animi beatae blanditiis earum iusto labore neque non -
-                quibusdam quisquam, quod similique vero.
+              <p className="text-sm text-justify lg:text-base">
+                Solana Grants seeks to distribute the wealth of foundations to individual projects based on the traction that they have. Funding them together in a democratic fashion rewards the projects in relation to their usage.
               </p>
             </div>
-            <div className="text-sm xl:text-base">
-              <h6 className="uppercase text-thistle font-montserrat font-bold mb-4 flex justify-center md:justify-start text-base">
+            <div className="flex-initial max-w-md text-sm lg:text-base">
+              <h6 className="flex justify-center mb-4 text-base font-bold uppercase text-thistle font-montserrat md:justify-start">
                 Community
               </h6>
               <p className="mb-4">
                 <a href="#" className="text-white">
-                  Donec dignissim
+                  Join on discord
                 </a>
               </p>
               <p className="mb-4">
                 <a href="#" className="text-white">
-                  Curabitur egestas
-                </a>
-              </p>
-              <p className="mb-4">
-                <a href="#" className="text-white">
-                  Curabitur egestas
-                </a>
-              </p>
-              <p className="mb-4">
-                <a href="#" className="text-white">
-                  Curabitur egestas
+                  Follow on twitter
                 </a>
               </p>
             </div>
-            <div className="text-sm xl:text-base">
-              <h6 className="uppercase text-thistle font-montserrat font-bold mb-4 flex justify-center md:justify-start text-base">
+            <div className="hidden text-sm lg:text-base">
+              <h6 className="flex justify-center mb-4 text-base font-bold uppercase text-thistle font-montserrat md:justify-start">
                 Services
               </h6>
               <p className="mb-4">
-                <a href="#" className="text-white">
+                <a href="components/common/Footer#" className="text-white">
                   Donec dignissim
                 </a>
               </p>
               <p className="mb-4">
-                <a href="#" className="text-white">
+                <a href="components/common/Footer#" className="text-white">
                   Curabitur egestas
                 </a>
               </p>
               <p className="mb-4">
-                <a href="#" className="text-white">
+                <a href="components/common/Footer#" className="text-white">
                   Donec dignissim
                 </a>
               </p>
               <p className="mb-4">
-                <a href="#" className="text-white">
+                <a href="components/common/Footer#" className="text-white">
                   Curabitur egestas
                 </a>
               </p>
             </div>
-            <div className="text-sm xl:text-base">
-              <h6 className="uppercase text-thistle font-montserrat font-bold mb-4 flex justify-center md:justify-start text-base">
+            <div className="hidden text-sm lg:text-base">
+              <h6 className="flex justify-center mb-4 text-base font-bold uppercase text-thistle font-montserrat md:justify-start">
                 resources
               </h6>
               <p className="mb-4">
-                <a href="#" className="text-white">
+                <a href="components/common/Footer#" className="text-white">
                   Donec dignissim
                 </a>
               </p>
               <p className="mb-4">
-                <a href="#" className="text-white">
+                <a href="components/common/Footer#" className="text-white">
                   Curabitur egestas
                 </a>
               </p>
               <p className="mb-4">
-                <a href="#" className="text-white">
+                <a href="components/common/Footer#" className="text-white">
                   Donec dignissim
                 </a>
               </p>
               <p className="mb-4">
-                <a href="#" className="text-white">
+                <a href="components/common/Footer#" className="text-white">
                   Curabitur egestas
                 </a>
               </p>
             </div>
-            <div className="">
+            <div className="hidden">
               <button
                 id="dropdownDefault"
                 data-dropdown-toggle="dropdown"
@@ -188,7 +170,7 @@ export const Footer: FC = () => {
                 </svg>
                 <p className="text-sm xl:text-base">English - En</p>
                 <svg
-                  className="w-8 xl:w-10 h-4 ml-2 xl:ml-5"
+                  className="w-8 h-4 ml-2 xl:w-10 xl:ml-5"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -205,7 +187,7 @@ export const Footer: FC = () => {
               {showDropdown && (
                 <div
                   id="dropdown"
-                  className="z-10 bg-gray-600 divide-y divide-gray-100 rounded shadow dark:bg-gray-700 w-full"
+                  className="z-10 w-full bg-gray-600 divide-y divide-gray-100 rounded shadow dark:bg-gray-700"
                 >
                   <ul
                     className="py-1 text-sm text-gray-700 dark:text-gray-200"
@@ -213,7 +195,7 @@ export const Footer: FC = () => {
                   >
                     <li>
                       <a
-                        href="#"
+                        href="components/common/Footer#"
                         className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
                       >
                         Dashboard
@@ -221,7 +203,7 @@ export const Footer: FC = () => {
                     </li>
                     <li>
                       <a
-                        href="#"
+                        href="components/common/Footer#"
                         className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
                       >
                         Settings
@@ -229,7 +211,7 @@ export const Footer: FC = () => {
                     </li>
                     <li>
                       <a
-                        href="#"
+                        href="components/common/Footer#"
                         className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
                       >
                         Earnings
@@ -237,7 +219,7 @@ export const Footer: FC = () => {
                     </li>
                     <li>
                       <a
-                        href="#"
+                        href="components/common/Footer#"
                         className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
                       >
                         Sign out
@@ -248,8 +230,6 @@ export const Footer: FC = () => {
               )}
             </div>
           </div>
-        </div>
-      </footer>
-    </div>
+        </footer>
   );
 };

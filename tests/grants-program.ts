@@ -11,7 +11,7 @@ import {
 import { expect } from "chai";
 import { describe } from "mocha";
 import { toBytesInt32 } from "../app/src/utils/conversion";
-import { GrantsProgram } from "../target/types/grants_program";
+import { GrantsProgram } from "../app/src/idl/grants_program";
 import donations from "./suites/donations.test";
 import grants from "./suites/grants.test";
 import matches from "./suites/matches.test";
@@ -31,16 +31,17 @@ describe("grants-program", function () {
     this.admin = await generateFundedKeypair();
     this.generateFundedKeypair = generateFundedKeypair;
     this.createGrant = createGrant; 
+    this.createGrantWithDueDate = createGrantWithDueDate; 
     programInfoPDA = await initializeProgramInfo(this.admin);
     this.programInfoPDA = programInfoPDA;
   });
   
   it("Initializes Grant Program Info!", async function () {
     // Only assert it because we need it to initialize during `before` hook
-    // to be able to use `.only` on other specific tests.
+    // to be able to use `.only` on other specific tests.    
     const programInfo = await program.account.programInfo.fetch(this.programInfoPDA);
-    expect(programInfo.admin).to.eql(this.admin.publicKey);
     expect(programInfo.grantsCount).to.eql(0);
+    expect(programInfo.admin.toString()).to.eql(this.admin.publicKey.toString());
   });
 
   describe("Grants", grants.bind(this)); // execute the grants suite
@@ -69,6 +70,9 @@ describe("grants-program", function () {
         .signers([admin])
         .rpc();
     }
+
+    // console.log("programInfo address: " + programInfoPDA.toString());
+
     return newProgramInfoPDA;
   }
   async function generateFundedKeypair(): Promise<anchor.web3.Keypair> {
@@ -87,14 +91,12 @@ describe("grants-program", function () {
 
     return newKeypair;
   }
-  
-  async function createGrant(author: Keypair) {
+  async function createGrantWithDueDate(author: Keypair, dueDate: number) {
     const targetLamports = new BN(LAMPORTS_PER_SOL);
-    const dueDate = new Date().getTime() + 1000 * 60 * 60 * 24 * 7;
     const info = "";
 
     const programInfo = await program.account.programInfo.fetch(programInfoPDA);
-    
+
     const [newGrantPDA, _grantBump] =
       await anchor.web3.PublicKey.findProgramAddress(
         [encode("grant"), toBytesInt32(programInfo.grantsCount)],
@@ -124,6 +126,11 @@ describe("grants-program", function () {
     }
 
     return newGrantPDA;
+  }
+  async function createGrant(author: Keypair) {
+    // Unix timestamp in solana is in seconds, getTime() gives it in milliseconds
+    const dueDate = Math.floor(new Date().getTime() / 1000) + 60 * 60 * 24 * 7;
+    return createGrantWithDueDate(author, dueDate);
   }
 });
 
