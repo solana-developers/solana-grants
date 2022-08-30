@@ -5,18 +5,6 @@ import { PublicKey } from "@solana/web3.js";
 import { toBytesInt32 } from "../utils/conversion";
 import { GrantsProgram } from "../idl/grants_program";
 
-// let program: Program<GrantsProgram> = undefined;
-
-// export async function makeDonation2(
-//   wallet: AnchorWallet,
-//   grantPDA: PublicKey,
-//   lamports: BN
-// ) {
-//   const provider = getProvider(wallet);
-//   program = getProgram(provider) as Program<GrantsProgram>;
-//   return makeDonation(wallet.publicKey, grantPDA, lamports);
-// }
-
 export async function makeDonation(
   program: Program<GrantsProgram>,
   donor: PublicKey,

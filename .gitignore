@@ -8,3 +8,4 @@ test-ledger
 .idea
 .next
 .env
+.vscode
